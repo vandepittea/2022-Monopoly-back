@@ -153,6 +153,7 @@ public class MonopolyService extends ServiceAdapter {
 
         Player p = new Player(playerName);
         g.addPlayer(p);
+        g.changeStartedIfNeeded();
 
         return "";
     }

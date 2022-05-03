@@ -44,4 +44,14 @@ public class Game<set> {
     public void addPlayer(Player p){
         players.add(p);
     }
+
+    public void changeStartedIfNeeded(){
+        if(checkForReachingOfMaximumPlayers()){
+            started = true;
+        }
+    }
+
+    private boolean checkForReachingOfMaximumPlayers(){
+        return players.size() >= numberOfPlayers;
+    }
 }
