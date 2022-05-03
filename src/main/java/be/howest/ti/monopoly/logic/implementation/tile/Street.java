@@ -22,4 +22,8 @@ public class Street extends Property {
     public void addHouse(){
         amountOfHouses++;
     }
+
+    public int calculateRent(){
+        return rentOfHouses[amountOfHouses - 1];
+    }
 }
