@@ -5,10 +5,9 @@ public class Railroad extends Property {
 
     private final int rent;
 
-    public Railroad(int position, String name, int cost, int mortgage, int groupSize, String color,
-                String type, int rent) {
+    public Railroad(int position, String name, int cost, int mortgage, int groupSize, String color, int rent) {
         super(position, name, cost, mortgage, groupSize, color);
-        this.type = type;
+        this.type = "railroad";
         this.rent = rent;
     }
 
