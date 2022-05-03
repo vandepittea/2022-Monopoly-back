@@ -1,6 +1,8 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
 public class Street extends Property {
+    private int amountOfHouses;
+
     private String type;
     private Integer[] rentOfHouses;
     private int housePrice;
@@ -15,5 +17,9 @@ public class Street extends Property {
         this.streetColor = streetColor;
         this.rentOfHouses = rentOfHouses;
         this.rent = rent;
+    }
+
+    public void addHouse(){
+        amountOfHouses++;
     }
 }
