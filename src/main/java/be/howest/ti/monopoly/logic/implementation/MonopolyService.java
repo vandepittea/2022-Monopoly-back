@@ -36,4 +36,14 @@ public class MonopolyService extends ServiceAdapter {
         }
         throw new MonopolyResourceNotFoundException("No such tile, index out of bounds.");
     }
+
+    @Override
+    public Tile getTile(String name){
+        for(Tile tile: getTiles()){
+            if(tile.getName().equals(name)){
+                return tile;
+            }
+        }
+        throw new MonopolyResourceNotFoundException("No such tile, name doesn't exist");
+    }
 }
