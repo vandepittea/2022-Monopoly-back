@@ -19,7 +19,7 @@ public class TestService implements IService {
     }
 
     @Override
-    public Game createGame() {
-        return delegate.createGame();
+    public Game createGame(int numberOfPlayers, String prefix) {
+        return delegate.createGame(numberOfPlayers, prefix);
     }
 }

@@ -4,5 +4,5 @@ import be.howest.ti.monopoly.logic.implementation.Game;
 
 public interface IService {
     String getVersion();
-    Game createGame();
+    Game createGame(int numberOfPlayers, String prefix);
 }
