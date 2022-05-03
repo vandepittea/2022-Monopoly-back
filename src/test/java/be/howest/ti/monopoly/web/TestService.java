@@ -40,4 +40,9 @@ public class TestService implements IService {
     public Game createGame(int numberOfPlayers, String prefix) {
         return delegate.createGame(numberOfPlayers, prefix);
     }
+
+    @Override
+    public String[] getChance() {
+        return delegate.getChance();
+    }
 }
