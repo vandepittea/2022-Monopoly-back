@@ -12,12 +12,12 @@ public class MonopolyService extends ServiceAdapter {
     private Set<Game> games = new HashSet<>();
 
     @Override
-    public List<Game> getGames(boolean started, boolean startedMatters, int numberOfPlayers, boolean playersMatter, String prefix) {
+    public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
         List<Game> gamesList = new ArrayList<>();
 
         games.forEach(game -> {
-            if (!startedMatters || (started == game.isStarted())) {
-                if (!playersMatter || (numberOfPlayers == game.getNumberOfPlayers())) {
+            if ((started == null) || (started == game.isStarted())) {
+                if ((numberOfPlayers == null) || (numberOfPlayers == game.getNumberOfPlayers())) {
                     String gamePrefix = game.getId().split("_")[0];
                     if (gamePrefix.equals(prefix)) {
                         gamesList.add(game);

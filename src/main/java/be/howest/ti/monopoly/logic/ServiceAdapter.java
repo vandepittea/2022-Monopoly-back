@@ -17,7 +17,7 @@ public class ServiceAdapter implements IService {
     }
 
     @Override
-    public List<Game> getGames(boolean started, boolean startedMatters, int numberOfPlayers, boolean playersMatter, String prefix) {
+    public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
         throw new UnsupportedOperationException();
     }
 }
