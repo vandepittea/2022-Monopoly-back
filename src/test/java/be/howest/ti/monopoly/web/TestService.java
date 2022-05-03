@@ -2,7 +2,7 @@ package be.howest.ti.monopoly.web;
 
 import be.howest.ti.monopoly.logic.IService;
 import be.howest.ti.monopoly.logic.ServiceAdapter;
-import be.howest.ti.monopoly.logic.implementation.Tile;
+import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 
 import java.util.List;
 
