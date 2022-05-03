@@ -11,6 +11,16 @@ public class Tile {
         this.nameAsPathParameter = decideNameAsPathParameter();
     }
 
+    public String getName() {
+        return name;
+    }
+    public int getPosition() {
+        return position;
+    }
+    public String getNameAsPathParameter() {
+        return nameAsPathParameter;
+    }
+
     public String decideNameAsPathParameter(){
         return name.replaceAll(" ", "_");
     }

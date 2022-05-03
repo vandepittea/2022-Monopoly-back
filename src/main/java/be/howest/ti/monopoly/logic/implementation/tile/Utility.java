@@ -10,4 +10,11 @@ public class Utility extends Property {
         this.type = type;
         this.rent = rent;
     }
+
+    public String getType() {
+        return type;
+    }
+    public String getRent() {
+        return rent;
+    }
 }

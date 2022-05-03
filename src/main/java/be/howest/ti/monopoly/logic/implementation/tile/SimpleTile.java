@@ -7,4 +7,8 @@ public class SimpleTile extends Tile {
         super(position, name);
         this.type = type;
     }
+
+    public String getType() {
+        return type;
+    }
 }
