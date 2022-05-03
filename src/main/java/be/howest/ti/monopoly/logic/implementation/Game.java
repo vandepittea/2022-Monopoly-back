@@ -2,14 +2,16 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-public class Game {
+public class Game<set> {
     private static final Map<String, Integer> idCounter = new HashMap<>();
 
     private final int numberOfPlayers;
     private final String id;
 
     private boolean started;
+    private Set<Player> players;
 
     public Game(int numberOfPlayers, String prefix)
     {
@@ -37,5 +39,9 @@ public class Game {
 
     public boolean isStarted() {
         return this.started;
+    }
+
+    public void addPlayer(Player p){
+        players.add(p);
     }
 }
