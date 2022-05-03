@@ -42,4 +42,9 @@ public class ServiceAdapter implements IService {
     public String[] getCommunityChest() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public String joinGame() {
+        throw new UnsupportedOperationException();
+    }
 }

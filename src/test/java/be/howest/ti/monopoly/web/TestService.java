@@ -50,4 +50,9 @@ public class TestService implements IService {
     public String[] getCommunityChest() {
         return delegate.getCommunityChest();
     }
+
+    @Override
+    public String joinGame() {
+        return delegate.joinGame();
+    }
 }
