@@ -1,11 +1,20 @@
 package be.howest.ti.monopoly.logic;
 
+import be.howest.ti.monopoly.logic.implementation.tile.Tile;
+
+import java.util.List;
+
 import be.howest.ti.monopoly.logic.implementation.Game;
 
 public class ServiceAdapter implements IService {
 
     @Override
     public String getVersion() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<Tile> getTiles() {
         throw new UnsupportedOperationException();
     }
 
