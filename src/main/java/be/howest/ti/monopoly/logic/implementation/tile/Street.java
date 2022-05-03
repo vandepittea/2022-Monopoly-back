@@ -3,14 +3,14 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 public class Street extends Property {
     private int amountOfHouses;
 
-    private String type;
+    private final String type;
     private Integer[] rentOfHouses;
-    private int housePrice;
-    private String streetColor;
-    private int rent;
+    private final int housePrice;
+    private final String streetColor;
+    private final int rent;
 
     public Street(int position, String name, int cost, int mortgage, int groupSize, String color,
-                  String type, int housePrice, String streetColor, Integer[] rentOfHouses) {
+                  String type, Integer[] rentOfHouses, int housePrice, String streetColor, int rent) {
         super(position, name, cost, mortgage, groupSize, color);
         this.type = type;
         this.housePrice = housePrice;
