@@ -19,6 +19,16 @@ public class ServiceAdapter implements IService {
     }
 
     @Override
+    public Tile getTile(int position) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Tile getTile(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Game createGame(int numberOfPlayers, String prefix) {
         throw new UnsupportedOperationException();
     }

@@ -1,6 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.ServiceAdapter;
+import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 
 import java.util.List;
@@ -62,6 +63,26 @@ public class MonopolyService extends ServiceAdapter {
                 new Street(39, "Bowser Castle", 400, 200, 2, "DARKBLUE", new Integer[]{200,600,1400,1700,2000}, 200, "DARKBLUE", 50)
 
         );
+    }
+
+    @Override
+    public Tile getTile(int position){
+        for(Tile tile: getTiles()){
+            if(tile.getPosition() == position){
+                return tile;
+            }
+        }
+        throw new MonopolyResourceNotFoundException("No such tile, index out of bounds.");
+    }
+
+    @Override
+    public Tile getTile(String name){
+        for(Tile tile: getTiles()){
+            if(tile.getName().equals(name)){
+                return tile;
+            }
+        }
+        throw new MonopolyResourceNotFoundException("No such tile, name doesn't exist");
     }
 
     @Override

@@ -56,6 +56,18 @@ public class Request {
                 Objects.equals(expectedPlayerName, user.getPlayerName());
     }
 
+    public int getTilePosition() {
+        return params.pathParameter("tileId").getInteger();
+    }
+
+    public boolean hasTilePosition() {
+        return params.pathParameter("tileId").isNumber();
+    }
+
+    public String getTileName() {
+        return params.pathParameter("tileId").getString();
+    }
+
     public int getNumberOfPlayersForNewGame() {
         return params.body().getJsonObject().getInteger("numberOfPlayers");
     }
