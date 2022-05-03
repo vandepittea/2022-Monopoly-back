@@ -146,4 +146,23 @@ public class MonopolyService extends ServiceAdapter {
     public String[] getCommunityChest(){
         return communityChests;
     }
+
+    @Override
+    public String joinGame(String gameId, String playerName){
+        Game g = searchGameBasedOnId(gameId);
+
+        Player p = new Player(playerName);
+        g.addPlayer(p);
+
+        return "";
+    }
+
+    private Game searchGameBasedOnId(String gameId){
+        for(Game g: games){
+            if(g.getId() == gameId){
+                return g;
+            }
+        }
+        return null;
+    }
 }
