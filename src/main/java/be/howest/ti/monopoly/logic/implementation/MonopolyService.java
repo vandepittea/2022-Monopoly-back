@@ -2,12 +2,25 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.ServiceAdapter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
 public class MonopolyService extends ServiceAdapter {
     private Set<Game> games = new HashSet<>();
+
+    @Override
+    public List<Game> getGames() {
+        List<Game> gamesList = new ArrayList<>();
+
+        games.forEach(game -> {
+            gamesList.add(game);
+        });
+
+        return gamesList;
+    }
 
     @Override
     public String getVersion() {
