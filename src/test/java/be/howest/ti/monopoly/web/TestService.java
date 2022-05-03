@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.web;
 
 import be.howest.ti.monopoly.logic.IService;
 import be.howest.ti.monopoly.logic.ServiceAdapter;
+import be.howest.ti.monopoly.logic.implementation.Game;
 
 
 public class TestService implements IService {
@@ -15,5 +16,10 @@ public class TestService implements IService {
     @Override
     public String getVersion() {
         return delegate.getVersion();
+    }
+
+    @Override
+    public Game createGame(int numberOfPlayers, String prefix) {
+        return delegate.createGame(numberOfPlayers, prefix);
     }
 }
