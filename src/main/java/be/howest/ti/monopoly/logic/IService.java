@@ -8,5 +8,5 @@ public interface IService {
     String getVersion();
     Game createGame(int numberOfPlayers, String prefix);
 
-    List<Game> getGames();
+    List<Game> getGames(boolean started, boolean startedMatters, int numberOfPlayers, boolean playersMatter, String prefix);
 }
