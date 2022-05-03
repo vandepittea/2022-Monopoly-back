@@ -9,6 +9,7 @@ import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.web.exceptions.ForbiddenAccessException;
 import be.howest.ti.monopoly.web.exceptions.InvalidRequestException;
 import be.howest.ti.monopoly.web.exceptions.NotYetImplementedException;
+import be.howest.ti.monopoly.web.tokens.MonopolyUser;
 import be.howest.ti.monopoly.web.tokens.PlainTextTokens;
 import be.howest.ti.monopoly.web.tokens.TokenManager;
 import io.vertx.core.http.HttpMethod;
@@ -181,7 +182,12 @@ public class MonopolyApiBridge {
         String playerName = request.getPlayerNameForGame();
         String gameId = request.getGameIdToAddPlayerTo();
 
-        Response.sendJsonResponse(ctx, 200, service.joinGame(gameId, playerName));
+        boolean success = service.joinGame(gameId, playerName);
+
+        if(success){
+            String playerToken = tokenManager.createToken(new MonopolyUser(gameId, playerName));
+            Response.sendJsonResponse(ctx, 200, new JsonObject().put("playerToken", playerToken));
+        }
     }
 
     private void getGame(RoutingContext ctx) {

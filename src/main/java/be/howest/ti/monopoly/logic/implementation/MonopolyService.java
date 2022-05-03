@@ -148,14 +148,14 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public String joinGame(String gameId, String playerName){
+    public boolean joinGame(String gameId, String playerName){
         Game g = searchGameBasedOnId(gameId);
 
         Player p = new Player(playerName);
         g.addPlayer(p);
         g.changeStartedIfNeeded();
 
-        return "";
+        return true;
     }
 
     private Game searchGameBasedOnId(String gameId){
