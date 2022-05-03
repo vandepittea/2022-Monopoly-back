@@ -44,7 +44,7 @@ public class ServiceAdapter implements IService {
     }
 
     @Override
-    public String joinGame() {
+    public String joinGame(String gameId, String playerName) {
         throw new UnsupportedOperationException();
     }
 }
