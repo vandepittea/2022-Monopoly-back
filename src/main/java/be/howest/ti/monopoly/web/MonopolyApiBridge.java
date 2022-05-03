@@ -150,7 +150,7 @@ public class MonopolyApiBridge {
     }
 
     private void getCommunityChest(RoutingContext ctx) {
-        Response.sendJsonResponse((ctx, 200, service.getCommunityChest()));
+        Response.sendJsonResponse(ctx, 200, service.getCommunityChest());
     }
 
     private void clearGameList(RoutingContext ctx) {
