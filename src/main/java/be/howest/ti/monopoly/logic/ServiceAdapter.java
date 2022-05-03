@@ -1,5 +1,7 @@
 package be.howest.ti.monopoly.logic;
 
+import be.howest.ti.monopoly.logic.implementation.Game;
+
 public class ServiceAdapter implements IService {
 
     @Override
@@ -7,4 +9,8 @@ public class ServiceAdapter implements IService {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public Game createGame() {
+        throw new UnsupportedOperationException();
+    }
 }
