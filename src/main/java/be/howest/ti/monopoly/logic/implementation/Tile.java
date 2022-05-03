@@ -1,18 +1,17 @@
 package be.howest.ti.monopoly.logic.implementation;
 
 public class Tile {
-    private final int position;
     private final String name;
+    private final int position;
+    private final String nameAsPathParameter;
 
-    public Tile(int number, String name) {
-        this.position = number;
+    public Tile(int position, String name) {
+        this.position = position;
         this.name = name;
+        this.nameAsPathParameter = decideNameAsPathParameter();
     }
 
-    public int getPosition() {
-        return position;
-    }
-    public String getName() {
-        return name;
+    public String decideNameAsPathParameter(){
+        return name.replaceAll(" ", "_");
     }
 }
