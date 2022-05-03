@@ -22,6 +22,9 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MonopolyApiBridge {
 
     private static final Logger LOGGER = Logger.getLogger(MonopolyApiBridge.class.getName());
@@ -143,6 +146,11 @@ public class MonopolyApiBridge {
 
     private void createGame(RoutingContext ctx) {
         Request request = Request.from(ctx);
+
+        if (ctx.getBodyAsJson().size() == 0)
+        {
+            Response.sendFailure(ctx, 400, "Empty body");
+        }
 
         int numberOfPlayers = request.getNumberOfPlayersForNewGame();
         String prefix = request.getPrefixForNewGame();
