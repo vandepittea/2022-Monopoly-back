@@ -1,6 +1,8 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
 public class Property extends Tile {
+    private boolean mortgaged;
+
     private int cost;
     private int mortgage;
     private int groupSize;
@@ -12,5 +14,13 @@ public class Property extends Tile {
         this.mortgage = mortgage;
         this.groupSize = groupSize;
         this.color = color;
+    }
+
+    public void takeMortgage(){
+        mortgaged = true;
+    }
+
+    public void payMortgage(){
+        mortgaged = false;
     }
 }
