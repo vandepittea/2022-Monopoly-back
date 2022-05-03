@@ -15,11 +15,13 @@ public class MonopolyService extends ServiceAdapter {
     private Set<Game> games;
     private List<Tile> tiles;
     private String[] chances;
+    private String[] communityChests;
 
     public MonopolyService() {
         games = new HashSet<>();
 
-        chances = new String[]{"Advance to Boardwalk",
+        chances = new String[]{
+                "Advance to Boardwalk",
                 "Advance to Go (Collect $200)",
                 "Advance to Illinois Avenue. If you pass Go, collect $200",
                 "Advance to St. Charles Place. If you pass Go, collect $200",
@@ -33,7 +35,27 @@ public class MonopolyService extends ServiceAdapter {
                 "Speeding fine $15",
                 "Take a trip to Reading Railroad. If you pass Go, collect $200",
                 "You have been elected Chairman of the Board. Pay each player $50",
-                "Your building loan matures. Collect $150"};
+                "Your building loan matures. Collect $150"
+        };
+
+        communityChests = new String[]{
+                "Advance to Go (Collect $200)",
+                "Bank error in your favor. Collect $200",
+                "Doctor's fee. Pay $50",
+                "From sale of stock you get $50",
+                "Get Out of Jail Free",
+                "Go to Jail. Go directly to jail, do not pass Go, do not collect $200",
+                "Holiday fund matures. Receive $100",
+                "Income tax refund. Collect $20",
+                "It is your birthday. Collect $10 from every player",
+                "Life insurance matures. Collect $100",
+                "Pay hospital fees of $100 ",
+                "Pay school fees of $50",
+                "Receive $25 consultancy fee ",
+                "You are assessed for street repair. $40 per house. $115 per hotel",
+                "You have won second prize in a beauty contest. Collect $10",
+                "You inherit $100"
+        };
 
         tiles = new ArrayList<>();
         tiles.add(new SimpleTile(0, "Peach Castle", "Go"));
@@ -118,5 +140,10 @@ public class MonopolyService extends ServiceAdapter {
     @Override
     public String[] getChance(){
         return chances;
+    }
+
+    @Override
+    public String[] getCommunityChest(){
+        return communityChests;
     }
 }
