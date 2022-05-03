@@ -1,5 +1,8 @@
 package be.howest.ti.monopoly.web;
 
+import be.howest.ti.monopoly.logic.ServiceAdapter;
+import be.howest.ti.monopoly.logic.implementation.Game;
+import be.howest.ti.monopoly.logic.implementation.MonopolyService;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
@@ -49,17 +52,29 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
 
     @Test
     void createGameWithEmptyBody(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public Game createGame(int numberOfPlayers, String prefix) {
+                return null;
+            }
+        });
         post(
                 testContext,
                 "/games",
                 null,
                 new JsonObject(),
-                response -> assertNotYetImplemented(response, "createGame")
+                response -> assertErrorResponse(response, 400)
         );
     }
 
     @Test
     void createGame(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public Game createGame(int numberOfPlayers, String prefix) {
+                return null;
+            }
+        });
         post(
                 testContext,
                 "/games",
@@ -67,12 +82,18 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
                 new JsonObject()
                         .put("prefix", "Prefix123")
                         .put("numberOfPlayers", 10),
-                response -> assertNotYetImplemented(response, "createGame")
+                response -> assertOkResponse(response)
         );
     }
 
     @Test
     void createGamePrefixTooLong(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public Game createGame(int numberOfPlayers, String prefix) {
+                return null;
+            }
+        });
         post(
                 testContext,
                 "/games",
@@ -85,6 +106,12 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
 
     @Test
     void createGameInvalidSymbol(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public Game createGame(int numberOfPlayers, String prefix) {
+                return null;
+            }
+        });
         post(
                 testContext,
                 "/games",
@@ -97,6 +124,12 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
 
     @Test
     void createGameTooManyPlayers(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public Game createGame(int numberOfPlayers, String prefix) {
+                return null;
+            }
+        });
         post(
                 testContext,
                 "/games",
@@ -109,6 +142,12 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
 
     @Test
     void createGameTooFewPlayers(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public Game createGame(int numberOfPlayers, String prefix) {
+                return null;
+            }
+        });
         post(
                 testContext,
                 "/games",
@@ -121,6 +160,12 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
 
     @Test
     void createGamePlayersNotANumber(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public Game createGame(int numberOfPlayers, String prefix) {
+                return null;
+            }
+        });
         post(
                 testContext,
                 "/games",
@@ -133,6 +178,12 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
 
     @Test
     void createGameWithoutBody(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public Game createGame(int numberOfPlayers, String prefix) {
+                return null;
+            }
+        });
         post(
                 testContext,
                 "/games",

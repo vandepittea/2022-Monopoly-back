@@ -5,8 +5,12 @@ import be.howest.ti.monopoly.logic.implementation.tile.*;
 
 import java.util.List;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class MonopolyService extends ServiceAdapter {
+    private Set<Game> games = new HashSet<>();
 
     @Override
     public String getVersion() {
@@ -58,5 +62,12 @@ public class MonopolyService extends ServiceAdapter {
                 new Street(39, "Bowser Castle", 400, 200, 2, "DARKBLUE", new Integer[]{200,600,1400,1700,2000}, 200, "DARKBLUE", 50)
 
         );
+    }
+
+    @Override
+    public Game createGame(int numberOfPlayers, String prefix) {
+        Game newGame = new Game(numberOfPlayers, prefix);
+        games.add(newGame);
+        return newGame;
     }
 }

@@ -4,6 +4,8 @@ import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 
 import java.util.List;
 
+import be.howest.ti.monopoly.logic.implementation.Game;
+
 public class ServiceAdapter implements IService {
 
     @Override
@@ -16,4 +18,8 @@ public class ServiceAdapter implements IService {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public Game createGame(int numberOfPlayers, String prefix) {
+        throw new UnsupportedOperationException();
+    }
 }
