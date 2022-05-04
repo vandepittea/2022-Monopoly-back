@@ -37,4 +37,9 @@ public class ServiceAdapter implements IService {
     public String[] getChance() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public String[] getCommunityChest() {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -109,11 +109,18 @@ class OpenApiGeneralInfoTests extends OpenApiTestsBase {
 
     @Test
     void getCommunityChest(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter(){
+            @Override
+            public String[] getCommunityChest() {
+                return new String[0];
+            }
+        });
+
         get(
                 testContext,
                 "/community-chest",
                 null,
-                response -> assertNotYetImplemented(response, "getCommunityChest")
+                response -> assertOkResponse(response)
         );
     }
 

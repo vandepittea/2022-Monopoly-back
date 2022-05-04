@@ -14,4 +14,5 @@ public interface IService {
     Tile getTile(String name);
     Game createGame(int numberOfPlayers, String prefix);
     String[] getChance();
+    String[] getCommunityChest();
 }
