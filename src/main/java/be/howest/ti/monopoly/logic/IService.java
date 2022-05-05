@@ -13,6 +13,7 @@ public interface IService {
     Tile getTile(int position);
     Tile getTile(String name);
     Game createGame(int numberOfPlayers, String prefix);
+    List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix);
     String[] getChance();
     String[] getCommunityChest();
 }
