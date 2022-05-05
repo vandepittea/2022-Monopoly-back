@@ -15,5 +15,5 @@ public interface IService {
     Game createGame(int numberOfPlayers, String prefix);
     String[] getChance();
     String[] getCommunityChest();
-    boolean joinGame(String gameId, String playerName);
+    void joinGame(String gameId, String playerName);
 }

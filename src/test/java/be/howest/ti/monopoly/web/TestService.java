@@ -52,7 +52,7 @@ public class TestService implements IService {
     }
 
     @Override
-    public boolean joinGame(String gameId, String playerName) {
-        return delegate.joinGame(gameId, playerName);
+    public void joinGame(String gameId, String playerName) {
+        delegate.joinGame(gameId, playerName);
     }
 }

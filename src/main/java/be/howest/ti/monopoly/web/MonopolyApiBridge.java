@@ -182,11 +182,16 @@ public class MonopolyApiBridge {
         String playerName = request.getPlayerNameForGame();
         String gameId = request.getGameIdToAddPlayerTo();
 
-        boolean success = service.joinGame(gameId, playerName);
-
-        if(success){
+        try{
+            service.joinGame(gameId, playerName);
             String playerToken = tokenManager.createToken(new MonopolyUser(gameId, playerName));
             Response.sendJsonResponse(ctx, 200, new JsonObject().put("playerToken", playerToken));
+        }
+        catch (IllegalMonopolyActionException exception) {
+            Response.sendFailure(ctx, 409, exception.getMessage());
+        }
+        catch(MonopolyResourceNotFoundException exception){
+            Response.sendFailure(ctx, 404, exception.getMessage());
         }
     }
 
