@@ -188,6 +188,11 @@ public class MonopolyService extends ServiceAdapter {
         }
     }
 
+    @Override
+    public void buyProperty(String gameId, String playerName, String propertyName){
+
+    }
+
     private Game searchGameBasedOnId(String gameId){
         for(Game g: games){
             if(g.getId().equals(gameId)){
