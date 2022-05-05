@@ -14,7 +14,7 @@ class MonopolyServiceTest {
         Game g = s.createGame(2, "group17");
         Player p = new Player("Bob");
 
-        s.joinGame("group17_0", "Bob");
+        s.joinGame(g.getId(), "Bob");
 
         assertTrue(g.getPlayers().contains(p));
         assertFalse(g.isStarted());
@@ -26,8 +26,8 @@ class MonopolyServiceTest {
         Player p = new Player("Bob");
         Player p2 = new Player("Jan");
 
-        s.joinGame("group17_0", "Bob");
-        s.joinGame("group17_0", "Jan");
+        s.joinGame(g.getId(), "Bob");
+        s.joinGame(g.getId(), "Jan");
 
         assertTrue(g.getPlayers().contains(p));
         assertTrue(g.getPlayers().contains(p2));
@@ -42,18 +42,20 @@ class MonopolyServiceTest {
     @Test
     void joinGameTwoUserWithTheSameName(){
         MonopolyService s = new MonopolyService();
+        Game g = s.createGame(2, "group17");
 
-        s.joinGame("group17_0", "Bob");
+        s.joinGame(g.getId(), "Bob");
 
-        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> s.joinGame("group17_0", "Bob"));
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> s.joinGame(g.getId(), "Bob"));
     }
     @Test
     void joinAlreadyStartedGame(){
         MonopolyService s = new MonopolyService();
+        Game g = s.createGame(2, "group17");
 
-        s.joinGame("group17_0", "Bob");
-        s.joinGame("group17_0", "Jan");
+        s.joinGame(g.getId(), "Bob");
+        s.joinGame(g.getId(), "Jan");
 
-        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> s.joinGame("group17_0", "Jonas"));
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> s.joinGame(g.getId(), "Jonas"));
     }
 }
