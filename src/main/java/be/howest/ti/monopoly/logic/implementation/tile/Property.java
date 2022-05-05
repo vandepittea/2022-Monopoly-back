@@ -49,12 +49,6 @@ public class Property extends Tile {
         return hotelCount;
     }
 
-    public void payProperty(Player p){
-        int currentMoneyOfPlayer = p.getMoney();
-        int newMoneyOfPlayer = currentMoneyOfPlayer - cost;
-        p.setMoney(newMoneyOfPlayer);
-    }
-
     public void takeMortgage(){
         mortgaged = true;
     }

@@ -1,5 +1,8 @@
 package be.howest.ti.monopoly.logic.implementation;
 
+import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
+import be.howest.ti.monopoly.logic.implementation.tile.Property;
+import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 
@@ -62,8 +65,17 @@ public class Player {
         this.money = money;
     }
 
-    public void addProperty(PropertyView p){
+    public void buyProperty(Property pr){
+        payProperty(pr);
+        addProperty(new PropertyView(pr));
+    }
+
+    private void addProperty(PropertyView p){
         properties.add(p);
+    }
+
+    private void payProperty(Property pr){
+        money -= pr.getCost();
     }
 
     @Override

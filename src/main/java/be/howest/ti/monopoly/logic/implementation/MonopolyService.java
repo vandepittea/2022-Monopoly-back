@@ -175,11 +175,7 @@ public class MonopolyService extends ServiceAdapter {
     public void joinGame(String gameId, String playerName){
         Game g = searchGameBasedOnId(gameId);
 
-        if(g == null){
-            throw new MonopolyResourceNotFoundException("The game you are looking for does not exist. " +
-                    "Double check the ID.");
-        }
-        else if(g.isExistedUser(playerName) || g.isStartedGame()){
+        if(g.isExistedUser(playerName) || g.isStartedGame()){
             throw new IllegalMonopolyActionException("You tried to do something which is against the " +
                     "rules of Monopoly. In this case, it is most likely that you tried to join a game which has " +
                     "already started, or you used a name that is already taken in this game.");
@@ -199,10 +195,7 @@ public class MonopolyService extends ServiceAdapter {
         Property pr = (Property) t;
 
         if(playerName.equals(g.getCurrentPlayer()) && t.getName().equals(g.getDirectSale())) {
-            pr.payProperty(pl);
-
-            pl.addProperty(new PropertyView(pr));
-
+            pl.buyProperty(pr);
             return pr.getName();
         }
         else {
