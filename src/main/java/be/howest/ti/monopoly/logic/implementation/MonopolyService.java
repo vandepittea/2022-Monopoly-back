@@ -194,29 +194,35 @@ public class MonopolyService extends ServiceAdapter {
         Game g = searchGameBasedOnId(gameId);
 
         if(g != null){
-            Player pl = g.searchPlayerBasedOnName(playerName);
-            Tile t = getTile(propertyName);
+            if(playerName.equals(g.getCurrentPlayer()) && propertyName.equals(g.getDirectSale()))
+            {
+                Player pl = g.searchPlayerBasedOnName(playerName);
+                Tile t = getTile(propertyName);
 
-            if(pl != null && t != null){
-                Property pr = (Property) t;
-                pr.payProperty(pl);
+                if(pl != null && t != null){
+                    Property pr = (Property) t;
+                    pr.payProperty(pl);
 
-                PlayerProperty pp = new PlayerProperty(pr.getName());
-                pl.addProperty(pp);
+                    PlayerProperty pp = new PlayerProperty(pr.getName());
+                    pl.addProperty(pp);
 
-                return pp.getProperty();
+                    return pp.getProperty();
+                }
+                else{
+                    throw new MonopolyResourceNotFoundException("The player you are looking for do not exist. " +
+                            "Double check the name. Also double check if the name of the property is spelled correctly.");
+                }
             }
             else{
-                throw new MonopolyResourceNotFoundException("The player you are looking for do not exist. " +
-                        "Double check the name. Also double check if the name of the property is spelled correctly.");
+                throw new IllegalMonopolyActionException("You tried to do something which is against the rules of " +
+                        "Monopoly. In this case, it is most likely not your place to buy this property and/or you are " +
+                        "trying to buy the wrong property.");
             }
         }
         else{
             throw new MonopolyResourceNotFoundException("The game you are looking for do not exist. " +
                     "Double check the ID.");
         }
-
-
     }
 
     private Game searchGameBasedOnId(String gameId){
