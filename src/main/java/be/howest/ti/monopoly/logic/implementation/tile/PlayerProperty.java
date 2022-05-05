@@ -13,6 +13,10 @@ public class PlayerProperty {
         this.hotelCount = 0;
     }
 
+    public String getProperty() {
+        return property;
+    }
+
     public void takeMortgage(){
         mortgage= true;
     }

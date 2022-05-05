@@ -233,7 +233,18 @@ public class MonopolyApiBridge {
                     "passed along is valid token for this game and is the token that gives this player access.");
         }
 
-        service.buyProperty(gameId, playerName, propertyName);
+        try{
+            String property = service.buyProperty(gameId, playerName, propertyName);
+            Response.sendJsonResponse(ctx, 200, new JsonObject().put("property",
+                    property).put("purchased", true));
+        }
+        catch (IllegalMonopolyActionException exception) {
+            Response.sendFailure(ctx, 409, exception.getMessage());
+        }
+        catch(MonopolyResourceNotFoundException exception){
+            Response.sendFailure(ctx, 404, exception.getMessage());
+        }
+
     }
 
     private void dontBuyProperty(RoutingContext ctx) {

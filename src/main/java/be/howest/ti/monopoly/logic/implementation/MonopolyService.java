@@ -190,7 +190,7 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public void buyProperty(String gameId, String playerName, String propertyName){
+    public String buyProperty(String gameId, String playerName, String propertyName){
         Game g = searchGameBasedOnId(gameId);
 
         if(g != null){
@@ -203,6 +203,8 @@ public class MonopolyService extends ServiceAdapter {
 
                 PlayerProperty pp = new PlayerProperty(pr.getName());
                 pl.addProperty(pp);
+
+                return pp.getProperty();
             }
             else{
                 throw new MonopolyResourceNotFoundException("The player you are looking for do not exist. " +
