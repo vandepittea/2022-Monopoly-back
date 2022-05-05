@@ -8,8 +8,6 @@ public class Property extends Tile {
     private final int groupSize;
     private final String color;
 
-    private boolean mortgaged;
-
     public Property(int position, String name, int cost, int mortgage, int groupSize, String color) {
         super(position, name);
         this.cost = cost;
@@ -29,14 +27,6 @@ public class Property extends Tile {
     }
     public String getColor() {
         return color;
-    }
-
-    public void takeMortgage(){
-        mortgaged = true;
-    }
-
-    public void payMortgage(){
-        mortgaged = false;
     }
 
     public void payProperty(Player p){
