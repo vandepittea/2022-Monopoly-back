@@ -69,23 +69,23 @@ public class Request {
         return params.pathParameter("tileId").getString();
     }
 
-    public int getNumberOfPlayersForNewGame() {
+    public int getNumberOfPlayers() {
         return params.body().getJsonObject().getInteger("numberOfPlayers");
     }
 
-    public String getPrefixForNewGame() {
+    public String getPrefix() {
         return params.body().getJsonObject().getString("prefix");
     }
 
-    public String getPlayerNameForGame() {
+    public String getPlayerName() {
         return params.body().getJsonObject().getString("playerName");
     }
 
-    public String getGameIdToAddPlayerTo() {
+    public String getGameId() {
         return params.pathParameter("gameId").getString();
     }
 
-    public Boolean getGameStarted() {
+    public Boolean isGameStarted() {
         RequestParameter parameter = params.pathParameter("started");
         if (parameter == null) {
             return null;
@@ -93,19 +93,7 @@ public class Request {
         return parameter.getBoolean();
     }
 
-    public Integer getNumberOfPlayersOfGame() {
-        RequestParameter parameter = params.pathParameter("numberOfPlayers");
-        if (parameter == null) {
-            return null;
-        }
-        return parameter.getInteger();
-    }
-
-    public String getPrefixOfGame() {
-        RequestParameter parameter = params.pathParameter("prefix");
-        if (parameter == null) {
-            return null;
-        }
-        return parameter.getString();
+    public String getPropertyName() {
+        return params.pathParameter("propertyName").getString();
     }
 }
