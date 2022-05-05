@@ -145,7 +145,7 @@ public class MonopolyService extends ServiceAdapter {
     @Override
     public Tile getTile(String name){
         for(Tile tile: getTiles()){
-            if(tile.getName().equals(name)){
+            if(tile.getNameAsPathParameter().equals(name)){
                 return tile;
             }
         }
@@ -192,14 +192,29 @@ public class MonopolyService extends ServiceAdapter {
     @Override
     public void buyProperty(String gameId, String playerName, String propertyName){
         Game g = searchGameBasedOnId(gameId);
-        Player pl = g.searchPlayerBasedOnName(playerName);
-        Tile t = getTile(propertyName);
-        Property pr = (Property) t;
 
-        pr.payProperty(pl);
+        if(g != null){
+            Player pl = g.searchPlayerBasedOnName(playerName);
+            Tile t = getTile(propertyName);
 
-        PlayerProperty pp = new PlayerProperty(pr.getName());
-        pl.addProperty(pp);
+            if(pl != null && t != null){
+                Property pr = (Property) t;
+                pr.payProperty(pl);
+
+                PlayerProperty pp = new PlayerProperty(pr.getName());
+                pl.addProperty(pp);
+            }
+            else{
+                throw new MonopolyResourceNotFoundException("The player you are looking for do not exist. " +
+                        "Double check the name. Also double check if the name of the property is spelled correctly.");
+            }
+        }
+        else{
+            throw new MonopolyResourceNotFoundException("The game you are looking for do not exist. " +
+                    "Double check the ID.");
+        }
+
+
     }
 
     private Game searchGameBasedOnId(String gameId){
