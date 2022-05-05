@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class Player {
     private final String name;
+
     private String currentTile;
     private boolean jailed;
     private int money;
@@ -44,7 +45,6 @@ public class Player {
     public boolean isBankrupt() {
         return bankrupt;
     }
-
     public int getGetOutOfJailCards() {
         return getOutOfJailCards;
     }
