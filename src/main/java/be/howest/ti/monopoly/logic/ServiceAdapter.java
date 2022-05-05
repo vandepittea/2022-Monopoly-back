@@ -6,8 +6,6 @@ import java.util.List;
 
 import be.howest.ti.monopoly.logic.implementation.Game;
 
-import java.util.List;
-
 public class ServiceAdapter implements IService {
 
     @Override
@@ -37,6 +35,16 @@ public class ServiceAdapter implements IService {
 
     @Override
     public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String[] getChance() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String[] getCommunityChest() {
         throw new UnsupportedOperationException();
     }
 }

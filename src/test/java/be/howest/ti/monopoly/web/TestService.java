@@ -7,8 +7,6 @@ import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import java.util.List;
 import be.howest.ti.monopoly.logic.implementation.Game;
 
-import java.util.List;
-
 
 public class TestService implements IService {
 
@@ -46,5 +44,15 @@ public class TestService implements IService {
     @Override
     public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
         return delegate.getGames(started, numberOfPlayers, prefix);
+    }
+
+    @Override
+    public String[] getChance() {
+        return delegate.getChance();
+    }
+
+    @Override
+    public String[] getCommunityChest() {
+        return delegate.getCommunityChest();
     }
 }
