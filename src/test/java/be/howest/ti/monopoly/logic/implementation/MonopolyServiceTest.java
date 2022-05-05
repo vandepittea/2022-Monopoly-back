@@ -39,7 +39,6 @@ class MonopolyServiceTest {
 
         Assertions.assertThrows(MonopolyResourceNotFoundException.class, () -> s.joinGame("group17_0", "Bob"));
     }
-
     @Test
     void joinGameTwoUserWithTheSameName(){
         MonopolyService s = new MonopolyService();
@@ -48,5 +47,15 @@ class MonopolyServiceTest {
         s.joinGame("group17_0", "Bob");
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> s.joinGame("group17_0", "Bob"));
+    }
+    @Test
+    void joinAlreadyStartedGame(){
+        MonopolyService s = new MonopolyService();
+        Game g = s.createGame(2, "group17");
+
+        s.joinGame("group17_0", "Bob");
+        s.joinGame("group17_0", "Jan");
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> s.joinGame("group17_0", "Jonas"));
     }
 }
