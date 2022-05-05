@@ -1,7 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation;
 
-import be.howest.ti.monopoly.logic.implementation.tile.PlayerProperty;
-import be.howest.ti.monopoly.logic.implementation.tile.Tile;
+import be.howest.ti.monopoly.web.views.PropertyView;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -16,7 +16,7 @@ public class Player {
     private boolean bankrupt;
     private int getOutOfJailCards;
     private String taxSystem;
-    private Set<PlayerProperty> properties;
+    private Set<PropertyView> properties;
     private int debt;
 
     public Player(String name){
@@ -52,7 +52,7 @@ public class Player {
     public String getTaxSystem() {
         return taxSystem;
     }
-    public Set<PlayerProperty> getProperties() {
+    public Set<PropertyView> getProperties() {
         return properties;
     }
     public int getDebt() {
@@ -62,7 +62,7 @@ public class Player {
         this.money = money;
     }
 
-    public void addProperty(PlayerProperty p){
+    public void addProperty(PropertyView p){
         properties.add(p);
     }
 
