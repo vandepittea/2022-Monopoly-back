@@ -77,8 +77,12 @@ public class Request {
         return params.body().getJsonObject().getString("prefix");
     }
 
-    public String getPlayerName() {
+    public String getPlayerNameOfBody() {
         return params.body().getJsonObject().getString("playerName");
+    }
+
+    public String getPlayerNameOfPath() {
+        return params.pathParameter("playerName").getString();
     }
 
     public String getGameId() {

@@ -194,13 +194,13 @@ public class MonopolyService extends ServiceAdapter {
         Game g = searchGameBasedOnId(gameId);
 
         if(g != null){
-            if(playerName.equals(g.getCurrentPlayer()) && propertyName.equals(g.getDirectSale()))
-            {
-                Player pl = g.searchPlayerBasedOnName(playerName);
-                Tile t = getTile(propertyName);
+            Player pl = g.searchPlayerBasedOnName(playerName);
+            Tile t = getTile(propertyName);
 
-                if(pl != null && t != null){
-                    Property pr = (Property) t;
+            if(pl != null && t != null){
+                Property pr = (Property) t;
+
+                if(playerName.equals(g.getCurrentPlayer()) && t.getName().equals(g.getDirectSale())) {
                     pr.payProperty(pl);
 
                     PlayerProperty pp = new PlayerProperty(pr.getName());
@@ -208,15 +208,15 @@ public class MonopolyService extends ServiceAdapter {
 
                     return pp.getProperty();
                 }
-                else{
-                    throw new MonopolyResourceNotFoundException("The player you are looking for do not exist. " +
-                            "Double check the name. Also double check if the name of the property is spelled correctly.");
+                else {
+                    throw new IllegalMonopolyActionException("You tried to do something which is against the rules of " +
+                            "Monopoly. In this case, it is most likely not your place to buy this property and/or you are " +
+                            "trying to buy the wrong property.");
                 }
             }
             else{
-                throw new IllegalMonopolyActionException("You tried to do something which is against the rules of " +
-                        "Monopoly. In this case, it is most likely not your place to buy this property and/or you are " +
-                        "trying to buy the wrong property.");
+                throw new MonopolyResourceNotFoundException("The player you are looking for do not exist. " +
+                        "Double check the name. Also double check if the name of the property is spelled correctly.");
             }
         }
         else{

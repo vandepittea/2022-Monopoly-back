@@ -181,7 +181,7 @@ public class MonopolyApiBridge {
     private void joinGame(RoutingContext ctx) {
         Request request = Request.from(ctx);
 
-        String playerName = request.getPlayerName();
+        String playerName = request.getPlayerNameOfBody();
         String gameId = request.getGameId();
 
         try{
@@ -225,26 +225,26 @@ public class MonopolyApiBridge {
         Request request = Request.from(ctx);
 
         String gameId = request.getGameId();
-        String playerName = request.getPlayerName();
+        String playerName = request.getPlayerNameOfPath();
         String propertyName = request.getPropertyName();
 
         if(!request.isAuthorized(gameId, playerName)){
             throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you " +
                     "passed along is valid token for this game and is the token that gives this player access.");
         }
-
-        try{
-            String property = service.buyProperty(gameId, playerName, propertyName);
-            Response.sendJsonResponse(ctx, 200, new JsonObject().put("property",
-                    property).put("purchased", true));
+        else{
+            try{
+                String property = service.buyProperty(gameId, playerName, propertyName);
+                Response.sendJsonResponse(ctx, 200, new JsonObject().put("property",
+                        property).put("purchased", true));
+            }
+            catch (IllegalMonopolyActionException exception) {
+                Response.sendFailure(ctx, 409, exception.getMessage());
+            }
+            catch(MonopolyResourceNotFoundException exception){
+                Response.sendFailure(ctx, 404, exception.getMessage());
+            }
         }
-        catch (IllegalMonopolyActionException exception) {
-            Response.sendFailure(ctx, 409, exception.getMessage());
-        }
-        catch(MonopolyResourceNotFoundException exception){
-            Response.sendFailure(ctx, 404, exception.getMessage());
-        }
-
     }
 
     private void dontBuyProperty(RoutingContext ctx) {

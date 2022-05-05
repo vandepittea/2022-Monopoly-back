@@ -34,14 +34,14 @@ public class Game {
         }
         this.started = false;
         this.players = new HashSet<>();
-        this.directSale = null;
+        this.directSale = "DK Summit";
         this.availableHouses = 32;
         this.availableHotels = 12;
         this.turns = new ArrayList<>();
         this.lastDiceRoll = new Integer[2];
         this.canRoll = true;
         this.ended = false;
-        this.currentPlayer = null;
+        this.currentPlayer = "Bob";
         this.winner = null;
     }
 
