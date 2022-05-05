@@ -1,5 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation;
 
+import be.howest.ti.monopoly.logic.implementation.tile.PlayerProperty;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 
 import java.util.HashSet;
@@ -15,7 +16,7 @@ public class Player {
     private boolean bankrupt;
     private int getOutOfJailCards;
     private String taxSystem;
-    private Set<Tile> properties;
+    private Set<PlayerProperty> properties;
     private int debt;
 
     public Player(String name){
@@ -51,7 +52,7 @@ public class Player {
     public String getTaxSystem() {
         return taxSystem;
     }
-    public Set<Tile> getProperties() {
+    public Set<PlayerProperty> getProperties() {
         return properties;
     }
     public int getDebt() {
@@ -59,6 +60,10 @@ public class Player {
     }
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    public void addProperty(PlayerProperty p){
+        properties.add(p);
     }
 
     @Override
