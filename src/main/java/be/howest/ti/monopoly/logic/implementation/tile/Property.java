@@ -1,5 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
+import be.howest.ti.monopoly.logic.implementation.Player;
+
 public class Property extends Tile {
     private final int cost;
     private final int mortgage;
@@ -35,5 +37,11 @@ public class Property extends Tile {
 
     public void payMortgage(){
         mortgaged = false;
+    }
+
+    public void payProperty(Player p){
+        int currentMoneyOfPlayer = p.getMoney();
+        int newMoneyOfPlayer = currentMoneyOfPlayer - cost;
+        p.setMoney(newMoneyOfPlayer);
     }
 }

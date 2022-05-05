@@ -57,6 +57,9 @@ public class Player {
     public int getDebt() {
         return debt;
     }
+    public void setMoney(int money) {
+        this.money = money;
+    }
 
     @Override
     public boolean equals(Object o) {
