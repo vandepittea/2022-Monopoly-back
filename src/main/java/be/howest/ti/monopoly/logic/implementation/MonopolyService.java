@@ -8,7 +8,9 @@ import be.howest.ti.monopoly.logic.implementation.tile.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -99,6 +101,24 @@ public class MonopolyService extends ServiceAdapter {
         tiles.add(new Street(37, "Crumbleden", 350, 175, 2, "DARKBLUE", new Integer[]{175, 500, 1100, 1300, 1500}, 200, "DARKGREEN", 35));
         tiles.add(new CardExecutingTile(38, "Luxury Tax", "Luxury Tax"));
         tiles.add(new Street(39, "Bowser Castle", 400, 200, 2, "DARKBLUE", new Integer[]{200, 600, 1400, 1700, 2000}, 200, "DARKBLUE", 50));
+    }
+
+    @Override
+    public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
+        List<Game> gamesList = new ArrayList<>();
+
+        games.forEach(game -> {
+            if ((started == null) || (started == game.isStarted())) {
+                if ((numberOfPlayers == null) || (numberOfPlayers == game.getNumberOfPlayers())) {
+                    String gamePrefix = game.getId().split("_")[0];
+                    if (gamePrefix.equals(prefix)) {
+                        gamesList.add(game);
+                    }
+                }
+            }
+        });
+
+        return gamesList;
     }
 
     @Override

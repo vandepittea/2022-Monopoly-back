@@ -7,31 +7,52 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+import java.util.List;
+
 
 class OpenApiManagingGamesTests extends OpenApiTestsBase {
 
     @Test
     void getGames(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
+                return Collections.emptyList();
+            }
+        });
         get(
                 testContext,
                 "/games",
                 null,
-                response -> assertNotYetImplemented(response, "getGames")
+                response -> assertOkResponse(response)
         );
     }
 
     @Test
     void getGamesWithAllParams(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
+                return Collections.emptyList();
+            }
+        });
         get(
                 testContext,
                 "/games?started=true&prefix=azerty&numberOfPlayers=3",
                 null,
-                response -> assertNotYetImplemented(response, "getGames")
+                response -> assertOkResponse(response)
         );
     }
 
     @Test
     void getGamesWithInvalidStartedType(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
+                return Collections.emptyList();
+            }
+        });
         get(
                 testContext,
                 "/games?started=not-a-boolean",
@@ -42,6 +63,12 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
 
     @Test
     void getGamesWithInvalidNumberType(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
+                return Collections.emptyList();
+            }
+        });
         get(
                 testContext,
                 "/games?numberOfPlayers=not-a-number",

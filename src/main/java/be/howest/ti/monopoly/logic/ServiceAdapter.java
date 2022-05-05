@@ -34,6 +34,11 @@ public class ServiceAdapter implements IService {
     }
 
     @Override
+    public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public String[] getChance() {
         throw new UnsupportedOperationException();
     }
