@@ -197,6 +197,9 @@ public class MonopolyService extends ServiceAdapter {
         Property pr = (Property) t;
 
         pr.payProperty(pl);
+
+        PlayerProperty pp = new PlayerProperty(pr.getName());
+        pl.addProperty(pp);
     }
 
     private Game searchGameBasedOnId(String gameId){
