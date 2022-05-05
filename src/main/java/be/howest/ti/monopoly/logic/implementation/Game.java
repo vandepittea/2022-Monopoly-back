@@ -1,9 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Game {
     private static final Map<String, Integer> idCounter = new HashMap<>();
@@ -13,6 +10,15 @@ public class Game {
 
     private boolean started;
     private Set<Player> players;
+    private String directSale;
+    private int availableHouses;
+    private int availableHotels;
+    private List<String> turns;
+    private Integer[] lastDiceRoll;
+    private boolean canRoll;
+    private boolean ended;
+    private String currentPlayer;
+    private String winner;
 
     public Game(int numberOfPlayers, String prefix)
     {
@@ -28,6 +34,15 @@ public class Game {
         }
         this.started = false;
         this.players = new HashSet<>();
+        this.directSale = null;
+        this.availableHouses = 32;
+        this.availableHotels = 12;
+        this.turns = new ArrayList<>();
+        this.lastDiceRoll = new Integer[2];
+        this.canRoll = true;
+        this.ended = false;
+        this.currentPlayer = null;
+        this.winner = null;
     }
 
     public int getNumberOfPlayers()
@@ -42,6 +57,33 @@ public class Game {
     }
     public Set<Player> getPlayers() {
         return players;
+    }
+    public String getDirectSale() {
+        return directSale;
+    }
+    public int getAvailableHouses() {
+        return availableHouses;
+    }
+    public int getAvailableHotels() {
+        return availableHotels;
+    }
+    public List<String> getTurns() {
+        return turns;
+    }
+    public Integer[] getLastDiceRoll() {
+        return lastDiceRoll;
+    }
+    public boolean isCanRoll() {
+        return canRoll;
+    }
+    public boolean isEnded() {
+        return ended;
+    }
+    public String getCurrentPlayer() {
+        return currentPlayer;
+    }
+    public String getWinner() {
+        return winner;
     }
 
     public void addPlayer(Player p){
