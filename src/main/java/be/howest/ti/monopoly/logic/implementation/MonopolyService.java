@@ -149,7 +149,8 @@ public class MonopolyService extends ServiceAdapter {
                 return tile;
             }
         }
-        throw new MonopolyResourceNotFoundException("No such tile, name doesn't exist");
+        throw new MonopolyResourceNotFoundException("No such tile, name doesn't exist. Check if the name of the " +
+                "tile is spelled correctly.");
     }
 
     @Override
@@ -192,36 +193,22 @@ public class MonopolyService extends ServiceAdapter {
     @Override
     public String buyProperty(String gameId, String playerName, String propertyName){
         Game g = searchGameBasedOnId(gameId);
+        Player pl = g.searchPlayerBasedOnName(playerName);
+        Tile t = getTile(propertyName);
+        Property pr = (Property) t;
 
-        if(g != null){
-            Player pl = g.searchPlayerBasedOnName(playerName);
-            Tile t = getTile(propertyName);
+        if(playerName.equals(g.getCurrentPlayer()) && t.getName().equals(g.getDirectSale())) {
+            pr.payProperty(pl);
 
-            if(pl != null && t != null){
-                Property pr = (Property) t;
+            PlayerProperty pp = new PlayerProperty(pr.getName());
+            pl.addProperty(pp);
 
-                if(playerName.equals(g.getCurrentPlayer()) && t.getName().equals(g.getDirectSale())) {
-                    pr.payProperty(pl);
-
-                    PlayerProperty pp = new PlayerProperty(pr.getName());
-                    pl.addProperty(pp);
-
-                    return pp.getProperty();
-                }
-                else {
-                    throw new IllegalMonopolyActionException("You tried to do something which is against the rules of " +
-                            "Monopoly. In this case, it is most likely not your place to buy this property and/or you are " +
-                            "trying to buy the wrong property.");
-                }
-            }
-            else{
-                throw new MonopolyResourceNotFoundException("The player you are looking for do not exist. " +
-                        "Double check the name. Also double check if the name of the property is spelled correctly.");
-            }
+            return pp.getProperty();
         }
-        else{
-            throw new MonopolyResourceNotFoundException("The game you are looking for do not exist. " +
-                    "Double check the ID.");
+        else {
+            throw new IllegalMonopolyActionException("You tried to do something which is against the rules of " +
+                    "Monopoly. In this case, it is most likely not your place to buy this property and/or you are " +
+                    "trying to buy the wrong property.");
         }
     }
 
@@ -231,6 +218,7 @@ public class MonopolyService extends ServiceAdapter {
                 return g;
             }
         }
-        return null;
+        throw new MonopolyResourceNotFoundException("The game you are looking for do not exist. " +
+                "Double check the ID.");
     }
 }

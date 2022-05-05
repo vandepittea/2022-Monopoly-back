@@ -1,5 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation;
 
+import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
+
 import java.util.*;
 
 public class Game {
@@ -34,14 +36,14 @@ public class Game {
         }
         this.started = false;
         this.players = new HashSet<>();
-        this.directSale = "DK Summit";
+        this.directSale = null;
         this.availableHouses = 32;
         this.availableHotels = 12;
         this.turns = new ArrayList<>();
         this.lastDiceRoll = new Integer[2];
         this.canRoll = true;
         this.ended = false;
-        this.currentPlayer = "Bob";
+        this.currentPlayer = null;
         this.winner = null;
     }
 
@@ -119,6 +121,7 @@ public class Game {
                 return p;
             }
         }
-        return null;
+        throw new MonopolyResourceNotFoundException("The player you are looking for do not exist. " +
+                "Double check the name.");
     }
 }
