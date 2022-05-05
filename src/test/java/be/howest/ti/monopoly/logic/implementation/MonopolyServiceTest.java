@@ -1,5 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation;
 
+import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,5 +31,13 @@ class MonopolyServiceTest {
         assertTrue(g.getPlayers().contains(p));
         assertTrue(g.getPlayers().contains(p2));
         assertTrue(g.isStarted());
+    }
+    @Test
+    void joinGameNonExistingGameId(){
+        MonopolyService s = new MonopolyService();
+
+        Assertions.assertThrows(MonopolyResourceNotFoundException.class, () -> {
+            s.joinGame("group17_0", "Bob");
+        });
     }
 }
