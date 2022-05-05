@@ -99,4 +99,26 @@ public class Game {
     private boolean checkForReachingOfMaximumPlayers(){
         return players.size() >= numberOfPlayers;
     }
+
+    public boolean isExistedUser(String playerName){
+        for(Player p: players){
+            if(p.getName().equals(playerName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isStartedGame(){
+        return this.isStarted();
+    }
+
+    public Player searchPlayerBasedOnName(String playerName){
+        for(Player p: players){
+            if(p.getName().equals(playerName)){
+                return p;
+            }
+        }
+        return null;
+    }
 }

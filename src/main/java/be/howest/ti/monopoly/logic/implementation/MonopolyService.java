@@ -4,6 +4,7 @@ import be.howest.ti.monopoly.logic.ServiceAdapter;
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,7 +177,7 @@ public class MonopolyService extends ServiceAdapter {
             throw new MonopolyResourceNotFoundException("The game you are looking for does not exist. " +
                     "Double check the ID.");
         }
-        else if(isExistedUser(g, playerName) || isStartedGame(g)){
+        else if(g.isExistedUser(playerName) || g.isStartedGame()){
             throw new IllegalMonopolyActionException("You tried to do something which is against the " +
                     "rules of Monopoly. In this case, it is most likely that you tried to join a game which has " +
                     "already started, or you used a name that is already taken in this game.");
@@ -190,7 +191,12 @@ public class MonopolyService extends ServiceAdapter {
 
     @Override
     public void buyProperty(String gameId, String playerName, String propertyName){
+        Game g = searchGameBasedOnId(gameId);
+        Player pl = g.searchPlayerBasedOnName(playerName);
+        Tile t = getTile(propertyName);
+        Property pr = (Property) t;
 
+        pr.payProperty(pl);
     }
 
     private Game searchGameBasedOnId(String gameId){
@@ -200,18 +206,5 @@ public class MonopolyService extends ServiceAdapter {
             }
         }
         return null;
-    }
-
-    private boolean isExistedUser(Game g, String playerName){
-        for(Player p: g.getPlayers()){
-            if(p.getName().equals(playerName)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isStartedGame(Game g){
-        return g.isStarted();
     }
 }
