@@ -1,5 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation;
 
+import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,8 +37,16 @@ class MonopolyServiceTest {
     void joinGameNonExistingGameId(){
         MonopolyService s = new MonopolyService();
 
-        Assertions.assertThrows(MonopolyResourceNotFoundException.class, () -> {
-            s.joinGame("group17_0", "Bob");
-        });
+        Assertions.assertThrows(MonopolyResourceNotFoundException.class, () -> s.joinGame("group17_0", "Bob"));
+    }
+
+    @Test
+    void joinGameTwoUserWithTheSameName(){
+        MonopolyService s = new MonopolyService();
+        Game g = s.createGame(2, "group17");
+
+        s.joinGame("group17_0", "Bob");
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> s.joinGame("group17_0", "Bob"));
     }
 }
