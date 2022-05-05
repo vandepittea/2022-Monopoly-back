@@ -77,6 +77,14 @@ public class Request {
         return params.body().getJsonObject().getString("prefix");
     }
 
+    public String getPlayerNameForGame() {
+        return params.body().getJsonObject().getString("playerName");
+    }
+
+    public String getGameIdToAddPlayerTo() {
+        return params.pathParameter("gameId").getString();
+    }
+
     public Boolean getGameStarted() {
         RequestParameter parameter = params.pathParameter("started");
         if (parameter == null) {
