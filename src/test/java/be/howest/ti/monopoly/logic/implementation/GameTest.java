@@ -1,24 +1,23 @@
 package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
-import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
-    MonopolyService s = new MonopolyService();
-    Game g = s.createGame(2, "group17");
+    MonopolyService service = new MonopolyService();
+    Game game = service.createGame(2, "group17");
 
     @Test
     void joinGameSuccesful(){
         Player p = new Player("Bob");
 
-        g.joinGame("Bob");
+        game.joinGame("Bob");
 
-        assertTrue(g.getPlayers().contains(p));
-        assertFalse(g.isStarted());
+        assertTrue(game.getPlayers().contains(p));
+        assertFalse(game.isStarted());
     }
 
     @Test
@@ -26,24 +25,24 @@ class GameTest {
         Player p = new Player("Bob");
         Player p2 = new Player("Jan");
 
-        g.joinGame("Bob");
-        g.joinGame("Jan");
+        game.joinGame("Bob");
+        game.joinGame("Jan");
 
-        assertTrue(g.getPlayers().contains(p));
-        assertTrue(g.getPlayers().contains(p2));
-        assertTrue(g.isStarted());
+        assertTrue(game.getPlayers().contains(p));
+        assertTrue(game.getPlayers().contains(p2));
+        assertTrue(game.isStarted());
     }
 
     @Test
     void joinGameTwoUserWithTheSameName(){
-        g.joinGame("Bob");
+        game.joinGame("Bob");
 
-        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> g.joinGame( "Bob"));
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.joinGame( "Bob"));
     }
 
     @Test
     void joinAlreadyStartedGame() {
-        Game g = s.createGame(2, "group17");
+        Game g = service.createGame(2, "group17");
 
         g.joinGame("Bob");
         g.joinGame("Jan");

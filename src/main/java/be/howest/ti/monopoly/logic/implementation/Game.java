@@ -10,7 +10,6 @@ public class Game {
 
     private final int numberOfPlayers;
     private final String id;
-
     private boolean started;
     private Set<Player> players;
     private String directSale;
@@ -87,6 +86,12 @@ public class Game {
     }
     public String getWinner() {
         return winner;
+    }
+    public void setDirectSale(String directSale) {
+        this.directSale = directSale;
+    }
+    public void setCurrentPlayer(String currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 
     public void joinGame(String playerName){
