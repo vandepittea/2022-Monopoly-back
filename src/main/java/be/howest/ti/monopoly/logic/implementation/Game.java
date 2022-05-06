@@ -13,6 +13,20 @@ public class Game {
     private final String id;
     private boolean started;
     private List<Player> players;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return numberOfPlayers == game.numberOfPlayers && id.equals(game.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(numberOfPlayers, id);
+    }
+
     private String directSale;
     private int availableHouses;
     private int availableHotels;
@@ -47,6 +61,7 @@ public class Game {
         this.currentPlayer = null;
         this.winner = null;
         this.startingTile = startingTile;
+        this.service = service;
     }
 
     public int getNumberOfPlayers() {
@@ -137,6 +152,7 @@ public class Game {
     private void changeStartedIfNeeded() {
         if (checkForReachingOfMaximumPlayers()) {
             started = true;
+            currentPlayer = players.get(0);
         }
     }
 
@@ -168,6 +184,10 @@ public class Game {
     }
 
     public void rollDice(String playerName) {
+        if (!started){
+            throw new IllegalMonopolyActionException("The game has not started yet.");
+        }
+
         if (!currentPlayer.getName().equals(playerName)) {
             throw new IllegalMonopolyActionException("It is not your turn.");
         }
@@ -195,7 +215,7 @@ public class Game {
 
     private void movePlayer(int roll1, int roll2) {
         List<Tile> tiles = service.getTiles();
-        Tile currentPlayerTile = service.getTile(currentPlayer.getCurrentTile());
+        Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
         int nextTileIdx = currentPlayerTile.getPosition() + roll1 + roll2;
         if (nextTileIdx >= tiles.size()) {
             nextTileIdx -= tiles.size();

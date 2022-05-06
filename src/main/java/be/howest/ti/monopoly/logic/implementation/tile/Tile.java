@@ -10,7 +10,7 @@ public class Tile {
     public Tile(int position, String name) {
         this.position = position;
         this.name = name;
-        this.nameAsPathParameter = decideNameAsPathParameter();
+        this.nameAsPathParameter = Tile.decideNameAsPathParameter(name);
     }
 
     public String getName() {
@@ -23,8 +23,8 @@ public class Tile {
         return nameAsPathParameter;
     }
 
-    public String decideNameAsPathParameter(){
-        return name.replaceAll(" ", "_");
+    public static String decideNameAsPathParameter(String tileName){
+        return tileName.replaceAll(" ", "_");
     }
 
     @Override
