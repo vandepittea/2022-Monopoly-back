@@ -187,7 +187,7 @@ public class MonopolyService extends ServiceAdapter {
     @Override
     public String buyProperty(String gameId, String playerName, String propertyName){
         Game g = searchGameBasedOnId(gameId);
-        Player pl = g.searchPlayerBasedOnName(playerName);
+        Player pl = g.getPlayer(playerName);
         Tile t = getTile(propertyName);
         Property pr = (Property) t;
 

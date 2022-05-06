@@ -134,7 +134,7 @@ public class Game {
         return this.isStarted();
     }
 
-    public Player searchPlayerBasedOnName(String playerName){
+    public Player getPlayer(String playerName){
         for(Player p: players){
             if(p.getName().equals(playerName)){
                 return p;
