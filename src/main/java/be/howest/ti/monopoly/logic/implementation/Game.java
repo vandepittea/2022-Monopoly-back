@@ -1,5 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation;
 
+import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 
 import java.util.*;
@@ -89,9 +90,16 @@ public class Game {
     }
 
     public void joinGame(String playerName){
-        Player p = new Player(playerName);
-        addPlayer(p);
-        changeStartedIfNeeded();
+        if(isExistedUser(playerName) || isStartedGame()){
+            throw new IllegalMonopolyActionException("You tried to do something which is against the " +
+                    "rules of Monopoly. In this case, it is most likely that you tried to join a game which has " +
+                    "already started, or you used a name that is already taken in this game.");
+        }
+        else{
+            Player p = new Player(playerName);
+            addPlayer(p);
+            changeStartedIfNeeded();
+        }
     }
 
     private void addPlayer(Player p){
@@ -108,7 +116,7 @@ public class Game {
         return players.size() >= numberOfPlayers;
     }
 
-    public boolean isExistedUser(String playerName){
+    private boolean isExistedUser(String playerName){
         for(Player p: players){
             if(p.getName().equals(playerName)){
                 return true;
@@ -117,7 +125,7 @@ public class Game {
         return false;
     }
 
-    public boolean isStartedGame(){
+    private boolean isStartedGame(){
         return this.isStarted();
     }
 

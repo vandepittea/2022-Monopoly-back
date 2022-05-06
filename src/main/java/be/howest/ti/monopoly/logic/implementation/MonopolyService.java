@@ -185,14 +185,7 @@ public class MonopolyService extends ServiceAdapter {
     public void joinGame(String gameId, String playerName){
         Game g = searchGameBasedOnId(gameId);
 
-        if(g.isExistedUser(playerName) || g.isStartedGame()){
-            throw new IllegalMonopolyActionException("You tried to do something which is against the " +
-                    "rules of Monopoly. In this case, it is most likely that you tried to join a game which has " +
-                    "already started, or you used a name that is already taken in this game.");
-        }
-        else{
-            g.joinGame(playerName);
-        }
+        g.joinGame(playerName);
     }
 
     @Override
