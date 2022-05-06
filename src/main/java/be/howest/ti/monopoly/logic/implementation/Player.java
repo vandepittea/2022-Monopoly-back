@@ -73,6 +73,10 @@ public class Player {
         this.money = money;
     }
 
+    public void becomeBankrupt(){
+        this.bankrupt = true;
+    }
+
     public void buyProperty(Property pr) {
         boolean succesfulPayment = payProperty(pr);
 
