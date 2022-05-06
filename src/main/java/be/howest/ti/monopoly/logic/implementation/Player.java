@@ -1,5 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation;
 
+import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.web.views.PropertyView;
 
@@ -63,16 +64,28 @@ public class Player {
     }
 
     public void buyProperty(Property pr){
-        payProperty(pr);
-        addProperty(new PropertyView(pr));
+        boolean succesfulPayment = payProperty(pr);
+
+        if(succesfulPayment){
+            addProperty(new PropertyView(pr));
+        }
+        else{
+            throw new IllegalMonopolyActionException("You don't have enough money to buy this property");
+        }
     }
 
     private void addProperty(PropertyView p){
         properties.add(p);
     }
 
-    private void payProperty(Property pr){
-        money -= pr.getCost();
+    private boolean payProperty(Property pr){
+        if(money > pr.getCost()){
+            money -= pr.getCost();
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     @Override
