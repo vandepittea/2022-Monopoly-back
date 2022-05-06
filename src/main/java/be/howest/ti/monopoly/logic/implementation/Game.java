@@ -219,6 +219,12 @@ public class Game {
         currentPlayer = players.get(playerIdx);
     }
 
+    public void declareBankruptcy(String playerName){
+        Player p = getPlayer(playerName);
+        p.becomeBankrupt();
+        players.add(p);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

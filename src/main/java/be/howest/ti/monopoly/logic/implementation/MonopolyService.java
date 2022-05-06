@@ -203,13 +203,6 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public Game rollDice(String gameId, String playerName) {
-        Game game = getGame(gameId);
-        game.rollDice(playerName);
-        return game;
-    }
-
-    @Override
     public Game getGame(String gameId) {
         for (Game game : games) {
             if (game.getId().equals(gameId)) {
@@ -217,5 +210,19 @@ public class MonopolyService extends ServiceAdapter {
             }
         }
         throw new MonopolyResourceNotFoundException("The game you are looking for does not exist. Double check the ID.");
+    }
+
+    @Override
+    public Game rollDice(String gameId, String playerName) {
+        Game game = getGame(gameId);
+        game.rollDice(playerName);
+        return game;
+    }
+
+    @Override
+    public Game declareBankruptcy(String gameId, String playerName){
+        Game g = getGame(gameId);
+        g.declareBankruptcy(playerName);
+        return g;
     }
 }
