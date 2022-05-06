@@ -172,7 +172,7 @@ public class MonopolyService extends ServiceAdapter {
 
     @Override
     public Game createGame(int numberOfPlayers, String prefix) {
-        Game newGame = new Game(numberOfPlayers, prefix);
+        Game newGame = new Game(this, numberOfPlayers, prefix, tiles.get(0));
         games.add(newGame);
         return newGame;
     }
@@ -200,6 +200,13 @@ public class MonopolyService extends ServiceAdapter {
                     "Monopoly. In this case, it is most likely not your place to buy this property and/or you are " +
                     "trying to buy the wrong property.");
         }
+    }
+
+    @Override
+    public Game rollDice(String gameId, String playerName) {
+        Game game = getGame(gameId);
+        game.rollDice(playerName);
+        return game;
     }
 
     @Override

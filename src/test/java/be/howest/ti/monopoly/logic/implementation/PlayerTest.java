@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlayerTest {
     @Test
     void buyPropertySuccesful(){
-        Player pl = new Player("Bob");
+        Player pl = new Player("Bob", null);
         Property pr = new Property(1, "name", 5, 3, 2, "PURPLE");
         PropertyView prView = new PropertyView(pr);
 
@@ -24,7 +24,7 @@ class PlayerTest {
 
     @Test
     void buyPropertyFailPayment(){
-        Player pl = new Player("Bob");
+        Player pl = new Player("Bob", null);
         Property pr = new Property(1, "name", 1505, 3, 2, "PURPLE");
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> pl.buyProperty(pr));

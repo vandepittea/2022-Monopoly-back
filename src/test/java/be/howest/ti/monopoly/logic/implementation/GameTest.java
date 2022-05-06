@@ -13,7 +13,7 @@ class GameTest {
 
     @Test
     void joinGameSuccesful(){
-        Player p = new Player("Bob");
+        Player p = new Player("Bob", null);
 
         game.joinGame("Bob");
 
@@ -23,8 +23,8 @@ class GameTest {
 
     @Test
     void joinGameAndStartGame(){
-        Player p = new Player("Bob");
-        Player p2 = new Player("Jan");
+        Player p = new Player("Bob", null);
+        Player p2 = new Player("Jan", null);
 
         game.joinGame("Bob");
         game.joinGame("Jan");
@@ -54,7 +54,7 @@ class GameTest {
     @Test
     void getPlayerSuccesful(){
         Game g = service.createGame(2, "group17");
-        Player p = new Player("Bob");
+        Player p = new Player("Bob", null);
         g.joinGame("Bob");
 
         assertEquals(p, g.getPlayer("Bob"));
@@ -65,5 +65,35 @@ class GameTest {
         Game g = service.createGame(2, "group17");
 
         Assertions.assertThrows(MonopolyResourceNotFoundException.class, () -> g.getPlayer("Unexisted"));
+    }
+
+    @Test
+    void rollDiceGameNotStarted() {
+        Game game = service.createGame(2, "group17");
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Jonas"));
+    }
+
+    @Test
+    void rollDiceWrongPlayer() {
+        Game game = service.createGame(2, "group17");
+        game.joinGame("Jonas");
+        game.joinGame("Thomas");
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Thomas"));
+    }
+
+    //TODO: make rollDice test for directSale when this is implemented
+
+    @Test
+    void rollDice() {
+        Game game = service.createGame(2, "group17");
+
+        game.joinGame("Jonas");
+        game.joinGame("Thomas");
+
+        assertEquals(game, service.rollDice(game.getId(), "Jonas"));
+        assertNotEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile());
+        assertEquals("Thomas", game.getCurrentPlayer());
+        assertEquals(1, game.getTurns().size());
+        assertEquals(game.getLastDiceRoll(), game.getTurns().get(game.getTurns().size() - 1).getRoll());
     }
 }
