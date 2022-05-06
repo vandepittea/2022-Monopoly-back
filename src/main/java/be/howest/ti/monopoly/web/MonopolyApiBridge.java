@@ -163,8 +163,8 @@ public class MonopolyApiBridge {
             Response.sendFailure(ctx, 400, "Empty body");
         }
 
-        int numberOfPlayers = request.getNumberOfPlayers();
-        String prefix = request.getPrefix();
+        int numberOfPlayers = request.getNumberOfPlayersOfBody();
+        String prefix = request.getPrefixOfBody();
 
         Response.sendJsonResponse(ctx, 200, service.createGame(numberOfPlayers, prefix));
     }
@@ -172,8 +172,8 @@ public class MonopolyApiBridge {
     private void getGames(RoutingContext ctx) {
         Request request = Request.from(ctx);
         Boolean isStarted = request.isGameStarted();
-        Integer numberOfPlayers = request.getNumberOfPlayers();
-        String prefix = request.getPrefix();
+        Integer numberOfPlayers = request.getNumberOfPlayersOfPath();
+        String prefix = request.getPrefixOfPath();
 
         Response.sendJsonResponse(ctx, 200, service.getGames(isStarted, numberOfPlayers, prefix));
     }

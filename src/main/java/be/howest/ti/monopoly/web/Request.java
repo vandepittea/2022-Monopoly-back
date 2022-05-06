@@ -69,12 +69,29 @@ public class Request {
         return params.pathParameter("tileId").getString();
     }
 
-    public int getNumberOfPlayers() {
+    public int getNumberOfPlayersOfBody() {
         return params.body().getJsonObject().getInteger("numberOfPlayers");
     }
 
-    public String getPrefix() {
+    public Integer getNumberOfPlayersOfPath(){
+        RequestParameter parameter = params.pathParameter("numberOfPlayers");
+        if (parameter == null) {
+            return null;
+        }
+        return parameter.getInteger();
+    }
+
+    public String getPrefixOfBody() {
         return params.body().getJsonObject().getString("prefix");
+    }
+
+    public String getPrefixOfPath(){
+        RequestParameter parameter = params.pathParameter("prefix");
+        if (parameter == null) {
+            return null;
+        }
+        return parameter.getString();
+
     }
 
     public String getPlayerNameOfBody() {
