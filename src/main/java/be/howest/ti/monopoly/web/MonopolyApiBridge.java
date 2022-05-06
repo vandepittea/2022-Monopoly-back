@@ -68,7 +68,6 @@ public class MonopolyApiBridge {
         routerBuilder.operation("getGames").handler(this::getGames);
         routerBuilder.operation("createGame").handler(this::createGame);
         routerBuilder.operation("joinGame").handler(this::joinGame);
-        routerBuilder.operation("clearGameList").handler(this::clearGameList);
 
         // Game Info
         routerBuilder.operation("getGame").handler(this::getGame);
