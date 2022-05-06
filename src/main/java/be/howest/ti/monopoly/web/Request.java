@@ -69,31 +69,11 @@ public class Request {
         return params.pathParameter("tileId").getString();
     }
 
-    public int getNumberOfPlayersForNewGame() {
+    public int getNumberOfPlayersOfBody() {
         return params.body().getJsonObject().getInteger("numberOfPlayers");
     }
 
-    public String getPrefixForNewGame() {
-        return params.body().getJsonObject().getString("prefix");
-    }
-
-    public String getPlayerNameForGame() {
-        return params.body().getJsonObject().getString("playerName");
-    }
-
-    public String getGameIdToAddPlayerTo() {
-        return params.pathParameter("gameId").getString();
-    }
-
-    public Boolean getGameStarted() {
-        RequestParameter parameter = params.pathParameter("started");
-        if (parameter == null) {
-            return null;
-        }
-        return parameter.getBoolean();
-    }
-
-    public Integer getNumberOfPlayersOfGame() {
+    public Integer getNumberOfPlayersOfPath(){
         RequestParameter parameter = params.pathParameter("numberOfPlayers");
         if (parameter == null) {
             return null;
@@ -101,11 +81,40 @@ public class Request {
         return parameter.getInteger();
     }
 
-    public String getPrefixOfGame() {
+    public String getPrefixOfBody() {
+        return params.body().getJsonObject().getString("prefix");
+    }
+
+    public String getPrefixOfPath(){
         RequestParameter parameter = params.pathParameter("prefix");
         if (parameter == null) {
             return null;
         }
         return parameter.getString();
+
+    }
+
+    public String getPlayerNameOfBody() {
+        return params.body().getJsonObject().getString("playerName");
+    }
+
+    public String getPlayerNameOfPath() {
+        return params.pathParameter("playerName").getString();
+    }
+
+    public String getGameId() {
+        return params.pathParameter("gameId").getString();
+    }
+
+    public Boolean isGameStarted() {
+        RequestParameter parameter = params.pathParameter("started");
+        if (parameter == null) {
+            return null;
+        }
+        return parameter.getBoolean();
+    }
+
+    public String getPropertyName() {
+        return params.pathParameter("propertyName").getString();
     }
 }

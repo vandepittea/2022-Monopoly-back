@@ -2,70 +2,46 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
+import be.howest.ti.monopoly.logic.implementation.tile.Street;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MonopolyServiceTest {
+    MonopolyService service = new MonopolyService();
+
     @Test
-    void joinGameSuccesful(){
-        MonopolyService s = new MonopolyService();
-        Game g = s.createGame(2, "group17");
-        Player p = new Player("Bob");
+    void getTileOnPositionSuccesful(){
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
 
-        s.joinGame(g.getId(), "Bob");
-
-        assertTrue(g.getPlayers().contains(p));
-        assertFalse(g.isStarted());
+        assertEquals(s, service.getTile(1));
     }
 
     @Test
-    void joinGameAndStartGame(){
-        MonopolyService s = new MonopolyService();
-        Game g = s.createGame(2, "group17");
-        Player p = new Player("Bob");
-        Player p2 = new Player("Jan");
+    void getTileOnPositionIndexOutOfBound(){
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
 
-        s.joinGame(g.getId(), "Bob");
-        s.joinGame(g.getId(), "Jan");
-
-        assertTrue(g.getPlayers().contains(p));
-        assertTrue(g.getPlayers().contains(p2));
-        assertTrue(g.isStarted());
+        Assertions.assertThrows(MonopolyResourceNotFoundException.class, () -> service.getTile(40));
     }
 
     @Test
-    void joinGameNonExistingGameId(){
-        MonopolyService s = new MonopolyService();
+    void getTileOnNameSuccesful(){
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
 
-        Assertions.assertThrows(MonopolyResourceNotFoundException.class, () -> s.joinGame("group17_0", "Bob"));
+        assertEquals(s, service.getTile("Peach's_Garden"));
     }
 
     @Test
-    void joinGameTwoUserWithTheSameName(){
-        MonopolyService s = new MonopolyService();
-        Game g = s.createGame(2, "group17");
-
-        s.joinGame(g.getId(), "Bob");
-
-        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> s.joinGame(g.getId(), "Bob"));
-    }
-
-    @Test
-    void joinAlreadyStartedGame() {
-        MonopolyService s = new MonopolyService();
-        Game g = s.createGame(2, "group17");
-
-        s.joinGame(g.getId(), "Bob");
-        s.joinGame(g.getId(), "Jan");
-
-        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> s.joinGame(g.getId(), "Jonas"));
+    void getTileOnNameUnexistedTile(){
+        Assertions.assertThrows(MonopolyResourceNotFoundException.class, () -> service.getTile("Unexisted_Tile"));
     }
 
     @Test
     void testGetGames() {
-        MonopolyService service = new MonopolyService();
         assertEquals(0, service.getGames(false, 2, "test").size());
         service.createGame(2, "test");
         assertEquals(1, service.getGames(false, 2, "test").size());
@@ -76,31 +52,65 @@ class MonopolyServiceTest {
 
     @Test
     void testGetGamesWithoutPrefix() {
-        MonopolyService service = new MonopolyService();
         service.createGame(2, "test");
         assertEquals(0, service.getGames(false, 2, null).size());
     }
 
     @Test
     void testGetGamesWithoutNumber() {
-        MonopolyService service = new MonopolyService();
         service.createGame(2, "test");
         assertEquals(1, service.getGames(false, null, "test").size());
     }
 
     @Test
     void testGetGamesWithoutStarted() {
-        MonopolyService service = new MonopolyService();
         service.createGame(2, "test");
         assertEquals(1, service.getGames(null, 2, "test").size());
     }
 
     @Test
     void testGetGamesWithoutMultipleParamater() {
-        MonopolyService service = new MonopolyService();
         service.createGame(2, "test");
         assertEquals(0, service.getGames(false, null, null).size());
         assertEquals(0, service.getGames(null, 2, null).size());
         assertEquals(1, service.getGames(null, null, "test").size());
+    }
+
+    @Test
+    void buyProperty(){
+        Game g = service.createGame(2, "group17");
+
+        g.joinGame("Jan");
+        g.setCurrentPlayer("Jan");
+        g.setDirectSale("DK Summit");
+
+        assertEquals("DK Summit", service.buyProperty(g.getId(),
+                "Jan", "DK_Summit"));
+    }
+
+    @Test
+    void buyPropertyIncorrectUser(){
+        Game g = service.createGame(2, "group17");
+
+        g.joinGame("Bob");
+        g.joinGame("Jan");
+        g.setCurrentPlayer("Jan");
+        g.setDirectSale("DK Summit");
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> service.buyProperty(g.getId(),
+                "Bob", "DK_Summit"));
+    }
+
+    @Test
+    void buyPropertyIncorrectProperty(){
+        Game g = service.createGame(2, "group17");
+
+        g.joinGame("Bob");
+        g.joinGame("Jan");
+        g.setCurrentPlayer("Jan");
+        g.setDirectSale("Steam Gardens");
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> service.buyProperty(g.getId(),
+                "Jan", "DK_Summit"));
     }
 }

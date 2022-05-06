@@ -17,4 +17,5 @@ public interface IService {
     String[] getChance();
     String[] getCommunityChest();
     void joinGame(String gameId, String playerName);
+    String buyProperty(String gameId, String playerName, String propertyName);
 }

@@ -8,59 +8,28 @@ import be.howest.ti.monopoly.logic.implementation.tile.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
 public class MonopolyService extends ServiceAdapter {
     private Set<Game> games;
-    private List<Tile> tiles;
-    private String[] chances;
-    private String[] communityChests;
+    private final List<Tile> tiles;
+    private final String[] chances;
+    private final String[] communityChests;
 
     public MonopolyService() {
         games = new HashSet<>();
 
-        chances = new String[]{
-                "Advance to Boardwalk",
-                "Advance to Go (Collect $200)",
-                "Advance to Illinois Avenue. If you pass Go, collect $200",
-                "Advance to St. Charles Place. If you pass Go, collect $200",
-                "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled",
-                "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.",
-                "Bank pays you dividend of $50",
-                "Get Out of Jail Free",
-                "Go Back 3 Spaces",
-                "Go to Jail. Go directly to Jail, do not pass Go, do not collect $200",
-                "Make general repairs on all your property. For each house pay $25. For each hotel pay $100",
-                "Speeding fine $15",
-                "Take a trip to Reading Railroad. If you pass Go, collect $200",
-                "You have been elected Chairman of the Board. Pay each player $50",
-                "Your building loan matures. Collect $150"
-        };
+        chances = generateChances();
 
-        communityChests = new String[]{
-                "Advance to Go (Collect $200)",
-                "Bank error in your favor. Collect $200",
-                "Doctor's fee. Pay $50",
-                "From sale of stock you get $50",
-                "Get Out of Jail Free",
-                "Go to Jail. Go directly to jail, do not pass Go, do not collect $200",
-                "Holiday fund matures. Receive $100",
-                "Income tax refund. Collect $20",
-                "It is your birthday. Collect $10 from every player",
-                "Life insurance matures. Collect $100",
-                "Pay hospital fees of $100 ",
-                "Pay school fees of $50",
-                "Receive $25 consultancy fee ",
-                "You are assessed for street repair. $40 per house. $115 per hotel",
-                "You have won second prize in a beauty contest. Collect $10",
-                "You inherit $100"
-        };
+        communityChests = generateCommunityChests();
 
         tiles = new ArrayList<>();
+        generateTiles();
+    }
+
+    private void generateTiles(){
         tiles.add(new SimpleTile(0, "Peach Castle", "Go"));
         tiles.add(new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2));
         tiles.add(new CardExecutingTile(2, "Community Chest I", "community chest"));
@@ -103,6 +72,86 @@ public class MonopolyService extends ServiceAdapter {
         tiles.add(new Street(39, "Bowser Castle", 400, 200, 2, "DARKBLUE", new Integer[]{200, 600, 1400, 1700, 2000}, 200, "DARKBLUE", 50));
     }
 
+    private String[] generateChances(){
+        return new String[]{ "Advance to Boardwalk",
+                "Advance to Go (Collect $200)",
+                "Advance to Illinois Avenue. If you pass Go, collect $200",
+                "Advance to St. Charles Place. If you pass Go, collect $200",
+                "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled",
+                "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.",
+                "Bank pays you dividend of $50",
+                "Get Out of Jail Free",
+                "Go Back 3 Spaces",
+                "Go to Jail. Go directly to Jail, do not pass Go, do not collect $200",
+                "Make general repairs on all your property. For each house pay $25. For each hotel pay $100",
+                "Speeding fine $15",
+                "Take a trip to Reading Railroad. If you pass Go, collect $200",
+                "You have been elected Chairman of the Board. Pay each player $50",
+                "Your building loan matures. Collect $150"
+        };
+    }
+
+    private String[] generateCommunityChests(){
+        return new String[]{ "Advance to Go (Collect $200)",
+                "Bank error in your favor. Collect $200",
+                "Doctor's fee. Pay $50",
+                "From sale of stock you get $50",
+                "Get Out of Jail Free",
+                "Go to Jail. Go directly to jail, do not pass Go, do not collect $200",
+                "Holiday fund matures. Receive $100",
+                "Income tax refund. Collect $20",
+                "It is your birthday. Collect $10 from every player",
+                "Life insurance matures. Collect $100",
+                "Pay hospital fees of $100 ",
+                "Pay school fees of $50",
+                "Receive $25 consultancy fee ",
+                "You are assessed for street repair. $40 per house. $115 per hotel",
+                "You have won second prize in a beauty contest. Collect $10",
+                "You inherit $100"
+        };
+    }
+
+    @Override
+    public String getVersion() {
+        return "0.0.1";
+    }
+
+    @Override
+    public List<Tile> getTiles(){
+        return tiles;
+    }
+
+    @Override
+    public String[] getChance(){
+        return chances;
+    }
+
+    @Override
+    public String[] getCommunityChest(){
+        return communityChests;
+    }
+
+    @Override
+    public Tile getTile(int position){
+        for(Tile tile: getTiles()){
+            if(tile.getPosition() == position){
+                return tile;
+            }
+        }
+        throw new MonopolyResourceNotFoundException("No such tile, index out of bounds.");
+    }
+
+    @Override
+    public Tile getTile(String name){
+        for(Tile tile: getTiles()){
+            if(tile.getNameAsPathParameter().equals(name)){
+                return tile;
+            }
+        }
+        throw new MonopolyResourceNotFoundException("No such tile, name doesn't exist. Check if the name of the " +
+                "tile is spelled correctly.");
+    }
+
     @Override
     public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
         List<Game> gamesList = new ArrayList<>();
@@ -122,36 +171,6 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public String getVersion() {
-        return "0.0.1";
-    }
-
-    @Override
-    public List<Tile> getTiles(){
-        return tiles;
-    }
-
-    @Override
-    public Tile getTile(int position){
-        for(Tile tile: getTiles()){
-            if(tile.getPosition() == position){
-                return tile;
-            }
-        }
-        throw new MonopolyResourceNotFoundException("No such tile, index out of bounds.");
-    }
-
-    @Override
-    public Tile getTile(String name){
-        for(Tile tile: getTiles()){
-            if(tile.getName().equals(name)){
-                return tile;
-            }
-        }
-        throw new MonopolyResourceNotFoundException("No such tile, name doesn't exist");
-    }
-
-    @Override
     public Game createGame(int numberOfPlayers, String prefix) {
         Game newGame = new Game(numberOfPlayers, prefix);
         games.add(newGame);
@@ -159,32 +178,27 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public String[] getChance(){
-        return chances;
-    }
-
-    @Override
-    public String[] getCommunityChest(){
-        return communityChests;
-    }
-
-    @Override
     public void joinGame(String gameId, String playerName){
         Game g = searchGameBasedOnId(gameId);
 
-        if(g == null){
-            throw new MonopolyResourceNotFoundException("The game you are looking for does not exist. " +
-                    "Double check the ID.");
+        g.joinGame(playerName);
+    }
+
+    @Override
+    public String buyProperty(String gameId, String playerName, String propertyName){
+        Game g = searchGameBasedOnId(gameId);
+        Player pl = g.getPlayer(playerName);
+        Tile t = getTile(propertyName);
+        Property pr = (Property) t;
+
+        if(playerName.equals(g.getCurrentPlayer()) && t.getName().equals(g.getDirectSale())) {
+            pl.buyProperty(pr);
+            return pr.getName();
         }
-        else if(isExistedUser(g, playerName) || isStartedGame(g)){
-            throw new IllegalMonopolyActionException("You tried to do something which is against the " +
-                    "rules of Monopoly. In this case, it is most likely that you tried to join a game which has " +
-                    "already started, or you used a name that is already taken in this game.");
-        }
-        else{
-            Player p = new Player(playerName);
-            g.addPlayer(p);
-            g.changeStartedIfNeeded();
+        else {
+            throw new IllegalMonopolyActionException("You tried to do something which is against the rules of " +
+                    "Monopoly. In this case, it is most likely not your place to buy this property and/or you are " +
+                    "trying to buy the wrong property.");
         }
     }
 
@@ -194,19 +208,7 @@ public class MonopolyService extends ServiceAdapter {
                 return g;
             }
         }
-        return null;
-    }
-
-    private boolean isExistedUser(Game g, String playerName){
-        for(Player p: g.getPlayers()){
-            if(p.getName().equals(playerName)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isStartedGame(Game g){
-        return g.isStarted();
+        throw new MonopolyResourceNotFoundException("The game you are looking for do not exist. " +
+                "Double check the ID.");
     }
 }

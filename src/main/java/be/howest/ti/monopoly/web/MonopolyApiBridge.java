@@ -24,9 +24,6 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class MonopolyApiBridge {
 
     private static final Logger LOGGER = Logger.getLogger(MonopolyApiBridge.class.getName());
@@ -166,17 +163,17 @@ public class MonopolyApiBridge {
             Response.sendFailure(ctx, 400, "Empty body");
         }
 
-        int numberOfPlayers = request.getNumberOfPlayersForNewGame();
-        String prefix = request.getPrefixForNewGame();
+        int numberOfPlayers = request.getNumberOfPlayersOfBody();
+        String prefix = request.getPrefixOfBody();
 
         Response.sendJsonResponse(ctx, 200, service.createGame(numberOfPlayers, prefix));
     }
 
     private void getGames(RoutingContext ctx) {
         Request request = Request.from(ctx);
-        Boolean isStarted = request.getGameStarted();
-        Integer numberOfPlayers = request.getNumberOfPlayersOfGame();
-        String prefix = request.getPrefixOfGame();
+        Boolean isStarted = request.isGameStarted();
+        Integer numberOfPlayers = request.getNumberOfPlayersOfPath();
+        String prefix = request.getPrefixOfPath();
 
         Response.sendJsonResponse(ctx, 200, service.getGames(isStarted, numberOfPlayers, prefix));
     }
@@ -184,8 +181,8 @@ public class MonopolyApiBridge {
     private void joinGame(RoutingContext ctx) {
         Request request = Request.from(ctx);
 
-        String playerName = request.getPlayerNameForGame();
-        String gameId = request.getGameIdToAddPlayerTo();
+        String playerName = request.getPlayerNameOfBody();
+        String gameId = request.getGameId();
 
         try{
             service.joinGame(gameId, playerName);
@@ -225,7 +222,29 @@ public class MonopolyApiBridge {
     }
 
     private void buyProperty(RoutingContext ctx) {
-        throw new NotYetImplementedException("buyProperty");
+        Request request = Request.from(ctx);
+
+        String gameId = request.getGameId();
+        String playerName = request.getPlayerNameOfPath();
+        String propertyName = request.getPropertyName();
+
+        if(!request.isAuthorized(gameId, playerName)){
+            throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you " +
+                    "passed along is valid token for this game and is the token that gives this player access.");
+        }
+        else{
+            try{
+                String property = service.buyProperty(gameId, playerName, propertyName);
+                Response.sendJsonResponse(ctx, 200, new JsonObject().put("property",
+                        property).put("purchased", true));
+            }
+            catch (IllegalMonopolyActionException exception) {
+                Response.sendFailure(ctx, 409, exception.getMessage());
+            }
+            catch(MonopolyResourceNotFoundException exception){
+                Response.sendFailure(ctx, 404, exception.getMessage());
+            }
+        }
     }
 
     private void dontBuyProperty(RoutingContext ctx) {
