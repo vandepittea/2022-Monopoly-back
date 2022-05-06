@@ -3,6 +3,7 @@ package be.howest.ti.monopoly.logic.implementation;
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
+import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 
 import java.util.*;
 
@@ -13,24 +14,10 @@ public class Game {
     private final String id;
     private boolean started;
     private List<Player> players;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Game game = (Game) o;
-        return numberOfPlayers == game.numberOfPlayers && id.equals(game.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(numberOfPlayers, id);
-    }
-
     private String directSale;
     private int availableHouses;
     private int availableHotels;
-    private List<String> turns;
+    private List<Turn> turns;
     private Integer[] lastDiceRoll;
     private boolean canRoll;
     private boolean ended;
@@ -92,7 +79,7 @@ public class Game {
         return availableHotels;
     }
 
-    public List<String> getTurns() {
+    public List<Turn> getTurns() {
         return turns;
     }
 
@@ -109,6 +96,9 @@ public class Game {
     }
 
     public String getCurrentPlayer() {
+        if (currentPlayer == null) {
+            return null;
+        }
         return currentPlayer.getName();
     }
 
@@ -184,7 +174,7 @@ public class Game {
     }
 
     public void rollDice(String playerName) {
-        if (!started){
+        if (!started) {
             throw new IllegalMonopolyActionException("The game has not started yet.");
         }
 
@@ -196,12 +186,28 @@ public class Game {
             throw new IllegalMonopolyActionException("You can't roll the dice as long as you can buy property");
         }
 
-        Random r = new Random();
-        int roll1 = r.nextInt(6) + 1;
-        int roll2 = r.nextInt(6) + 1;
+        Turn turn = new Turn(currentPlayer);
+        lastDiceRoll = turn.generateRoll();
 
-        movePlayer(roll1, roll2);
-        changeCurrentPlayer();
+        movePlayer(turn, lastDiceRoll);
+        turns.add(turn);
+
+        if (!Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
+            changeCurrentPlayer();
+        }
+    }
+
+    private void movePlayer(Turn turn, Integer[] roll) {
+        List<Tile> tiles = service.getTiles();
+        Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
+        int nextTileIdx = currentPlayerTile.getPosition() + roll[0] + roll[1];
+        if (nextTileIdx >= tiles.size()) {
+            nextTileIdx -= tiles.size();
+        }
+        Tile newTile = service.getTile(nextTileIdx);
+        currentPlayer.MoveTo(newTile);
+
+        turn.addMove(newTile.getName(), "Description");
     }
 
     private void changeCurrentPlayer() {
@@ -213,13 +219,16 @@ public class Game {
         currentPlayer = players.get(playerIdx);
     }
 
-    private void movePlayer(int roll1, int roll2) {
-        List<Tile> tiles = service.getTiles();
-        Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
-        int nextTileIdx = currentPlayerTile.getPosition() + roll1 + roll2;
-        if (nextTileIdx >= tiles.size()) {
-            nextTileIdx -= tiles.size();
-        }
-        currentPlayer.MoveTo(service.getTile(nextTileIdx));
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return numberOfPlayers == game.numberOfPlayers && id.equals(game.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(numberOfPlayers, id);
     }
 }
