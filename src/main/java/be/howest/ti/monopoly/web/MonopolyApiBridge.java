@@ -198,7 +198,19 @@ public class MonopolyApiBridge {
     }
 
     private void getGame(RoutingContext ctx) {
-        throw new NotYetImplementedException("getGame");
+        Request request = Request.from(ctx);
+
+        String gameId = request.getGameId();
+
+        if (!request.isAuthorizedOnlyGame(gameId)) {
+            throw new ForbiddenAccessException("You cannot get the info of this game");
+        }
+
+        try {
+            Response.sendJsonResponse(ctx, 200, service.getGame(gameId));
+        } catch (MonopolyResourceNotFoundException exception) {
+            Response.sendFailure(ctx, 404, exception.getMessage());
+        }
     }
 
     private void getDummyGame(RoutingContext ctx) {
