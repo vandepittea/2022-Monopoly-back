@@ -2,9 +2,7 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
-import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.logic.implementation.tile.Street;
-import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
