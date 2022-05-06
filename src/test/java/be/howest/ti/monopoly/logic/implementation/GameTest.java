@@ -93,5 +93,7 @@ class GameTest {
         assertEquals(game, service.rollDice(game.getId(), "Jonas"));
         assertNotEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile());
         assertEquals("Thomas", game.getCurrentPlayer());
+        assertEquals(1, game.getTurns().size());
+        assertEquals(game.getLastDiceRoll(), game.getTurns().get(game.getTurns().size() - 1).getRoll());
     }
 }
