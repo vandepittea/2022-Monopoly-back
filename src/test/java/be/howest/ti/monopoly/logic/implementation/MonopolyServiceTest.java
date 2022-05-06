@@ -3,6 +3,7 @@ package be.howest.ti.monopoly.logic.implementation;
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
+import be.howest.ti.monopoly.logic.implementation.tile.Street;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,35 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MonopolyServiceTest {
     MonopolyService service = new MonopolyService();
+
+    @Test
+    void getTileOnPositionSuccesful(){
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+
+        assertEquals(s, service.getTile(1));
+    }
+
+    @Test
+    void getTileOnPositionIndexOutOfBound(){
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+
+        Assertions.assertThrows(MonopolyResourceNotFoundException.class, () -> service.getTile(40));
+    }
+
+    @Test
+    void getTileOnNameSuccesful(){
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+
+        assertEquals(s, service.getTile("Peach's_Garden"));
+    }
+
+    @Test
+    void getTileOnNameUnexistedTile(){
+        Assertions.assertThrows(MonopolyResourceNotFoundException.class, () -> service.getTile("Unexisted_Tile"));
+    }
 
     @Test
     void testGetGames() {

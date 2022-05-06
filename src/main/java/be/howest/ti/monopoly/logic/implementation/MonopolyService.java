@@ -116,24 +116,6 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
-        List<Game> gamesList = new ArrayList<>();
-
-        games.forEach(game -> {
-            if ((started == null) || (started == game.isStarted())) {
-                if ((numberOfPlayers == null) || (numberOfPlayers == game.getNumberOfPlayers())) {
-                    String gamePrefix = game.getId().split("_")[0];
-                    if (gamePrefix.equals(prefix)) {
-                        gamesList.add(game);
-                    }
-                }
-            }
-        });
-
-        return gamesList;
-    }
-
-    @Override
     public String getVersion() {
         return "0.0.1";
     }
@@ -141,6 +123,16 @@ public class MonopolyService extends ServiceAdapter {
     @Override
     public List<Tile> getTiles(){
         return tiles;
+    }
+
+    @Override
+    public String[] getChance(){
+        return chances;
+    }
+
+    @Override
+    public String[] getCommunityChest(){
+        return communityChests;
     }
 
     @Override
@@ -165,20 +157,28 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
+    public List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix) {
+        List<Game> gamesList = new ArrayList<>();
+
+        games.forEach(game -> {
+            if ((started == null) || (started == game.isStarted())) {
+                if ((numberOfPlayers == null) || (numberOfPlayers == game.getNumberOfPlayers())) {
+                    String gamePrefix = game.getId().split("_")[0];
+                    if (gamePrefix.equals(prefix)) {
+                        gamesList.add(game);
+                    }
+                }
+            }
+        });
+
+        return gamesList;
+    }
+
+    @Override
     public Game createGame(int numberOfPlayers, String prefix) {
         Game newGame = new Game(numberOfPlayers, prefix);
         games.add(newGame);
         return newGame;
-    }
-
-    @Override
-    public String[] getChance(){
-        return chances;
-    }
-
-    @Override
-    public String[] getCommunityChest(){
-        return communityChests;
     }
 
     @Override

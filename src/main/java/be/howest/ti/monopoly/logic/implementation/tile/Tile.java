@@ -1,5 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
+import java.util.Objects;
+
 public class Tile {
     private final String name;
     private final int position;
@@ -23,5 +25,18 @@ public class Tile {
 
     public String decideNameAsPathParameter(){
         return name.replaceAll(" ", "_");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tile tile = (Tile) o;
+        return position == tile.position && name.equals(tile.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, position);
     }
 }
