@@ -88,11 +88,17 @@ public class Game {
         return winner;
     }
 
-    public void addPlayer(Player p){
+    public void joinGame(String playerName){
+        Player p = new Player(playerName);
+        addPlayer(p);
+        changeStartedIfNeeded();
+    }
+
+    private void addPlayer(Player p){
         players.add(p);
     }
 
-    public void changeStartedIfNeeded(){
+    private void changeStartedIfNeeded(){
         if(checkForReachingOfMaximumPlayers()){
             started = true;
         }

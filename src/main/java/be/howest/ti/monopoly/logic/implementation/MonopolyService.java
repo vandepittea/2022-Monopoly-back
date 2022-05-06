@@ -191,9 +191,7 @@ public class MonopolyService extends ServiceAdapter {
                     "already started, or you used a name that is already taken in this game.");
         }
         else{
-            Player p = new Player(playerName);
-            g.addPlayer(p);
-            g.changeStartedIfNeeded();
+            g.joinGame(playerName);
         }
     }
 
