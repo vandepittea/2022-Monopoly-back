@@ -117,4 +117,8 @@ public class Request {
     public String getPropertyName() {
         return params.pathParameter("propertyName").getString();
     }
+
+    public String getPlayerNameOfCtx() {
+        return user.getPlayerName();
+    }
 }

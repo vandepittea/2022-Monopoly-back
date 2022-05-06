@@ -47,6 +47,11 @@ public class TestService implements IService {
     }
 
     @Override
+    public Game getGame(String gameId) {
+        return delegate.getGame(gameId);
+    }
+
+    @Override
     public String[] getChance() {
         return delegate.getChance();
     }

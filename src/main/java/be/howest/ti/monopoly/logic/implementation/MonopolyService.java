@@ -179,14 +179,14 @@ public class MonopolyService extends ServiceAdapter {
 
     @Override
     public void joinGame(String gameId, String playerName){
-        Game g = searchGameBasedOnId(gameId);
+        Game g = getGame(gameId);
 
         g.joinGame(playerName);
     }
 
     @Override
     public String buyProperty(String gameId, String playerName, String propertyName){
-        Game g = searchGameBasedOnId(gameId);
+        Game g = getGame(gameId);
         Player pl = g.getPlayer(playerName);
         Tile t = getTile(propertyName);
         Property pr = (Property) t;
@@ -202,13 +202,13 @@ public class MonopolyService extends ServiceAdapter {
         }
     }
 
-    private Game searchGameBasedOnId(String gameId){
-        for(Game g: games){
-            if(g.getId().equals(gameId)){
-                return g;
+    @Override
+    public Game getGame(String gameId) {
+        for (Game game : games) {
+            if (game.getId().equals(gameId)) {
+                return game;
             }
         }
-        throw new MonopolyResourceNotFoundException("The game you are looking for do not exist. " +
-                "Double check the ID.");
+        throw new MonopolyResourceNotFoundException("The game you are looking for does not exist. Double check the ID.");
     }
 }
