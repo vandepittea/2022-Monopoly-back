@@ -66,4 +66,32 @@ class GameTest {
 
         Assertions.assertThrows(MonopolyResourceNotFoundException.class, () -> g.getPlayer("Unexisted"));
     }
+
+    @Test
+    void rollDiceGameNotStarted() {
+        Game game = service.createGame(2, "group17");
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Jonas"));
+    }
+
+    @Test
+    void rollDiceWrongPlayer() {
+        Game game = service.createGame(2, "group17");
+        game.joinGame("Jonas");
+        game.joinGame("Thomas");
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Thomas"));
+    }
+
+    //TODO: make rollDice test for directSale when this is implemented
+
+    @Test
+    void rollDice() {
+        Game game = service.createGame(2, "group17");
+
+        game.joinGame("Jonas");
+        game.joinGame("Thomas");
+
+        assertEquals(game, service.rollDice(game.getId(), "Jonas"));
+        assertNotEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile());
+        assertEquals("Thomas", game.getCurrentPlayer());
+    }
 }
