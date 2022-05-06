@@ -172,7 +172,7 @@ public class MonopolyService extends ServiceAdapter {
 
     @Override
     public Game createGame(int numberOfPlayers, String prefix) {
-        Game newGame = new Game(numberOfPlayers, prefix);
+        Game newGame = new Game(this, numberOfPlayers, prefix, tiles.get(0));
         games.add(newGame);
         return newGame;
     }
@@ -204,7 +204,9 @@ public class MonopolyService extends ServiceAdapter {
 
     @Override
     public Game rollDice(String gameId, String playerName) {
-        return super.rollDice(gameId, playerName);
+        Game game = getGame(gameId);
+        game.rollDice(playerName);
+        return game;
     }
 
     @Override

@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
+import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.web.views.PropertyView;
 
 import java.util.HashSet;
@@ -11,7 +12,7 @@ import java.util.Set;
 public class Player {
     private final String name;
 
-    private String currentTile;
+    private Tile currentTile;
     private boolean jailed;
     private int money;
     private boolean bankrupt;
@@ -20,9 +21,9 @@ public class Player {
     private Set<PropertyView> properties;
     private int debt;
 
-    public Player(String name){
+    public Player(String name, Tile startingTile) {
         this.name = name;
-        this.currentTile = "Go";
+        this.currentTile = startingTile;
         this.jailed = false;
         this.money = 1500;
         this.bankrupt = false;
@@ -35,57 +36,68 @@ public class Player {
     public String getName() {
         return name;
     }
+
     public String getCurrentTile() {
-        return currentTile;
+        return currentTile.getName();
     }
+
     public boolean isJailed() {
         return jailed;
     }
+
     public int getMoney() {
         return money;
     }
+
     public boolean isBankrupt() {
         return bankrupt;
     }
+
     public int getGetOutOfJailCards() {
         return getOutOfJailCards;
     }
+
     public String getTaxSystem() {
         return taxSystem;
     }
+
     public Set<PropertyView> getProperties() {
         return properties;
     }
+
     public int getDebt() {
         return debt;
     }
+
     public void setMoney(int money) {
         this.money = money;
     }
 
-    public void buyProperty(Property pr){
+    public void buyProperty(Property pr) {
         boolean succesfulPayment = payProperty(pr);
 
-        if(succesfulPayment){
+        if (succesfulPayment) {
             addProperty(new PropertyView(pr));
-        }
-        else{
+        } else {
             throw new IllegalMonopolyActionException("You don't have enough money to buy this property");
         }
     }
 
-    private void addProperty(PropertyView p){
+    private void addProperty(PropertyView p) {
         properties.add(p);
     }
 
-    private boolean payProperty(Property pr){
-        if(money > pr.getCost()){
+    private boolean payProperty(Property pr) {
+        if (money > pr.getCost()) {
             money -= pr.getCost();
             return true;
-        }
-        else{
+        } else {
             return false;
         }
+    }
+
+    public void MoveTo(Tile newTile) {
+        currentTile = newTile;
     }
 
     @Override

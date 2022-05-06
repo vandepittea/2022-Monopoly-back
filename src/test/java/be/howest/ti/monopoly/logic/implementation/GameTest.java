@@ -13,7 +13,7 @@ class GameTest {
 
     @Test
     void joinGameSuccesful(){
-        Player p = new Player("Bob");
+        Player p = new Player("Bob", null);
 
         game.joinGame("Bob");
 
@@ -23,8 +23,8 @@ class GameTest {
 
     @Test
     void joinGameAndStartGame(){
-        Player p = new Player("Bob");
-        Player p2 = new Player("Jan");
+        Player p = new Player("Bob", null);
+        Player p2 = new Player("Jan", null);
 
         game.joinGame("Bob");
         game.joinGame("Jan");
@@ -54,7 +54,7 @@ class GameTest {
     @Test
     void getPlayerSuccesful(){
         Game g = service.createGame(2, "group17");
-        Player p = new Player("Bob");
+        Player p = new Player("Bob", null);
         g.joinGame("Bob");
 
         assertEquals(p, g.getPlayer("Bob"));
