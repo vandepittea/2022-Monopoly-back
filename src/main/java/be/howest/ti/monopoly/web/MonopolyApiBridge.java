@@ -203,7 +203,7 @@ public class MonopolyApiBridge {
         String gameId = request.getGameId();
 
         if (!request.isAuthorizedOnlyGame(gameId)) {
-            throw new ForbiddenAccessException("You cannot get the info of this game");
+            throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you passed along is valid token for this game and is the token that gives this player access.");
         }
 
         try {
@@ -226,7 +226,23 @@ public class MonopolyApiBridge {
     }
 
     private void rollDice(RoutingContext ctx) {
-        throw new NotYetImplementedException("rollDice");
+        Request request = Request.from(ctx);
+
+        String gameId = request.getGameId();
+        String playerName = request.getPlayerNameOfPath();
+
+        if (!request.isAuthorized(gameId, playerName))
+        {
+            throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you passed along is valid token for this game and is the token that gives this player access.");
+        }
+
+        try {
+            Response.sendJsonResponse(ctx, 200, service.rollDice(gameId, playerName));
+        } catch (MonopolyResourceNotFoundException exception) {
+            Response.sendFailure(ctx, 404, exception.getMessage());
+        } catch (IllegalMonopolyActionException exception) {
+            Response.sendFailure(ctx, 409, exception.getMessage());
+        }
     }
 
     private void declareBankruptcy(RoutingContext ctx) {
@@ -241,8 +257,7 @@ public class MonopolyApiBridge {
         String propertyName = request.getPropertyName();
 
         if(!request.isAuthorized(gameId, playerName)){
-            throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you " +
-                    "passed along is valid token for this game and is the token that gives this player access.");
+            throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you passed along is valid token for this game and is the token that gives this player access.");
         }
         else{
             try{

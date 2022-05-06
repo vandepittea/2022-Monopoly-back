@@ -203,6 +203,11 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
+    public Game rollDice(String gameId, String playerName) {
+        return super.rollDice(gameId, playerName);
+    }
+
+    @Override
     public Game getGame(String gameId) {
         for (Game game : games) {
             if (game.getId().equals(gameId)) {

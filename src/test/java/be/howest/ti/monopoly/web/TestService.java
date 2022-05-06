@@ -70,4 +70,9 @@ public class TestService implements IService {
     public String buyProperty(String gameId, String playerName, String propertyName) {
         return delegate.buyProperty(gameId, playerName, propertyName);
     }
+
+    @Override
+    public Game rollDice(String gameId, String playerName) {
+        return delegate.rollDice(gameId, playerName);
+    }
 }
