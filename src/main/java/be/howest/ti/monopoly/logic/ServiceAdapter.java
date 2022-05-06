@@ -67,4 +67,9 @@ public class ServiceAdapter implements IService {
     public Game rollDice(String gameId, String playerName) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Game declareBankruptcy(String gameId, String playerName) {
+        throw new UnsupportedOperationException();
+    }
 }
