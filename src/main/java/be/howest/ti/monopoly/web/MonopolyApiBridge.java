@@ -201,9 +201,8 @@ public class MonopolyApiBridge {
         Request request = Request.from(ctx);
 
         String gameId = request.getGameId();
-        String playerName = request.getPlayerNameOfCtx();
 
-        if (!request.isAuthorized(gameId, playerName)) {
+        if (!request.isAuthorizedOnlyGame(gameId)) {
             throw new ForbiddenAccessException("You cannot get the info of this game");
         }
 

@@ -57,6 +57,10 @@ public class Request {
                 Objects.equals(expectedPlayerName, user.getPlayerName());
     }
 
+    public boolean isAuthorizedOnlyGame(String expectedGameId) {
+        return Objects.equals(expectedGameId, user.getGameId());
+    }
+
     public int getTilePosition() {
         return params.pathParameter("tileId").getInteger();
     }
@@ -116,9 +120,5 @@ public class Request {
 
     public String getPropertyName() {
         return params.pathParameter("propertyName").getString();
-    }
-
-    public String getPlayerNameOfCtx() {
-        return user.getPlayerName();
     }
 }
