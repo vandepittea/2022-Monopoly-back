@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
+import be.howest.ti.monopoly.logic.implementation.turn.Move;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.HashSet;
@@ -146,7 +147,7 @@ public class Player {
         else if(checkIfDebtorIsOnYourProperty(pr, pl)){
             throw new IllegalMonopolyActionException("The specified player is not on this property.");
         }
-        else if(checkForNextRollDice(g)){
+        else if(checkForNextRollDice(g, pr)){
             throw new IllegalMonopolyActionException("You're too late. The next dice roll is already over.");
         }
         else{
@@ -178,9 +179,13 @@ public class Player {
         return !pr.getName().equals(pl.currentTile.getName());
     }
 
-    private boolean checkForNextRollDice(Game g){
-        String descriptionLastRoll = g.getTurns().get(g.getTurns().size() - 1).getMoves().get(0).getDescription();
-        return !descriptionLastRoll.equals("should pay rent");
+    private boolean checkForNextRollDice(Game g, Property p){
+        Move move = g.getTurns().get(g.getTurns().size() - 1).getMoves().get(0);
+        String descriptionLastRoll = move.getDescription();
+        String propertyTitle = move.getTitle();
+        boolean checkDescription = !descriptionLastRoll.equals("should pay rent");
+        boolean checkTitle = !propertyTitle.equals(p.getName());
+        return checkDescription && checkTitle;
     }
 
     @Override
