@@ -74,6 +74,7 @@ class GameTest {
     }
 
     //TODO: make rollDice test for an ended game
+    //TODO: make rollDice test for a player in debt, when debt is properly implemented
 
     @Test
     void rollDiceWrongPlayer() {
