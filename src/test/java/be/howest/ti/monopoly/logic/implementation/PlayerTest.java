@@ -17,12 +17,11 @@ class PlayerTest {
     void buyPropertySuccessful(){
         Player pl = new Player("Bob", null);
         Railroad pr = new Railroad(1, "name", 5, 3, 2, "PURPLE", 20);
-        PropertyView prView = new PropertyView(pr);
 
         pl.buyProperty(pr);
 
         assertEquals(1500 - 5, pl.getMoney());
-        assertTrue(pl.getProperties().contains(prView));
+        assertTrue(pl.getProperties().contains(pr));
     }
 
     @Test
