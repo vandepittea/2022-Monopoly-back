@@ -4,6 +4,7 @@ import be.howest.ti.monopoly.logic.ServiceAdapter;
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,6 +194,7 @@ public class MonopolyService extends ServiceAdapter {
 
         if(playerName.equals(g.getCurrentPlayer()) && t.getName().equals(g.getDirectSale())) {
             pl.buyProperty(pr);
+            g.handlePropertySale();
             return pr.getName();
         }
         else {
@@ -205,16 +207,19 @@ public class MonopolyService extends ServiceAdapter {
     @Override
     public String dontBuyProperty(String gameId, String playerName, String propertyName) {
         Game game = getGame(gameId);
+        Player player = game.getPlayer(playerName);
+        Property property = (Property) getTile(propertyName);
 
-        if (!playerName.equals(game.getCurrentPlayer())) {
+        if (!player.getName().equals(game.getCurrentPlayer())) {
             throw new IllegalMonopolyActionException("Only the current player can choose not to buy a property");
         }
 
-        if (!propertyName.equals(game.getDirectSale())) {
+        if (!property.getName().equals(game.getDirectSale())) {
             throw new IllegalMonopolyActionException("You can only choose not to buy the property you're standing on");
         }
 
-        return propertyName;
+        game.handlePropertySale();
+        return property.getName();
     }
 
     @Override

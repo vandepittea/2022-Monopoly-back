@@ -86,6 +86,8 @@ class MonopolyServiceTest {
 
         assertEquals("DK Summit", service.buyProperty(g.getId(),
                 "Jan", "DK_Summit"));
+        assertTrue(g.isCanRoll());
+        assertNull(g.getDirectSale());
     }
 
     @Test
@@ -111,6 +113,46 @@ class MonopolyServiceTest {
         g.setDirectSale("Steam Gardens");
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> service.buyProperty(g.getId(),
+                "Jan", "DK_Summit"));
+    }
+
+    @Test
+    void dontBuyProperty(){
+        Game g = service.createGame(2, "group17");
+
+        g.joinGame("Jan");
+        g.setCurrentPlayer("Jan");
+        g.setDirectSale("DK Summit");
+
+        assertEquals("DK Summit", service.dontBuyProperty(g.getId(),
+                "Jan", "DK_Summit"));
+        assertTrue(g.isCanRoll());
+        assertNull(g.getDirectSale());
+    }
+
+    @Test
+    void dontBuyPropertyIncorrectUser(){
+        Game g = service.createGame(2, "group17");
+
+        g.joinGame("Bob");
+        g.joinGame("Jan");
+        g.setCurrentPlayer("Jan");
+        g.setDirectSale("DK Summit");
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> service.dontBuyProperty(g.getId(),
+                "Bob", "DK_Summit"));
+    }
+
+    @Test
+    void dontBuyPropertyIncorrectProperty(){
+        Game g = service.createGame(2, "group17");
+
+        g.joinGame("Bob");
+        g.joinGame("Jan");
+        g.setCurrentPlayer("Jan");
+        g.setDirectSale("Steam Gardens");
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> service.dontBuyProperty(g.getId(),
                 "Jan", "DK_Summit"));
     }
 }
