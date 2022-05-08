@@ -1,5 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
 
 public abstract class Tile {
@@ -26,6 +28,11 @@ public abstract class Tile {
     }
     public String getType() {
         return this.type.toString().replace("_", " ");
+    }
+
+    @JsonIgnore
+    public TileType getActualType() {
+        return type;
     }
 
     public static String decideNameAsPathParameter(String tileName){
