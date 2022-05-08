@@ -250,8 +250,8 @@ public class Game {
                 continue;
             }
 
-            for (PropertyView property : player.getProperties()) {
-                if (property.getProperty().equals(newTile.getName())) {
+            for (Property property : player.getProperties()) {
+                if (property.getName().equals(newTile.getName())) {
                     if (!Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
                         return true;
                     }
@@ -276,8 +276,8 @@ public class Game {
 
     public void declareBankruptcy(String playerName){
         Player p = getPlayer(playerName);
-        if(p.getDebtor() != null){
-            p.turnOverAssetsTo(p.getDebtor());
+        if(p.getCreditor() != null){
+            p.turnOverAssetsTo(p.getCreditor());
         }
         else{
             p.turnOverAssetsToBank();

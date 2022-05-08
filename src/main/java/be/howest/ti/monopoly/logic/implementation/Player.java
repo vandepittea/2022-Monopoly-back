@@ -1,8 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
-import be.howest.ti.monopoly.logic.implementation.tile.Property;
-import be.howest.ti.monopoly.logic.implementation.tile.Tile;
+import be.howest.ti.monopoly.logic.implementation.tile.*;
 import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,7 +20,7 @@ public class Player {
     private String taxSystem;
     private Set<Property> properties;
     private int debt;
-    private Player debtor;
+    private Player creditor;
 
     public Player(String name, Tile startingTile) {
         this.name = name;
@@ -33,7 +32,7 @@ public class Player {
         this.taxSystem = "ESTIMATE";
         properties = new HashSet<>();
         this.debt = 0;
-        this.debtor = null;
+        this.creditor = null;
     }
 
     public String getName() {
@@ -73,8 +72,8 @@ public class Player {
     }
 
     @JsonIgnore
-    public Player getDebtor() {
-        return debtor;
+    public Player getCreditor() {
+        return creditor;
     }
 
     public void becomeBankrupt(){
@@ -82,9 +81,9 @@ public class Player {
     }
 
     public void buyProperty(Property pr) {
-        boolean succesfulPayment = payMoney(pr.getCost());
+        boolean successfulPayment = payMoney(pr.getCost());
 
-        if (succesfulPayment) {
+        if (successfulPayment) {
             addProperty(pr);
         } else {
             throw new IllegalMonopolyActionException("You don't have enough money to buy this property");
@@ -101,6 +100,16 @@ public class Player {
             return true;
         } else {
             return false;
+        }
+    }
+
+    private boolean payDebt(int amount, Player creditor){
+        boolean successfulPayment = payMoney(amount);
+        if(!successfulPayment){
+            debt += amount;
+            this.creditor = creditor;
+            throw new IllegalMonopolyActionException("You do not have enough money. You will have to sell properties " +
+                    "so that you can pay off your debt. You have time until it is your turn again.");
         }
     }
 
@@ -142,7 +151,23 @@ public class Player {
             throw new IllegalMonopolyActionException("You're too late. The next dice roll is already over.");
         }
         else{
+            int rent = calculateRent(pr, pl, g);
+            payDebt(rent, pl);
+        }
+    }
 
+    private int calculateRent(Property pr, Player pl, Game g){
+        if(pr.getType().equals("street")){
+            Street s = (Street) pr;
+            return s.calculateRent();
+        }
+        else if(pr.getType().equals("utility")){
+            Utility u = (Utility) pr;
+            return u.calculateRent(pl, g);
+        }
+        else{
+            Railroad r = (Railroad) pr;
+            return r.getRent();
         }
     }
 
