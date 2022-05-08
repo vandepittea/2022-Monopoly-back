@@ -36,11 +36,17 @@ class OpenApiBuyingPropertyTests extends OpenApiTestsBase {
 
     @Test
     void dontBuyProperty(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public String dontBuyProperty(String gameId, String playerName, String propertyName) {
+                return "";
+            }
+        });
         delete(
                 testContext,
-                "/games/game-id/players/Alice/properties/some-property",
-                "some-token",
-                response -> assertNotYetImplemented(response, "dontBuyProperty")
+                "/games/001/players/Alice/properties/some-property",
+                "001-Alice",
+                response -> assertOkResponse(response)
         );
     }
 

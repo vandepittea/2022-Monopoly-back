@@ -130,11 +130,10 @@ public class MonopolyApiBridge {
         Request request = Request.from(ctx);
 
         Tile tile;
-        if(request.hasTilePosition()){
+        if (request.hasTilePosition()) {
             int position = request.getTilePosition();
             tile = service.getTile(position);
-        }
-        else{
+        } else {
             String name = request.getTileName();
             tile = service.getTile(name);
         }
@@ -153,8 +152,7 @@ public class MonopolyApiBridge {
     private void createGame(RoutingContext ctx) {
         Request request = Request.from(ctx);
 
-        if (ctx.getBodyAsJson().size() == 0)
-        {
+        if (ctx.getBodyAsJson().size() == 0) {
             Response.sendFailure(ctx, 400, "Empty body");
         }
 
@@ -179,15 +177,13 @@ public class MonopolyApiBridge {
         String playerName = request.getPlayerNameOfBody();
         String gameId = request.getGameId();
 
-        try{
+        try {
             service.joinGame(gameId, playerName);
             String playerToken = tokenManager.createToken(new MonopolyUser(gameId, playerName));
             Response.sendJsonResponse(ctx, 200, new JsonObject().put("playerToken", playerToken));
-        }
-        catch (IllegalMonopolyActionException exception) {
+        } catch (IllegalMonopolyActionException exception) {
             Response.sendFailure(ctx, 409, exception.getMessage());
-        }
-        catch(MonopolyResourceNotFoundException exception){
+        } catch (MonopolyResourceNotFoundException exception) {
             Response.sendFailure(ctx, 404, exception.getMessage());
         }
     }
@@ -226,8 +222,7 @@ public class MonopolyApiBridge {
         String gameId = request.getGameId();
         String playerName = request.getPlayerNameOfPath();
 
-        if (!request.isAuthorized(gameId, playerName))
-        {
+        if (!request.isAuthorized(gameId, playerName)) {
             throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you passed along is valid token for this game and is the token that gives this player access.");
         }
 
@@ -266,26 +261,41 @@ public class MonopolyApiBridge {
         String playerName = request.getPlayerNameOfPath();
         String propertyName = request.getPropertyName();
 
-        if(!request.isAuthorized(gameId, playerName)){
+        if (!request.isAuthorized(gameId, playerName)) {
             throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you passed along is valid token for this game and is the token that gives this player access.");
-        }
-        else{
-            try{
+        } else {
+            try {
                 String property = service.buyProperty(gameId, playerName, propertyName);
                 Response.sendJsonResponse(ctx, 200, new JsonObject().put("property",
                         property).put("purchased", true));
-            }
-            catch (IllegalMonopolyActionException exception) {
+            } catch (IllegalMonopolyActionException exception) {
                 Response.sendFailure(ctx, 409, exception.getMessage());
-            }
-            catch(MonopolyResourceNotFoundException exception){
+            } catch (MonopolyResourceNotFoundException exception) {
                 Response.sendFailure(ctx, 404, exception.getMessage());
             }
         }
     }
 
     private void dontBuyProperty(RoutingContext ctx) {
-        throw new NotYetImplementedException("dontBuyProperty");
+        Request request = Request.from(ctx);
+
+        String gameId = request.getGameId();
+        String playerName = request.getPlayerNameOfPath();
+        String propertyName = request.getPropertyName();
+
+        if (!request.isAuthorized(gameId, playerName)) {
+            throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you passed along is valid token for this game and is the token that gives this player access.");
+        }
+
+        try {
+            String property = service.dontBuyProperty(gameId, playerName, propertyName);
+            Response.sendJsonResponse(ctx, 200, new JsonObject().put("property",
+                    property).put("purchased", false));
+        } catch (IllegalMonopolyActionException exception) {
+            Response.sendFailure(ctx, 409, exception.getMessage());
+        } catch (MonopolyResourceNotFoundException exception) {
+            Response.sendFailure(ctx, 404, exception.getMessage());
+        }
     }
 
     private void collectDebt(RoutingContext ctx) {
