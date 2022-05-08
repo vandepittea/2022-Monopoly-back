@@ -179,12 +179,16 @@ public class Game {
             throw new IllegalMonopolyActionException("The game has not started yet.");
         }
 
+        if (ended) {
+            throw new IllegalMonopolyActionException("The game has already ended");
+        }
+
         if (!currentPlayer.getName().equals(playerName)) {
             throw new IllegalMonopolyActionException("It is not your turn.");
         }
 
         if (directSale != null) {
-            throw new IllegalMonopolyActionException("You can't roll the dice as long as you can buy property");
+            throw new IllegalMonopolyActionException("The current player has to decide on a property");
         }
 
         Turn turn = new Turn(currentPlayer);
@@ -197,7 +201,7 @@ public class Game {
     }
 
     private void decideNextAction() {
-        Tile newTile = service.getTile(currentPlayer.getCurrentTile());
+        Tile newTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
 
         switch (newTile.getActualType()) {
             case street:
