@@ -245,4 +245,12 @@ public class MonopolyService extends ServiceAdapter {
         g.declareBankruptcy(playerName);
         return g;
     }
+
+    @Override
+    public boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName){
+        Game g = getGame(gameId);
+        Player p = g.getPlayer(playerName);
+        p.collectDebt(propertyName, debtorName);
+        return true;
+    }
 }
