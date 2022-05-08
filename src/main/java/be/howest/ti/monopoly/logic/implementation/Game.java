@@ -268,6 +268,7 @@ public class Game {
 
     public void declareBankruptcy(String playerName){
         Player p = getPlayer(playerName);
+        p.turnOverAssets(p.getDebtor());
         p.becomeBankrupt();
         players.add(p);
     }
