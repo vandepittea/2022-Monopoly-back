@@ -2,15 +2,17 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 
 import java.util.Objects;
 
-public class Tile {
+public abstract class Tile {
+    protected final TileType type;
     private final String name;
     private final int position;
     private final String nameAsPathParameter;
 
-    public Tile(int position, String name) {
+    public Tile(int position, String name, TileType type) {
         this.position = position;
         this.name = name;
         this.nameAsPathParameter = Tile.decideNameAsPathParameter(name);
+        this.type = type;
     }
 
     public String getName() {
@@ -22,9 +24,12 @@ public class Tile {
     public String getNameAsPathParameter() {
         return nameAsPathParameter;
     }
+    public String getType() {
+        return this.type.toString().replaceAll("_", " ");
+    }
 
     public static String decideNameAsPathParameter(String tileName){
-        return tileName.replaceAll(" ", "_");
+        return tileName.replace(" ", "_");
     }
 
     @Override

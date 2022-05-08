@@ -1,7 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
 public class Street extends Property {
-    private final String type;
     private Integer[] rentOfHouses;
     private final int housePrice;
     private final String streetColor;
@@ -11,16 +10,11 @@ public class Street extends Property {
 
     public Street(int position, String name, int cost, int mortgage, int groupSize, String color,
                   Integer[] rentOfHouses, int housePrice, String streetColor, int rent) {
-        super(position, name, cost, mortgage, groupSize, color);
-        this.type = "street";
+        super(position, name, cost, mortgage, groupSize, color, TileType.street);
         this.housePrice = housePrice;
         this.streetColor = streetColor;
         this.rentOfHouses = rentOfHouses;
         this.rent = rent;
-    }
-
-    public String getType() {
-        return type;
     }
     public Integer[] getRentOfHouses() {
         return rentOfHouses;
