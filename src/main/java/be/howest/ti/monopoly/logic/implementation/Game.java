@@ -270,9 +270,13 @@ public class Game {
 
     public void declareBankruptcy(String playerName){
         Player p = getPlayer(playerName);
-        p.turnOverAssetsTo(p.getDebtor());
+        if(p.getDebtor() != null){
+            p.turnOverAssetsTo(p.getDebtor());
+        }
+        else{
+            p.turnOverAssetsToBank();
+        }
         p.becomeBankrupt();
-        players.add(p);
     }
 
     @Override

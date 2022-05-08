@@ -116,4 +116,16 @@ class GameTest {
         assertEquals(1, game.getTurns().size());
         assertEquals(game.getLastDiceRoll(), game.getTurns().get(game.getTurns().size() - 1).getRoll());
     }
+
+    @Test
+    void declareBankruptcy(){
+        Game g = service.createGame(2, "group17");
+
+        g.joinGame("Bob");
+        g.declareBankruptcy("Bob");
+
+        assertTrue(g.getPlayers().get(0).isBankrupt());
+        assertTrue(g.getPlayers().get(0).getProperties().isEmpty());
+        assertEquals(0, g.getPlayers().get(0).getMoney());
+    }
 }

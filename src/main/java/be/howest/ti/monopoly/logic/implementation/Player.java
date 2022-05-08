@@ -123,6 +123,14 @@ public class Player {
         properties.clear();
     }
 
+    public void turnOverAssetsToBank(){
+        //TODO: start auction
+
+        money = 0;
+        debt = 0;
+        properties.clear();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
