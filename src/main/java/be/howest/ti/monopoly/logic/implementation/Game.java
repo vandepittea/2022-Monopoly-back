@@ -181,7 +181,7 @@ public class Game {
     }
 
     public void rollDice(String playerName) {
-            checkIllegalRollDiceActions(playerName);
+        checkIllegalRollDiceActions(playerName);
 
         if(!currentPlayer.isBankrupt()){
             Turn turn = new Turn(currentPlayer);
