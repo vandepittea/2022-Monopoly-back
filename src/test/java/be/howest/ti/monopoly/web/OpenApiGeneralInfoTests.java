@@ -3,6 +3,7 @@ package be.howest.ti.monopoly.web;
 import be.howest.ti.monopoly.logic.ServiceAdapter;
 import be.howest.ti.monopoly.logic.implementation.tile.SimpleTile;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
+import be.howest.ti.monopoly.logic.implementation.tile.TileType;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +60,7 @@ class OpenApiGeneralInfoTests extends OpenApiTestsBase {
         service.setDelegate( new ServiceAdapter(){
             @Override
             public Tile getTile(String name) {
-                return new SimpleTile(0, "Go", "Go");
+                return new SimpleTile(0, "Go", TileType.Go);
             }
         });
 
@@ -76,7 +77,7 @@ class OpenApiGeneralInfoTests extends OpenApiTestsBase {
         service.setDelegate( new ServiceAdapter(){
             @Override
             public Tile getTile(int position) {
-                return new SimpleTile(0, "Go", "Go");
+                return new SimpleTile(0, "Go", TileType.Go);
             }
         });
 

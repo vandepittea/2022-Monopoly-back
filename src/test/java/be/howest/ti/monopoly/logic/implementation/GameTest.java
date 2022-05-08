@@ -73,6 +73,8 @@ class GameTest {
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Jonas"));
     }
 
+    //TODO: make rollDice test for an ended game
+
     @Test
     void rollDiceWrongPlayer() {
         Game game = service.createGame(2, "group17");
@@ -81,7 +83,17 @@ class GameTest {
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Thomas"));
     }
 
-    //TODO: make rollDice test for directSale when this is implemented
+    @Test
+    void rollDiceWhenDirectSale() {
+        Game game = service.createGame(2, "group17");
+        game.joinGame("Jonas");
+        game.joinGame("Thomas");
+        while (game.getDirectSale() == null) {
+            assertEquals(game, service.rollDice(game.getId(), game.getCurrentPlayer()));
+        }
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Jonas"));
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Thomas"));
+    }
 
     @Test
     void rollDice() {
@@ -90,9 +102,17 @@ class GameTest {
         game.joinGame("Jonas");
         game.joinGame("Thomas");
 
+        assertEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile());
         assertEquals(game, service.rollDice(game.getId(), "Jonas"));
         assertNotEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile());
-        assertEquals("Thomas", game.getCurrentPlayer());
+
+        Integer[] lastDiceRoll = game.getLastDiceRoll();
+        if ((game.getDirectSale() == null) && (!lastDiceRoll[0].equals(lastDiceRoll[1]))) {
+            assertEquals("Thomas", game.getCurrentPlayer());
+        } else {
+            assertEquals("Jonas", game.getCurrentPlayer());
+        }
+
         assertEquals(1, game.getTurns().size());
         assertEquals(game.getLastDiceRoll(), game.getTurns().get(game.getTurns().size() - 1).getRoll());
     }
