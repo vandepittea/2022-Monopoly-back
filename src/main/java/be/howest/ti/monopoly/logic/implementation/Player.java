@@ -33,6 +33,7 @@ public class Player {
         this.taxSystem = "ESTIMATE";
         properties = new HashSet<>();
         this.debt = 0;
+        this.debtor = null;
     }
 
     public String getName() {
