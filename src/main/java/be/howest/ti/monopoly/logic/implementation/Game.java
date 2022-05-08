@@ -179,6 +179,7 @@ public class Game {
     public void handlePropertySale() {
         canRoll = true;
         directSale = null;
+        changeCurrentPlayer(false);
     }
 
     public void rollDice(String playerName) {
@@ -204,6 +205,7 @@ public class Game {
         } else {
             turn.addMove("Jail", "");
             turn.setType(TurnType.JAIL_STAY);
+            changeCurrentPlayer(true);
         }
     }
 
@@ -273,18 +275,18 @@ public class Game {
                     canRoll = false;
                     break;
                 }
-                changeCurrentPlayer();
+                changeCurrentPlayer(true);
                 break;
             case Go_to_Jail:
                 Tile jail = service.getTile("Jail");
                 currentPlayer.goToJail(jail);
-                changeCurrentPlayer();
+                changeCurrentPlayer(true);
                 break;
             case Jail:
             case Free_Parking:
             case Go:
             default:
-                changeCurrentPlayer();
+                changeCurrentPlayer(false);
                 break;
         }
     }
@@ -306,8 +308,8 @@ public class Game {
         return false;
     }
 
-    private void changeCurrentPlayer() {
-        if (Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
+    private void changeCurrentPlayer(boolean endTurn) {
+        if (!endTurn && Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
             return;
         }
 
