@@ -203,6 +203,21 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
+    public String dontBuyProperty(String gameId, String playerName, String propertyName) {
+        Game game = getGame(gameId);
+
+        if (!playerName.equals(game.getCurrentPlayer())) {
+            throw new IllegalMonopolyActionException("Only the current player can choose not to buy a property");
+        }
+
+        if (!propertyName.equals(game.getDirectSale())) {
+            throw new IllegalMonopolyActionException("You can only choose not to buy the property you're standing on");
+        }
+
+        return propertyName;
+    }
+
+    @Override
     public Game rollDice(String gameId, String playerName) {
         Game game = getGame(gameId);
         game.rollDice(playerName);
