@@ -5,6 +5,7 @@ import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
+import be.howest.ti.monopoly.logic.implementation.turn.TurnType;
 import be.howest.ti.monopoly.web.views.PropertyView;
 
 import java.util.*;
@@ -201,7 +202,8 @@ public class Game {
             currentPlayer.getOutOfJail();
             movePlayer(turn, lastDiceRoll);
         } else {
-            turn.addMove("Jail", "Didn't get out of jail");
+            turn.addMove("Jail", "");
+            turn.setType(TurnType.JAIL_STAY);
         }
     }
 
@@ -242,7 +244,8 @@ public class Game {
     private void JailCurrentPlayer(Turn turn) {
         Tile jail = service.getTile("Jail");
         currentPlayer.goToJail(jail);
-        turn.addMove(jail.getName(), "This player is jailed");
+        turn.addMove(jail.getName(), "");
+        turn.setType(TurnType.GO_TO_JAIL);
         decideNextAction(jail);
     }
 
@@ -257,6 +260,7 @@ public class Game {
         currentPlayer.moveTo(newTile);
 
         turn.addMove(newTile.getName(), "Description");
+        turn.setType(TurnType.DEFAULT);
 
         decideNextAction(newTile);
     }
