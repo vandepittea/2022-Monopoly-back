@@ -75,4 +75,9 @@ public class TestService implements IService {
     public Game rollDice(String gameId, String playerName) {
         return delegate.rollDice(gameId, playerName);
     }
+
+    @Override
+    public String dontBuyProperty(String gameId, String playerName, String propertyName) {
+        return delegate.dontBuyProperty(gameId, playerName, propertyName);
+    }
 }
