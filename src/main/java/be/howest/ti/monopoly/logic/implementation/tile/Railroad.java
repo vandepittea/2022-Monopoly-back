@@ -11,8 +11,4 @@ public class Railroad extends Property {
     public int getRent() {
         return rent;
     }
-
-    public int calculateRent(){
-        return rent;
-    }
 }
