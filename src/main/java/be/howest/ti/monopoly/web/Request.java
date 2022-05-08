@@ -121,4 +121,8 @@ public class Request {
     public String getPropertyName() {
         return params.pathParameter("propertyName").getString();
     }
+
+    public String getDebtorName() {
+        return params.pathParameter("debtorName").getString();
+    }
 }
