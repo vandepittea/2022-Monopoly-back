@@ -96,6 +96,8 @@ class GameTest {
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Thomas"));
     }
 
+    //TODO: make rollDice test for getting jailed when not buying a property is implemented
+
     @Test
     void rollDice() {
         Game game = service.createGame(2, "group17");
