@@ -85,4 +85,9 @@ public class TestService implements IService {
     public String dontBuyProperty(String gameId, String playerName, String propertyName) {
         return delegate.dontBuyProperty(gameId, playerName, propertyName);
     }
+
+    @Override
+    public boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName) {
+        return delegate.collectDebt(gameId, playerName, propertyName, debtorName);
+    }
 }

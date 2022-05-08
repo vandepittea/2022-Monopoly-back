@@ -22,4 +22,5 @@ public interface IService {
     Game rollDice(String gameId, String playerName);
     Game declareBankruptcy(String gameId, String playerName);
     String dontBuyProperty(String gameId, String playerName, String propertyName);
+    boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName);
 }

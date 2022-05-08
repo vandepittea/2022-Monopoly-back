@@ -77,4 +77,9 @@ public class ServiceAdapter implements IService {
     public String dontBuyProperty(String gameId, String playerName, String propertyName) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName) {
+        throw new UnsupportedOperationException();
+    }
 }
