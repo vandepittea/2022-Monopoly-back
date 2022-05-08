@@ -3,7 +3,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 import be.howest.ti.monopoly.logic.implementation.Player;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Property extends Tile {
+public abstract class Property extends Tile {
     private final int cost;
     private final int mortgage;
     private final int groupSize;
@@ -13,8 +13,8 @@ public class Property extends Tile {
     private int houseCount;
     private int hotelCount;
 
-    public Property(int position, String name, int cost, int mortgage, int groupSize, String color) {
-        super(position, name);
+    public Property(int position, String name, int cost, int mortgage, int groupSize, String color, TileType type) {
+        super(position, name, type);
         this.cost = cost;
         this.mortgage = mortgage;
         this.groupSize = groupSize;
