@@ -5,6 +5,7 @@ import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -147,7 +148,8 @@ public class Player {
     }
 
     private boolean checkForOwnership(Property p){
-        return !properties.contains(p);
+        PropertyView pv = new PropertyView(p);
+        return !properties.contains(pv);
     }
 
     private boolean checkIfDebtorIsOnYourProperty(Property pr, Player pl){
