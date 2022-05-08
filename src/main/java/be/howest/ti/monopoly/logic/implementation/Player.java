@@ -73,6 +73,11 @@ public class Player {
         this.money = money;
     }
 
+    public void goToJail(Tile jailTile) {
+        this.jailed = true;
+        moveTo(jailTile);
+    }
+
     public void buyProperty(Property pr) {
         boolean succesfulPayment = payProperty(pr);
 
@@ -96,7 +101,7 @@ public class Player {
         }
     }
 
-    public void MoveTo(Tile newTile) {
+    public void moveTo(Tile newTile) {
         currentTile = newTile;
     }
 

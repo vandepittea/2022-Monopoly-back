@@ -180,7 +180,11 @@ public class Game {
         Turn turn = new Turn(currentPlayer);
         lastDiceRoll = turn.generateRoll();
 
-        movePlayer(turn, lastDiceRoll);
+        if (doesCurrentPlayerGetJailed()) {
+            JailCurrentPlayer(turn);
+        } else {
+            movePlayer(turn, lastDiceRoll);
+        }
         turns.add(turn);
     }
 
@@ -202,6 +206,25 @@ public class Game {
         }
     }
 
+    private boolean doesCurrentPlayerGetJailed() {
+        if (turns.size() >= 2) {
+            Turn previousTurn = turns.get(turns.size() - 1);
+            Turn beforePreviousTurn = turns.get(turns.size() - 2);
+
+            if ((currentPlayer.getName().equals(previousTurn.getPlayer())) && (currentPlayer.getName().equals(beforePreviousTurn.getPlayer()))) {
+                return lastDiceRoll[0].equals(lastDiceRoll[1]);
+            }
+        }
+        return false;
+    }
+
+    private void JailCurrentPlayer(Turn turn) {
+        Tile jail = service.getTile("Jail");
+        currentPlayer.goToJail(jail);
+        turn.addMove(jail.getName(), "This player is jailed");
+        decideNextAction(jail);
+    }
+
     private void movePlayer(Turn turn, Integer[] roll) {
         List<Tile> tiles = service.getTiles();
         Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
@@ -210,16 +233,14 @@ public class Game {
             nextTileIdx -= tiles.size();
         }
         Tile newTile = service.getTile(nextTileIdx);
-        currentPlayer.MoveTo(newTile);
+        currentPlayer.moveTo(newTile);
 
         turn.addMove(newTile.getName(), "Description");
 
-        decideNextAction();
+        decideNextAction(newTile);
     }
 
-    private void decideNextAction() {
-        Tile newTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
-
+    private void decideNextAction(Tile newTile) {
         switch (newTile.getActualType()) {
             case street:
                 if (!propertyOwnedByOtherPlayer(newTile)) {
@@ -229,6 +250,13 @@ public class Game {
                 }
                 changeCurrentPlayer();
                 break;
+            case Go_to_Jail:
+                Tile jail = service.getTile("Jail");
+                currentPlayer.goToJail(jail);
+                changeCurrentPlayer();
+                break;
+            case Jail:
+            case Free_Parking:
             case Go:
             default:
                 changeCurrentPlayer();
@@ -238,7 +266,7 @@ public class Game {
 
     private boolean propertyOwnedByOtherPlayer(Tile newTile) {
         for (Player player : players) {
-            if (player.getProperties().equals(currentPlayer.getName())) {
+            if (player.getName().equals(currentPlayer.getName())) {
                 continue;
             }
 
