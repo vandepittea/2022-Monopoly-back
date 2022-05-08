@@ -175,6 +175,18 @@ public class Game {
     }
 
     public void rollDice(String playerName) {
+        checkIllegalRollDiceActions(playerName);
+
+        Turn turn = new Turn(currentPlayer);
+        lastDiceRoll = turn.generateRoll();
+
+        movePlayer(turn, lastDiceRoll);
+        turns.add(turn);
+
+        decideNextAction();
+    }
+
+    private void checkIllegalRollDiceActions(String playerName) {
         if (!started) {
             throw new IllegalMonopolyActionException("The game has not started yet.");
         }
@@ -190,14 +202,6 @@ public class Game {
         if (directSale != null) {
             throw new IllegalMonopolyActionException("The current player has to decide on a property");
         }
-
-        Turn turn = new Turn(currentPlayer);
-        lastDiceRoll = turn.generateRoll();
-
-        movePlayer(turn, lastDiceRoll);
-        turns.add(turn);
-
-        decideNextAction();
     }
 
     private void decideNextAction() {
