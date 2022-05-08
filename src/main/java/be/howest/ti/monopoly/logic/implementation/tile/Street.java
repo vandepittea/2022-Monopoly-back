@@ -43,6 +43,16 @@ public class Street extends Property {
     }
 
     public int calculateRent(){
+        int amountOfHousesNeededToBuyAHotel = 4;
 
+        if(houseCount > 0){
+            return rentOfHouses[houseCount - 1];
+        }
+        else if(hotelCount > 0){
+            return rentOfHouses[amountOfHousesNeededToBuyAHotel];
+        }
+        else{
+            return rent;
+        }
     }
 }
