@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
+import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.web.views.PropertyView;
@@ -172,6 +173,11 @@ public class Game {
         }
         throw new MonopolyResourceNotFoundException("The player you are looking for do not exist. " +
                 "Double check the name.");
+    }
+
+    public void handlePropertySale() {
+        canRoll = true;
+        directSale = null;
     }
 
     public void rollDice(String playerName) {
