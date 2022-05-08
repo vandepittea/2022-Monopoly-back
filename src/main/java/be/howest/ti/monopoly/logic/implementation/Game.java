@@ -175,13 +175,15 @@ public class Game {
     }
 
     public void rollDice(String playerName) {
-        checkIllegalRollDiceActions(playerName);
+        if(!currentPlayer.isBankrupt()){
+            checkIllegalRollDiceActions(playerName);
 
-        Turn turn = new Turn(currentPlayer);
-        lastDiceRoll = turn.generateRoll();
+            Turn turn = new Turn(currentPlayer);
+            lastDiceRoll = turn.generateRoll();
 
-        movePlayer(turn, lastDiceRoll);
-        turns.add(turn);
+            movePlayer(turn, lastDiceRoll);
+            turns.add(turn);
+        }
     }
 
     private void checkIllegalRollDiceActions(String playerName) {
