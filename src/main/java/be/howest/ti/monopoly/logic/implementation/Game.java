@@ -246,9 +246,8 @@ public class Game {
     private void JailCurrentPlayer(Turn turn) {
         Tile jail = service.getTile("Jail");
         currentPlayer.goToJail(jail);
-        turn.addMove(jail.getName(), "");
         turn.setType(TurnType.GO_TO_JAIL);
-        decideNextAction(jail);
+        decideNextAction(jail, turn);
     }
 
     private void movePlayer(Turn turn, Integer[] roll) {
@@ -261,31 +260,35 @@ public class Game {
         Tile newTile = service.getTile(nextTileIdx);
         currentPlayer.moveTo(newTile);
 
-        turn.addMove(newTile.getName(), "Description");
         turn.setType(TurnType.DEFAULT);
 
-        decideNextAction(newTile);
+        decideNextAction(newTile, turn);
     }
 
-    private void decideNextAction(Tile newTile) {
+    private void decideNextAction(Tile newTile, Turn turn) {
         switch (newTile.getActualType()) {
             case street:
                 if (!propertyOwnedByOtherPlayer(newTile)) {
                     directSale = newTile.getName();
                     canRoll = false;
+                    turn.addMove(newTile.getName(), "Can buy this property in a direct sale");
                     break;
                 }
+                turn.addMove(newTile.getName(), "Can be asked to pay rent if the property isn't mortgaged");
                 changeCurrentPlayer(true);
                 break;
             case Go_to_Jail:
                 Tile jail = service.getTile("Jail");
                 currentPlayer.goToJail(jail);
+                turn.addMove(newTile.getName(), "");
+                turn.addMove("Jail", "");
                 changeCurrentPlayer(true);
                 break;
             case Jail:
             case Free_Parking:
             case Go:
             default:
+                turn.addMove(newTile.getName(), "");
                 changeCurrentPlayer(false);
                 break;
         }
