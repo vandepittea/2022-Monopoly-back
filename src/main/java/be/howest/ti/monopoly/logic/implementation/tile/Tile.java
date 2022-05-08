@@ -25,7 +25,7 @@ public abstract class Tile {
         return nameAsPathParameter;
     }
     public String getType() {
-        return this.type.toString().replaceAll("_", " ");
+        return this.type.toString().replace("_", " ");
     }
 
     public static String decideNameAsPathParameter(String tileName){
