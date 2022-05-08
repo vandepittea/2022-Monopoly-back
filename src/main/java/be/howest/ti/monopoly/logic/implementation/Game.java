@@ -182,8 +182,6 @@ public class Game {
 
         movePlayer(turn, lastDiceRoll);
         turns.add(turn);
-
-        decideNextAction();
     }
 
     private void checkIllegalRollDiceActions(String playerName) {
@@ -202,6 +200,21 @@ public class Game {
         if (directSale != null) {
             throw new IllegalMonopolyActionException("The current player has to decide on a property");
         }
+    }
+
+    private void movePlayer(Turn turn, Integer[] roll) {
+        List<Tile> tiles = service.getTiles();
+        Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
+        int nextTileIdx = currentPlayerTile.getPosition() + roll[0] + roll[1];
+        if (nextTileIdx >= tiles.size()) {
+            nextTileIdx -= tiles.size();
+        }
+        Tile newTile = service.getTile(nextTileIdx);
+        currentPlayer.MoveTo(newTile);
+
+        turn.addMove(newTile.getName(), "Description");
+
+        decideNextAction();
     }
 
     private void decideNextAction() {
@@ -238,19 +251,6 @@ public class Game {
             }
         }
         return false;
-    }
-
-    private void movePlayer(Turn turn, Integer[] roll) {
-        List<Tile> tiles = service.getTiles();
-        Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
-        int nextTileIdx = currentPlayerTile.getPosition() + roll[0] + roll[1];
-        if (nextTileIdx >= tiles.size()) {
-            nextTileIdx -= tiles.size();
-        }
-        Tile newTile = service.getTile(nextTileIdx);
-        currentPlayer.MoveTo(newTile);
-
-        turn.addMove(newTile.getName(), "Description");
     }
 
     private void changeCurrentPlayer() {
