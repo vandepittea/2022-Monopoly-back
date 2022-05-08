@@ -249,8 +249,11 @@ public class MonopolyService extends ServiceAdapter {
     @Override
     public boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName){
         Game g = getGame(gameId);
-        Player p = g.getPlayer(playerName);
-        p.collectDebt(propertyName, debtorName);
+        String descriptionLastRoll = g.getTurns().get(g.getTurns().size() - 1).getMoves().get(0).getDescription();
+        Player pl = g.getPlayer(playerName);
+        Player d = g.getPlayer(debtorName);
+        Property pr = (Property) getTile(propertyName);
+        pl.collectDebt(pr, d, descriptionLastRoll);
         return true;
     }
 }

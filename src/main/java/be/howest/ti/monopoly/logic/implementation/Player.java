@@ -131,6 +131,21 @@ public class Player {
         properties.clear();
     }
 
+    public void collectDebt(Property pr, Player d, String descriptionLastRoll){
+        if(!properties.contains(pr)){
+            throw new IllegalMonopolyActionException("This property is not owned by you.");
+        }
+        else if(!pr.getName().equals(d.currentTile.getName())){
+            throw new IllegalMonopolyActionException("The specified player is not on this property.");
+        }
+        else if(!descriptionLastRoll.equals("should pay rent")){
+            throw new IllegalMonopolyActionException("You're too late. The next dice roll is already over.");
+        }
+        else{
+
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
