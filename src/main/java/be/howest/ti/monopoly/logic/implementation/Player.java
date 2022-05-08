@@ -5,7 +5,6 @@ import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -20,7 +19,7 @@ public class Player {
     private boolean bankrupt;
     private int getOutOfJailCards;
     private String taxSystem;
-    private Set<PropertyView> properties;
+    private Set<Property> properties;
     private int debt;
     private Player debtor;
 
@@ -65,7 +64,7 @@ public class Player {
         return taxSystem;
     }
 
-    public Set<PropertyView> getProperties() {
+    public Set<Property> getProperties() {
         return properties;
     }
 
@@ -86,13 +85,13 @@ public class Player {
         boolean succesfulPayment = payMoney(pr.getCost());
 
         if (succesfulPayment) {
-            addProperty(new PropertyView(pr));
+            addProperty(pr);
         } else {
             throw new IllegalMonopolyActionException("You don't have enough money to buy this property");
         }
     }
 
-    private void addProperty(PropertyView p) {
+    private void addProperty(Property p) {
         properties.add(p);
     }
 
@@ -114,7 +113,7 @@ public class Player {
     }
 
     public void turnOverAssetsTo(Player p){
-        for(PropertyView pr: properties){
+        for(Property pr: properties){
             p.addProperty(pr);
         }
         p.getMoney(money);
@@ -132,14 +131,14 @@ public class Player {
         properties.clear();
     }
 
-    public void collectDebt(Property pr, Player pl, String descriptionLastRoll){
+    public void collectDebt(Property pr, Player pl, Game g){
         if(checkForOwnership(pr)){
             throw new IllegalMonopolyActionException("This property is not owned by you.");
         }
         else if(checkIfDebtorIsOnYourProperty(pr, pl)){
             throw new IllegalMonopolyActionException("The specified player is not on this property.");
         }
-        else if(checkForNextRollDice(descriptionLastRoll)){
+        else if(checkForNextRollDice(g)){
             throw new IllegalMonopolyActionException("You're too late. The next dice roll is already over.");
         }
         else{
@@ -156,7 +155,8 @@ public class Player {
         return !pr.getName().equals(pl.currentTile.getName());
     }
 
-    private boolean checkForNextRollDice(String descriptionLastRoll){
+    private boolean checkForNextRollDice(Game g){
+        String descriptionLastRoll = g.getTurns().get(g.getTurns().size() - 1).getMoves().get(0).getDescription();
         return !descriptionLastRoll.equals("should pay rent");
     }
 
