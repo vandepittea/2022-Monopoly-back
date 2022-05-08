@@ -201,7 +201,7 @@ public class Game {
 
         switch (newTile.getActualType()) {
             case street:
-                if (!propertyOwned(newTile)) {
+                if (!propertyOwnedByOtherPlayer(newTile)) {
                     directSale = newTile.getName();
                     canRoll = false;
                     break;
@@ -215,8 +215,12 @@ public class Game {
         }
     }
 
-    private boolean propertyOwned(Tile newTile) {
+    private boolean propertyOwnedByOtherPlayer(Tile newTile) {
         for (Player player : players) {
+            if (player.getProperties().equals(currentPlayer.getName())) {
+                continue;
+            }
+
             for (PropertyView property : player.getProperties()) {
                 if (property.getProperty().equals(newTile.getName())) {
                     if (!Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
