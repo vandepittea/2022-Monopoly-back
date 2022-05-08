@@ -1,12 +1,15 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Street extends Property {
     private Integer[] rentOfHouses;
     private final int housePrice;
     private final String streetColor;
     private final int rent;
 
-    private int amountOfHouses;
+    private int houseCount;
+    private int hotelCount;
 
     public Street(int position, String name, int cost, int mortgage, int groupSize, String color,
                   Integer[] rentOfHouses, int housePrice, String streetColor, int rent) {
@@ -15,6 +18,8 @@ public class Street extends Property {
         this.streetColor = streetColor;
         this.rentOfHouses = rentOfHouses;
         this.rent = rent;
+        this.houseCount = 0;
+        this.hotelCount = 0;
     }
     public Integer[] getRentOfHouses() {
         return rentOfHouses;
@@ -28,12 +33,16 @@ public class Street extends Property {
     public int getRent() {
         return rent;
     }
-
-    public void addHouse(){
-        amountOfHouses++;
+    @JsonIgnore
+    public int getHouseCount() {
+        return houseCount;
+    }
+    @JsonIgnore
+    public int getHotelCount() {
+        return hotelCount;
     }
 
     public int calculateRent(){
-        return rentOfHouses[amountOfHouses - 1];
+
     }
 }

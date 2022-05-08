@@ -1,6 +1,7 @@
 package be.howest.ti.monopoly.web.views;
 
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
+import be.howest.ti.monopoly.logic.implementation.tile.Street;
 
 import java.util.Objects;
 
@@ -18,10 +19,22 @@ public class PropertyView {
         return property.isMortgaged();
     }
     public int getHouseCount() {
-        return property.getHouseCount();
+        if(property.getType().equals("street")){
+            Street street = (Street) property;
+            return street.getHouseCount();
+        }
+        else{
+            return 0;
+        }
     }
     public int getHotelCount() {
-        return property.getHotelCount();
+        if(property.getType().equals("street")){
+            Street street = (Street) property;
+            return street.getHotelCount();
+        }
+        else{
+            return 0;
+        }
     }
 
     @Override
