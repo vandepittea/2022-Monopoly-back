@@ -180,12 +180,23 @@ public class Game {
         Turn turn = new Turn(currentPlayer);
         lastDiceRoll = turn.generateRoll();
 
-        if (doesCurrentPlayerGetJailed()) {
+        if (currentPlayer.isJailed()) {
+            checkRollInJail(turn);
+        } else if (doesCurrentPlayerGetJailed()) {
             JailCurrentPlayer(turn);
         } else {
             movePlayer(turn, lastDiceRoll);
         }
         turns.add(turn);
+    }
+
+    private void checkRollInJail(Turn turn) {
+        if (lastDiceRoll[0].equals(lastDiceRoll[1])) {
+            currentPlayer.getOutOfJail();
+            movePlayer(turn, lastDiceRoll);
+        } else {
+            turn.addMove("Jail", "Didn't get out of jail");
+        }
     }
 
     private void checkIllegalRollDiceActions(String playerName) {

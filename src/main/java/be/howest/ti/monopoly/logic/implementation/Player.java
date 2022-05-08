@@ -78,6 +78,10 @@ public class Player {
         moveTo(jailTile);
     }
 
+    public void getOutOfJail() {
+        this.jailed = false;
+    }
+
     public void buyProperty(Property pr) {
         boolean succesfulPayment = payProperty(pr);
 
