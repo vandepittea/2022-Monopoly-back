@@ -138,6 +138,25 @@ class GameTest {
     }
 
     @Test
+    void rollDiceGoToJailTile() {
+        Game game = service.createGame(2, "group17");
+        game.joinGame("Jonas");
+        game.joinGame("Thomas");
+
+        Turn lastTurn = null;
+        do {
+            game.rollDice(game.getCurrentPlayer());
+            lastTurn = game.getTurns().get(game.getTurns().size() - 1);
+
+            if (game.getDirectSale() != null) {
+                service.dontBuyProperty(game.getId(), game.getCurrentPlayer(), Tile.decideNameAsPathParameter(game.getDirectSale()));
+            }
+        } while (!lastTurn.getMoves().get(0).getTitle().equals("Go to Jail"));
+
+        assertTrue(game.getPlayer(lastTurn.getPlayer()).isJailed());
+    }
+
+    @Test
     void rollDice() {
         Game game = service.createGame(2, "group17");
 
