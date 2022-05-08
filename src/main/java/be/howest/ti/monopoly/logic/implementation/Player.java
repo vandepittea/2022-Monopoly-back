@@ -112,7 +112,7 @@ public class Player {
         currentTile = newTile;
     }
 
-    public void turnOverAssets(Player p){
+    public void turnOverAssetsTo(Player p){
         for(PropertyView pr: properties){
             p.addProperty(pr);
         }
