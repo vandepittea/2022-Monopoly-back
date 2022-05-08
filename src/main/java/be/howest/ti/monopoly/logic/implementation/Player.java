@@ -103,11 +103,11 @@ public class Player {
         }
     }
 
-    private void payDebt(int amount, Player creditor){
+    private void payDebt(int amount, Player debtor){
         boolean successfulPayment = payMoney(amount);
         if(!successfulPayment){
-            debt += amount;
-            this.creditor = creditor;
+            debtor.debt += amount;
+            debtor.creditor = this;
             throw new IllegalMonopolyActionException("You do not have enough money. You will have to sell properties " +
                     "so that you can pay off your debt. You have time until it is your turn again.");
         }
@@ -152,7 +152,8 @@ public class Player {
         }
         else{
             int rent = calculateRent(pr, pl, g);
-            payDebt(rent, pl);
+            pl.payDebt(rent, pl);
+            getMoney(rent);
         }
     }
 

@@ -3,6 +3,7 @@ package be.howest.ti.monopoly.logic.implementation;
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.implementation.tile.Railroad;
 import be.howest.ti.monopoly.logic.implementation.tile.Street;
+import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.web.views.PropertyView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -84,5 +85,67 @@ class PlayerTest {
         p.getProperties().add(s);
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.collectDebt(s, p2, g));
+    }
+
+    @Test
+    void collectDebtTooLateDiceRolledAlready(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2,
+                "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+        Player p = new Player("Bob", null);
+        Player p2 = new Player("Jan", s);
+
+        p.getProperties().add(s);
+
+        Turn turn = new Turn(p2);
+        Turn turn2 = new Turn(p);
+        turn2.addMove("Electric Company", "can buy this property in direct sale");
+        turn.addMove(s.getName(), "should pay rent");
+        g.getTurns().add(turn);
+        g.getTurns().add(turn2);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.collectDebt(s, p2, g));
+    }
+
+    @Test
+    void collectDebtNotEnoughMoney(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2,
+                "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 1505);
+        Player p = new Player("Bob", null);
+        Player p2 = new Player("Jan", s);
+
+        p.getProperties().add(s);
+
+        Turn turn = new Turn(p2);
+        turn.addMove(s.getName(), "should pay rent");
+        g.getTurns().add(turn);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.collectDebt(s, p2, g));
+        assertEquals(1505, p2.getDebt());
+        assertEquals(1500, p2.getMoney());
+        assertEquals(p, p2.getCreditor());
+    }
+
+    @Test
+    void collectDebtSuccessful(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2,
+                "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 20);
+        Player p = new Player("Bob", null);
+        Player p2 = new Player("Jan", s);
+
+        p.getProperties().add(s);
+
+        Turn turn = new Turn(p2);
+        turn.addMove(s.getName(), "should pay rent");
+        g.getTurns().add(turn);
+
+        p.collectDebt(s, p2, g);
+        assertEquals(1500 - 20, p2.getMoney());
+        assertEquals(1500 + 20, p.getMoney());
     }
 }
