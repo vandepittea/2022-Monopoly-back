@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
     @Test
-    void buyPropertySuccesful(){
+    void buyPropertySuccessful(){
         Player pl = new Player("Bob", null);
         Railroad pr = new Railroad(1, "name", 5, 3, 2, "PURPLE", 20);
         PropertyView prView = new PropertyView(pr);
@@ -42,9 +42,6 @@ class PlayerTest {
                 new Integer[]{110, 330, 800, 975, 1150,}, 150, "YELLOW", 22);
         Street s3 = new Street(29, "Grumble Volcano", 280, 140, 3, "YELLOW",
                 new Integer[]{120, 360, 850, 1025, 1200}, 150, "YELLOW", 24);
-        PropertyView prView = new PropertyView(s);
-        PropertyView prView1 = new PropertyView(s2);
-        PropertyView prView2 = new PropertyView(s3);
 
         p2.buyProperty(s);
         p2.buyProperty(s2);
@@ -55,8 +52,8 @@ class PlayerTest {
         assertEquals(0, p2.getMoney());
         assertTrue(p2.getProperties().isEmpty());
         assertEquals(1500 - 280 + (1500 - 240 - 260), p.getMoney());
-        assertTrue(p.getProperties().contains(prView));
-        assertTrue(p.getProperties().contains(prView1));
-        assertTrue(p.getProperties().contains(prView2));
+        assertTrue(p.getProperties().contains(s));
+        assertTrue(p.getProperties().contains(s2));
+        assertTrue(p.getProperties().contains(s3));
     }
 }

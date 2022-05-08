@@ -172,8 +172,7 @@ public class Player {
     }
 
     private boolean checkForOwnership(Property p){
-        PropertyView pv = new PropertyView(p);
-        return !properties.contains(pv);
+        return !properties.contains(p);
     }
 
     private boolean checkIfDebtorIsOnYourProperty(Property pr, Player pl){
