@@ -255,6 +255,7 @@ public class Game {
         Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
         int nextTileIdx = currentPlayerTile.getPosition() + roll[0] + roll[1];
         if (nextTileIdx >= tiles.size()) {
+            //TODO: receive money for passing GO
             nextTileIdx -= tiles.size();
         }
         Tile newTile = service.getTile(nextTileIdx);
