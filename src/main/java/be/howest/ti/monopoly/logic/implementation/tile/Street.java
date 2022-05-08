@@ -42,6 +42,15 @@ public class Street extends Property {
         return hotelCount;
     }
 
+    public void buyHouse(){
+        houseCount++;
+    }
+
+    public void buyHotel(){
+        houseCount = 0;
+        hotelCount = 1;
+    }
+
     public int calculateRent(){
         int amountOfHousesNeededToBuyAHotel = 4;
 
