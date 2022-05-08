@@ -21,4 +21,6 @@ public interface IService {
     String buyProperty(String gameId, String playerName, String propertyName);
 
     Game rollDice(String gameId, String playerName);
+
+    String dontBuyProperty(String gameId, String playerName, String propertyName);
 }
