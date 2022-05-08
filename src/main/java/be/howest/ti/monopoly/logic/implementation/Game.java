@@ -4,6 +4,7 @@ import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
+import be.howest.ti.monopoly.web.views.PropertyView;
 
 import java.util.*;
 
@@ -111,16 +112,16 @@ public class Game {
     }
 
     public void setCurrentPlayer(String currentPlayerName) {
-        Player currentPlayer = null;
+        Player currentPlayerObject = null;
 
         for (Player player : players) {
             if (player.getName().equals(currentPlayerName)) {
-                currentPlayer = player;
+                currentPlayerObject = player;
                 break;
             }
         }
 
-        this.currentPlayer = currentPlayer;
+        this.currentPlayer = currentPlayerObject;
     }
 
     public void joinGame(String playerName) {
@@ -192,9 +193,39 @@ public class Game {
         movePlayer(turn, lastDiceRoll);
         turns.add(turn);
 
-        if (!Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
-            changeCurrentPlayer();
+        decideNextAction();
+    }
+
+    private void decideNextAction() {
+        Tile newTile = service.getTile(currentPlayer.getCurrentTile());
+
+        switch (newTile.getActualType()) {
+            case street:
+                if (!propertyOwned(newTile)) {
+                    directSale = newTile.getName();
+                    canRoll = false;
+                    break;
+                }
+                changeCurrentPlayer();
+                break;
+            case Go:
+            default:
+                changeCurrentPlayer();
+                break;
         }
+    }
+
+    private boolean propertyOwned(Tile newTile) {
+        for (Player player : players) {
+            for (PropertyView property : player.getProperties()) {
+                if (property.getProperty().equals(newTile.getName())) {
+                    if (!Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void movePlayer(Turn turn, Integer[] roll) {
@@ -211,6 +242,10 @@ public class Game {
     }
 
     private void changeCurrentPlayer() {
+        if (Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
+            return;
+        }
+
         int playerIdx = players.indexOf(currentPlayer);
         playerIdx++;
         if (playerIdx >= players.size()) {
