@@ -2,7 +2,6 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
-import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.HashSet;

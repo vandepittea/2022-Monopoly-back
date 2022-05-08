@@ -56,4 +56,33 @@ class PlayerTest {
         assertTrue(p.getProperties().contains(s2));
         assertTrue(p.getProperties().contains(s3));
     }
+
+    @Test
+    void collectDebtOwnershipFailed(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("Bob", null);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2,
+                "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+
+        g.joinGame("Bob");
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.collectDebt(s, p, g));
+    }
+
+    @Test
+    void collectDebtDebtorNotOnProperty(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2,
+                "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+        Street s2 = new Street(16, "Sirena Beach", 180, 90, 3, "ORANGE",
+                new Integer[]{70, 200, 550, 750, 950}, 100, "ORANGE", 14);
+        Player p = new Player("Bob", null);
+        Player p2 = new Player("Jan", s2);
+
+        p.getProperties().add(s);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.collectDebt(s, p2, g));
+    }
 }
