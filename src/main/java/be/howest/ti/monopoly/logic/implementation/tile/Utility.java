@@ -39,7 +39,7 @@ public class Utility extends Property {
         int amountOfUtilities = 0;
 
         for(Property pr: pl.getProperties()){
-            if(pr.getType().equals("utility")){
+            if(pr.getType().equals(TileType.utility)){
                 amountOfUtilities++;
             }
         }
