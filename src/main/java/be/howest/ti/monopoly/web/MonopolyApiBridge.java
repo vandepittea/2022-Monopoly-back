@@ -5,7 +5,6 @@ import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.InsufficientFundsException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
-import be.howest.ti.monopoly.logic.implementation.tile.Street;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.web.exceptions.ForbiddenAccessException;
 import be.howest.ti.monopoly.web.exceptions.InvalidRequestException;
@@ -288,9 +287,9 @@ public class MonopolyApiBridge {
                     "passed along is a valid token for this game and is the token that gives this player access.");
         } else {
             try {
-                String property = service.buyProperty(gameId, playerName, propertyName);
+                int houseCount = service.buyHouse(gameId, playerName, propertyName);
                 Response.sendJsonResponse(ctx, 200, new JsonObject().put("property",
-                        property).put("houses", service.getHouseCount()));
+                        propertyName).put("houses", houseCount));
             }
             catch (IllegalMonopolyActionException exception) {
                 Response.sendFailure(ctx, 409, exception.getMessage());
