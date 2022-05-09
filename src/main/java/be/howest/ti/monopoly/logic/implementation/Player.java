@@ -194,7 +194,19 @@ public class Player {
         if(checkOwnershipWholeStreet(s, service)){
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
+        if(s.checkStreetHouseDifference(service)){
+            throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
+                    "not be higher than one.");
+        }
+        else{
+            boolean successfulPayment = payMoney(s.getHousePrice());
 
+            if (successfulPayment) {
+                s.buyHouse();
+            } else {
+                throw new IllegalMonopolyActionException("You don't have enough money to buy a house for this property.");
+            }
+        }
     }
 
     private boolean checkOwnershipWholeStreet(Street streetToBuildHouseOn, MonopolyService service){
