@@ -44,12 +44,12 @@ public class ServiceAdapter implements IService {
     }
 
     @Override
-    public String[] getChance() {
+    public List<String> getChance() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String[] getCommunityChest() {
+    public List<String> getCommunityChest() {
         throw new UnsupportedOperationException();
     }
 

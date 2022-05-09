@@ -7,6 +7,7 @@ import be.howest.ti.monopoly.logic.implementation.tile.TileType;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -94,8 +95,8 @@ class OpenApiGeneralInfoTests extends OpenApiTestsBase {
     void getChance(final VertxTestContext testContext) {
         service.setDelegate(new ServiceAdapter(){
             @Override
-            public String[] getChance() {
-                return new String[0];
+            public List<String> getChance() {
+                return new ArrayList<>();
             }
         });
 
@@ -112,8 +113,8 @@ class OpenApiGeneralInfoTests extends OpenApiTestsBase {
     void getCommunityChest(final VertxTestContext testContext) {
         service.setDelegate(new ServiceAdapter(){
             @Override
-            public String[] getCommunityChest() {
-                return new String[0];
+            public List<String> getCommunityChest() {
+                return new ArrayList<>();
             }
         });
 

@@ -5,18 +5,14 @@ import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 public class MonopolyService extends ServiceAdapter {
     private Set<Game> games;
     private final List<Tile> tiles;
-    private final String[] chances;
-    private final String[] communityChests;
+    private final Map<ChanceCards, String> chances;
+    private final Map<CommunityChests, String> communityChests;
 
     public MonopolyService() {
         games = new HashSet<>();
@@ -29,7 +25,7 @@ public class MonopolyService extends ServiceAdapter {
         generateTiles();
     }
 
-    private void generateTiles(){
+    private void generateTiles() {
         tiles.add(new SimpleTile(0, "Peach Castle", TileType.GO));
         tiles.add(new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2));
         tiles.add(new CardExecutingTile(2, "Community Chest I", TileType.COMMUNITY_CHEST));
@@ -72,43 +68,49 @@ public class MonopolyService extends ServiceAdapter {
         tiles.add(new Street(39, "Bowser Castle", 400, 200, 2, "DARKBLUE", new Integer[]{200, 600, 1400, 1700, 2000}, 200, "DARKBLUE", 50));
     }
 
-    private String[] generateChances(){
-        return new String[]{ "Advance to Boardwalk",
-                "Advance to Go (Collect $200)",
-                "Advance to Illinois Avenue. If you pass Go, collect $200",
-                "Advance to St. Charles Place. If you pass Go, collect $200",
-                "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled",
-                "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.",
-                "Bank pays you dividend of $50",
-                "Get Out of Jail Free",
-                "Go Back 3 Spaces",
-                "Go to Jail. Go directly to Jail, do not pass Go, do not collect $200",
-                "Make general repairs on all your property. For each house pay $25. For each hotel pay $100",
-                "Speeding fine $15",
-                "Take a trip to Reading Railroad. If you pass Go, collect $200",
-                "You have been elected Chairman of the Board. Pay each player $50",
-                "Your building loan matures. Collect $150"
-        };
+    private Map<ChanceCards, String> generateChances() {
+        Map<ChanceCards, String> chanceCards = new EnumMap<>(ChanceCards.class);
+
+        chanceCards.put(ChanceCards.ADV_BOARDWALK, "Advance to Boardwalk");
+        chanceCards.put(ChanceCards.ADV_GO, "Advance to Go (Collect $200)");
+        chanceCards.put(ChanceCards.ADV_ILL, "Advance to Illinois Avenue. If you pass Go, collect $200");
+        chanceCards.put(ChanceCards.ADV_CHARLES, "Advance to St. Charles Place. If you pass Go, collect $200");
+        chanceCards.put(ChanceCards.ADV_RR, "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled");
+        chanceCards.put(ChanceCards.ADV_UT, "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.");
+        chanceCards.put(ChanceCards.REC_BANK_50, "Bank pays you dividend of $50");
+        chanceCards.put(ChanceCards.JAIL_CARD, "Get Out of Jail Free");
+        chanceCards.put(ChanceCards.RETURN_3, "Go Back 3 Spaces");
+        chanceCards.put(ChanceCards.GO_JAIL, "Go to Jail. Go directly to Jail, do not pass Go, do not collect $200");
+        chanceCards.put(ChanceCards.PAY_REPAIRS, "Make general repairs on all your property. For each house pay $25. For each hotel pay $100");
+        chanceCards.put(ChanceCards.PAY_15, "Speeding fine $15");
+        chanceCards.put(ChanceCards.GO_READING, "Take a trip to Reading Railroad. If you pass Go, collect $200");
+        chanceCards.put(ChanceCards.PAY_PLAYERS_50, "You have been elected Chairman of the Board. Pay each player $50");
+        chanceCards.put(ChanceCards.REC_150, "Your building loan matures. Collect $150");
+
+        return chanceCards;
     }
 
-    private String[] generateCommunityChests(){
-        return new String[]{ "Advance to Go (Collect $200)",
-                "Bank error in your favor. Collect $200",
-                "Doctor's fee. Pay $50",
-                "From sale of stock you get $50",
-                "Get Out of Jail Free",
-                "Go to Jail. Go directly to jail, do not pass Go, do not collect $200",
-                "Holiday fund matures. Receive $100",
-                "Income tax refund. Collect $20",
-                "It is your birthday. Collect $10 from every player",
-                "Life insurance matures. Collect $100",
-                "Pay hospital fees of $100 ",
-                "Pay school fees of $50",
-                "Receive $25 consultancy fee ",
-                "You are assessed for street repair. $40 per house. $115 per hotel",
-                "You have won second prize in a beauty contest. Collect $10",
-                "You inherit $100"
-        };
+    private Map<CommunityChests, String> generateCommunityChests() {
+        Map<CommunityChests, String> communityChestsCards = new EnumMap<>(CommunityChests.class);
+
+        communityChestsCards.put(CommunityChests.ADV_GO, "Advance to Go (Collect $200)");
+        communityChestsCards.put(CommunityChests.REC_BANK_ERR, "Bank error in your favor. Collect $200");
+        communityChestsCards.put(CommunityChests.PAY_DOCTOR_FEE, "Doctor's fee. Pay $50");
+        communityChestsCards.put(CommunityChests.REC_SOLD_STOCK, "From sale of stock you get $50");
+        communityChestsCards.put(CommunityChests.GET_JAIL_CARD, "Get Out of Jail Free");
+        communityChestsCards.put(CommunityChests.GO_JAIL, "Go to Jail. Go directly to jail, do not pass Go, do not collect $200)");
+        communityChestsCards.put(CommunityChests.REC_HOLIDAY, "Holiday fund matures. Receive $100");
+        communityChestsCards.put(CommunityChests.REC_TAX, "Income tax refund. Collect $20");
+        communityChestsCards.put(CommunityChests.REC_BIRTHDAY, "It is your birthday. Collect $10 from every player");
+        communityChestsCards.put(CommunityChests.REC_INSURANCE, "Life insurance matures. Collect $100");
+        communityChestsCards.put(CommunityChests.PAY_HOSPITAL, "Pay hospital fees of $100");
+        communityChestsCards.put(CommunityChests.PAY_SCHOOL, "Pay school fees of $50");
+        communityChestsCards.put(CommunityChests.REC_CONSULTANCY, "Receive $25 consultancy fee");
+        communityChestsCards.put(CommunityChests.PAY_REPAIRS, "You are assessed for street repair. $40 per house. $115 per hotel");
+        communityChestsCards.put(CommunityChests.REC_PRIZE, "You have won second prize in a beauty contest. Collect $10");
+        communityChestsCards.put(CommunityChests.REC_INHERIT, "You inherit $100");
+
+        return communityChestsCards;
     }
 
     @Override
@@ -117,24 +119,24 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public List<Tile> getTiles(){
+    public List<Tile> getTiles() {
         return tiles;
     }
 
     @Override
-    public String[] getChance(){
-        return chances;
+    public List<String> getChance() {
+        return new ArrayList<>(chances.values());
     }
 
     @Override
-    public String[] getCommunityChest(){
-        return communityChests;
+    public List<String> getCommunityChest() {
+        return new ArrayList<>(communityChests.values());
     }
 
     @Override
-    public Tile getTile(int position){
-        for(Tile tile: getTiles()){
-            if(tile.getPosition() == position){
+    public Tile getTile(int position) {
+        for (Tile tile : getTiles()) {
+            if (tile.getPosition() == position) {
                 return tile;
             }
         }
@@ -142,9 +144,9 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public Tile getTile(String name){
-        for(Tile tile: getTiles()){
-            if(tile.getNameAsPathParameter().equals(name)){
+    public Tile getTile(String name) {
+        for (Tile tile : getTiles()) {
+            if (tile.getNameAsPathParameter().equals(name)) {
                 return tile;
             }
         }
@@ -178,25 +180,24 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public void joinGame(String gameId, String playerName){
+    public void joinGame(String gameId, String playerName) {
         Game g = getGame(gameId);
 
         g.joinGame(playerName);
     }
 
     @Override
-    public String buyProperty(String gameId, String playerName, String propertyName){
+    public String buyProperty(String gameId, String playerName, String propertyName) {
         Game g = getGame(gameId);
         Player pl = g.getPlayer(playerName);
         Tile t = getTile(propertyName);
         Property pr = (Property) t;
 
-        if(playerName.equals(g.getCurrentPlayer()) && t.getName().equals(g.getDirectSale())) {
+        if (playerName.equals(g.getCurrentPlayer()) && t.getName().equals(g.getDirectSale())) {
             pl.buyProperty(pr);
             g.handlePropertySale();
             return pr.getName();
-        }
-        else {
+        } else {
             throw new IllegalMonopolyActionException("You tried to do something which is against the rules of " +
                     "Monopoly. In this case, it is most likely not your place to buy this property and/or you are " +
                     "trying to buy the wrong property.");
@@ -239,14 +240,14 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public Game declareBankruptcy(String gameId, String playerName){
+    public Game declareBankruptcy(String gameId, String playerName) {
         Game g = getGame(gameId);
         g.declareBankruptcy(playerName);
         return g;
     }
 
     @Override
-    public boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName){
+    public boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName) {
         Game g = getGame(gameId);
         Player pl = g.getPlayer(playerName);
         Player d = g.getPlayer(debtorName);
