@@ -206,6 +206,8 @@ public class Player {
             } else {
                 throw new IllegalMonopolyActionException("You don't have enough money to buy a house for this property.");
             }
+
+            return s.getHouseCount();
         }
     }
 
