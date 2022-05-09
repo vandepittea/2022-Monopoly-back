@@ -216,6 +216,7 @@ public class MonopolyService extends ServiceAdapter {
         Game game = getGame(gameId);
         Player p = game.getPlayer(playerName);
         Street s = (Street) getTile(propertyName);
-        p.buyHouse(s);
+        int houseCount = p.buyHouse(s);
+        return houseCount;
     }
 }

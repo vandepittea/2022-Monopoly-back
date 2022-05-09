@@ -89,8 +89,8 @@ public class Player {
         }
     }
 
-    public void buyHouse(Street s){
-
+    public int buyHouse(Street s){
+        return 0;
     }
 
     @Override
