@@ -2,7 +2,9 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
+import be.howest.ti.monopoly.logic.implementation.tile.CardExecutingTile;
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
+import be.howest.ti.monopoly.logic.implementation.tile.SimpleTile;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.logic.implementation.turn.TurnType;
@@ -270,30 +272,41 @@ public class Game {
     private void decideNextAction(Tile newTile, Turn turn) {
         switch (newTile.getActualType()) {
             case STREET:
-                if (!propertyOwnedByOtherPlayer(newTile)) {
-                    directSale = newTile.getName();
-                    canRoll = false;
-                    turn.addMove(newTile.getName(), "Can buy this property in a direct sale");
-                    break;
-                }
-                turn.addMove(newTile.getName(), "Can be asked to pay rent if the property isn't mortgaged");
-                changeCurrentPlayer(true);
+                executeStreetFunctionality(newTile, turn);
                 break;
             case GO_TO_JAIL:
-                Tile jail = service.getTile("Jail");
-                currentPlayer.goToJail(jail);
-                turn.addMove(newTile.getName(), "");
-                turn.addMove("Jail", "");
-                changeCurrentPlayer(true);
+                executeGoToJail(newTile, turn);
                 break;
-            case JAIL:
-            case FREE_PARKING:
-            case GO:
+            case COMMUNITY_CHEST:
+            case CHANCE:
+                CardExecutingTile execTile = (CardExecutingTile) newTile;
+                execTile.execute();
+                changeCurrentPlayer(false);
+                break;
             default:
                 turn.addMove(newTile.getName(), "");
                 changeCurrentPlayer(false);
                 break;
         }
+    }
+
+    private void executeGoToJail(Tile newTile, Turn turn) {
+        Tile jail = service.getTile("Jail");
+        currentPlayer.goToJail(jail);
+        turn.addMove(newTile.getName(), "");
+        turn.addMove("Jail", "");
+        changeCurrentPlayer(true);
+    }
+
+    private void executeStreetFunctionality(Tile newTile, Turn turn) {
+        if (!propertyOwnedByOtherPlayer(newTile)) {
+            directSale = newTile.getName();
+            canRoll = false;
+            turn.addMove(newTile.getName(), "Can buy this property in a direct sale");
+            return;
+        }
+        turn.addMove(newTile.getName(), "Can be asked to pay rent if the property isn't mortgaged");
+        changeCurrentPlayer(true);
     }
 
     private boolean propertyOwnedByOtherPlayer(Tile newTile) {

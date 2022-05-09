@@ -11,15 +11,9 @@ import java.util.*;
 public class MonopolyService extends ServiceAdapter {
     private Set<Game> games;
     private final List<Tile> tiles;
-    private final Map<ChanceCards, String> chances;
-    private final Map<CommunityChests, String> communityChests;
 
     public MonopolyService() {
         games = new HashSet<>();
-
-        chances = generateChances();
-
-        communityChests = generateCommunityChests();
 
         tiles = new ArrayList<>();
         generateTiles();
@@ -68,51 +62,6 @@ public class MonopolyService extends ServiceAdapter {
         tiles.add(new Street(39, "Bowser Castle", 400, 200, 2, "DARKBLUE", new Integer[]{200, 600, 1400, 1700, 2000}, 200, "DARKBLUE", 50));
     }
 
-    private Map<ChanceCards, String> generateChances() {
-        Map<ChanceCards, String> chanceCards = new EnumMap<>(ChanceCards.class);
-
-        chanceCards.put(ChanceCards.ADV_BOARDWALK, "Advance to Boardwalk");
-        chanceCards.put(ChanceCards.ADV_GO, "Advance to Go (Collect $200)");
-        chanceCards.put(ChanceCards.ADV_ILL, "Advance to Illinois Avenue. If you pass Go, collect $200");
-        chanceCards.put(ChanceCards.ADV_CHARLES, "Advance to St. Charles Place. If you pass Go, collect $200");
-        chanceCards.put(ChanceCards.ADV_RR, "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled");
-        chanceCards.put(ChanceCards.ADV_UT, "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.");
-        chanceCards.put(ChanceCards.REC_BANK_50, "Bank pays you dividend of $50");
-        chanceCards.put(ChanceCards.JAIL_CARD, "Get Out of Jail Free");
-        chanceCards.put(ChanceCards.RETURN_3, "Go Back 3 Spaces");
-        chanceCards.put(ChanceCards.GO_JAIL, "Go to Jail. Go directly to Jail, do not pass Go, do not collect $200");
-        chanceCards.put(ChanceCards.PAY_REPAIRS, "Make general repairs on all your property. For each house pay $25. For each hotel pay $100");
-        chanceCards.put(ChanceCards.PAY_15, "Speeding fine $15");
-        chanceCards.put(ChanceCards.GO_READING, "Take a trip to Reading Railroad. If you pass Go, collect $200");
-        chanceCards.put(ChanceCards.PAY_PLAYERS_50, "You have been elected Chairman of the Board. Pay each player $50");
-        chanceCards.put(ChanceCards.REC_150, "Your building loan matures. Collect $150");
-
-        return chanceCards;
-    }
-
-    private Map<CommunityChests, String> generateCommunityChests() {
-        Map<CommunityChests, String> communityChestsCards = new EnumMap<>(CommunityChests.class);
-
-        communityChestsCards.put(CommunityChests.ADV_GO, "Advance to Go (Collect $200)");
-        communityChestsCards.put(CommunityChests.REC_BANK_ERR, "Bank error in your favor. Collect $200");
-        communityChestsCards.put(CommunityChests.PAY_DOCTOR_FEE, "Doctor's fee. Pay $50");
-        communityChestsCards.put(CommunityChests.REC_SOLD_STOCK, "From sale of stock you get $50");
-        communityChestsCards.put(CommunityChests.GET_JAIL_CARD, "Get Out of Jail Free");
-        communityChestsCards.put(CommunityChests.GO_JAIL, "Go to Jail. Go directly to jail, do not pass Go, do not collect $200)");
-        communityChestsCards.put(CommunityChests.REC_HOLIDAY, "Holiday fund matures. Receive $100");
-        communityChestsCards.put(CommunityChests.REC_TAX, "Income tax refund. Collect $20");
-        communityChestsCards.put(CommunityChests.REC_BIRTHDAY, "It is your birthday. Collect $10 from every player");
-        communityChestsCards.put(CommunityChests.REC_INSURANCE, "Life insurance matures. Collect $100");
-        communityChestsCards.put(CommunityChests.PAY_HOSPITAL, "Pay hospital fees of $100");
-        communityChestsCards.put(CommunityChests.PAY_SCHOOL, "Pay school fees of $50");
-        communityChestsCards.put(CommunityChests.REC_CONSULTANCY, "Receive $25 consultancy fee");
-        communityChestsCards.put(CommunityChests.PAY_REPAIRS, "You are assessed for street repair. $40 per house. $115 per hotel");
-        communityChestsCards.put(CommunityChests.REC_PRIZE, "You have won second prize in a beauty contest. Collect $10");
-        communityChestsCards.put(CommunityChests.REC_INHERIT, "You inherit $100");
-
-        return communityChestsCards;
-    }
-
     @Override
     public String getVersion() {
         return "0.0.1";
@@ -125,12 +74,12 @@ public class MonopolyService extends ServiceAdapter {
 
     @Override
     public List<String> getChance() {
-        return new ArrayList<>(chances.values());
+        return CardExecutingTile.getChances();
     }
 
     @Override
     public List<String> getCommunityChest() {
-        return new ArrayList<>(communityChests.values());
+        return CardExecutingTile.getCommunityChests();
     }
 
     @Override
