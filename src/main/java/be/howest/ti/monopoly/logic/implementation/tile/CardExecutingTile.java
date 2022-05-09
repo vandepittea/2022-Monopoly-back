@@ -46,26 +46,26 @@ public class CardExecutingTile extends Tile {
         chances.put(ChanceCards.PAY_15, "Speeding fine 15 coins");
         chances.put(ChanceCards.GO_FLOWER, "Take a trip to the FireFlower. If you pass Peach's Castle, collect 200 coins");
         chances.put(ChanceCards.PAY_PLAYERS_50, "You lost a bet that you would defeat Bowser. Pay each player 50 coins");
-        chances.put(ChanceCards.REC_150, "You won a race. Collect 150 coins");
+        chances.put(ChanceCards.REC_150, "You won an important race! Collect 150 coins");
     }
 
     private static void generateCommunityChests() {
-        communityChests.put(CommunityChests.ADV_GO, "Advance to Go (Collect 200 coins)");
-        communityChests.put(CommunityChests.REC_BANK_ERR, "Bank error in your favor. Collect $200");
-        communityChests.put(CommunityChests.PAY_DOCTOR_FEE, "Doctor's fee. Pay $50");
-        communityChests.put(CommunityChests.REC_SOLD_STOCK, "From sale of stock you get $50");
+        communityChests.put(CommunityChests.ADV_GO, "Head to Peach's Castle (Collect 200 coins)");
+        communityChests.put(CommunityChests.REC_BANK_ERR, "The Toad Bank made an error in your favor. Collect 200 coins");
+        communityChests.put(CommunityChests.PAY_DOCTOR_FEE, "You are sick and go to Doctor Mario. Pay 50 coins");
+        communityChests.put(CommunityChests.REC_SOLD_STOCK, "You found a hidden chest with coins. You get 50 coins");
         communityChests.put(CommunityChests.GET_JAIL_CARD, "Get Out of Jail Free");
         communityChests.put(CommunityChests.GO_JAIL, "Go to Jail. Go directly to jail, do not pass Go, do not collect $200)");
-        communityChests.put(CommunityChests.REC_HOLIDAY, "Holiday fund matures. Receive $100");
-        communityChests.put(CommunityChests.REC_TAX, "Income tax refund. Collect $20");
-        communityChests.put(CommunityChests.REC_BIRTHDAY, "It is your birthday. Collect $10 from every player");
-        communityChests.put(CommunityChests.REC_INSURANCE, "Life insurance matures. Collect $100");
-        communityChests.put(CommunityChests.PAY_HOSPITAL, "Pay hospital fees of $100");
-        communityChests.put(CommunityChests.PAY_SCHOOL, "Pay school fees of $50");
-        communityChests.put(CommunityChests.REC_CONSULTANCY, "Receive $25 consultancy fee");
-        communityChests.put(CommunityChests.PAY_REPAIRS, "You are assessed for street repair. $40 per house. $115 per hotel");
-        communityChests.put(CommunityChests.REC_PRIZE, "You have won second prize in a beauty contest. Collect $10");
-        communityChests.put(CommunityChests.REC_INHERIT, "You inherit $100");
+        communityChests.put(CommunityChests.REC_DELFINO, "You guide tourists around Delfino Island. Receive 100 coins");
+        communityChests.put(CommunityChests.REC_BANK_OWES, "The toad Bank owes you some coins. Collect 20 coins");
+        communityChests.put(CommunityChests.REC_BIRTHDAY, "It is your birthday. Collect 10 coins from every player");
+        communityChests.put(CommunityChests.REC_KOOPALING, "You defeated a Koopaling. Collect 100 coins as a reward");
+        communityChests.put(CommunityChests.PAY_BOO, "A Boo scares you and steals some coins, you lose 100 coins");
+        communityChests.put(CommunityChests.PAY_STAR, "You lose a star and need to buy a new one for 50 coins");
+        communityChests.put(CommunityChests.REC_FRUIT, "Receive 25 coins from selling fruit");
+        communityChests.put(CommunityChests.PAY_REPAIRS, "You are assessed for street repair. $40 per house. $115 per castle");
+        communityChests.put(CommunityChests.REC_PRIZE, "You have won second prize in a run contest against Coopa. Collect 10 coind");
+        communityChests.put(CommunityChests.REC_ROSALINA, "Rosalina sends you a gift from space. Recieve 100 coins ");
     }
 
     public void execute(Game game, Turn turn) {
