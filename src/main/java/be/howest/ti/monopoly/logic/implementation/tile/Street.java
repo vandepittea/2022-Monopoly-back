@@ -57,11 +57,13 @@ public class Street extends Property {
 
     public boolean checkStreetHouseDifference(MonopolyService service){
         for(Tile t: service.getTiles()){
-            Street s = (Street) t;
-            if(s.getStreetColor().equals(this.getStreetColor())){
-                int difference = Math.abs(s.getHouseCount() - this.houseCount);
-                if(difference > 1){
-                    return false;
+            if(t.getType() == TileType.street){
+                Street s = (Street) t;
+                if(s.getStreetColor().equals(this.getStreetColor())){
+                    int difference = Math.abs(s.getHouseCount() - this.houseCount);
+                    if(difference > 1){
+                        return false;
+                    }
                 }
             }
         }

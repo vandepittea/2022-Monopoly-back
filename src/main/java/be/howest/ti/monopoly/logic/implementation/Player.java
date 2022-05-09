@@ -153,10 +153,10 @@ public class Player {
     }
 
     public void collectDebt(Property pr, Player pl, Game g){
-        if(checkForOwnership(pr)){
+        if(!checkForOwnership(pr)){
             throw new IllegalMonopolyActionException("This property is not owned by you.");
         }
-        else if(checkIfDebtorIsOnYourProperty(pr, pl)){
+        else if(!checkIfDebtorIsOnYourProperty(pr, pl)){
             throw new IllegalMonopolyActionException("The specified player is not on this property.");
         }
         else if(checkForNextRollDice(g, pr)){
@@ -174,11 +174,11 @@ public class Player {
     }
 
     private boolean checkForOwnership(Property p){
-        return !properties.contains(p);
+        return properties.contains(p);
     }
 
     private boolean checkIfDebtorIsOnYourProperty(Property pr, Player pl){
-        return !pr.getName().equals(pl.currentTile.getName());
+        return pr.getName().equals(pl.currentTile.getName());
     }
 
     private boolean checkForNextRollDice(Game g, Property p){
@@ -191,7 +191,7 @@ public class Player {
     }
 
     public int buyHouse(Street s, MonopolyService service){
-        if(checkOwnershipWholeStreet(s, service)){
+        if(!checkOwnershipWholeStreet(s, service)){
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
         if(s.checkStreetHouseDifference(service)){
@@ -213,10 +213,12 @@ public class Player {
 
     private boolean checkOwnershipWholeStreet(Street streetToBuildHouseOn, MonopolyService service){
         for(Tile t: service.getTiles()){
-            Street streetOfGroup = (Street) t;
-            if(streetOfGroup.getStreetColor().equals(streetToBuildHouseOn.getStreetColor())){
-                if(checkForOwnership(streetOfGroup)){
-                    return false;
+            if(t.getType() == TileType.street){
+                Street streetOfGroup = (Street) t;
+                if(streetOfGroup.getStreetColor().equals(streetToBuildHouseOn.getStreetColor())){
+                    if(!checkForOwnership(streetOfGroup)){
+                        return false;
+                    }
                 }
             }
         }

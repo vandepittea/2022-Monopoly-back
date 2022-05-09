@@ -147,4 +147,16 @@ class PlayerTest {
         assertEquals(1500 - 20, p2.getMoney());
         assertEquals(1500 + 20, p.getMoney());
     }
+
+    @Test
+    void buyHousePlayerFailOwnershipStreetGroup(){
+        MonopolyService service = new MonopolyService();
+        Player p = new Player("Bob", null);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+
+        p.buyProperty(s);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.buyHouse(s, service));
+    }
 }
