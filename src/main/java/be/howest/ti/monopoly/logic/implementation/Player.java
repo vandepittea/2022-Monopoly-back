@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
+import be.howest.ti.monopoly.logic.implementation.tile.Street;
 import be.howest.ti.monopoly.web.views.PropertyView;
 
 import java.util.HashSet;
@@ -86,6 +87,10 @@ public class Player {
         else{
             return false;
         }
+    }
+
+    public void buyHouse(Street s){
+
     }
 
     @Override
