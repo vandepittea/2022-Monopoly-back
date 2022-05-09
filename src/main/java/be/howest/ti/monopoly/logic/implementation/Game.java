@@ -6,7 +6,6 @@ import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.logic.implementation.turn.TurnType;
-import be.howest.ti.monopoly.web.views.PropertyView;
 
 import java.util.*;
 
@@ -270,7 +269,7 @@ public class Game {
 
     private void decideNextAction(Tile newTile, Turn turn) {
         switch (newTile.getActualType()) {
-            case street:
+            case STREET:
                 if (!propertyOwnedByOtherPlayer(newTile)) {
                     directSale = newTile.getName();
                     canRoll = false;
@@ -280,16 +279,16 @@ public class Game {
                 turn.addMove(newTile.getName(), "Can be asked to pay rent if the property isn't mortgaged");
                 changeCurrentPlayer(true);
                 break;
-            case Go_to_Jail:
+            case GO_TO_JAIL:
                 Tile jail = service.getTile("Jail");
                 currentPlayer.goToJail(jail);
                 turn.addMove(newTile.getName(), "");
                 turn.addMove("Jail", "");
                 changeCurrentPlayer(true);
                 break;
-            case Jail:
-            case Free_Parking:
-            case Go:
+            case JAIL:
+            case FREE_PARKING:
+            case GO:
             default:
                 turn.addMove(newTile.getName(), "");
                 changeCurrentPlayer(false);

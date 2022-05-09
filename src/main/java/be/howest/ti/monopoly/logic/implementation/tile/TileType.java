@@ -1,5 +1,5 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
 public enum TileType {
-    Go, street, community_chest, Tax_Income, railroad, chance, Jail, utility, Free_Parking, Go_to_Jail, Luxury_Tax
+    GO, STREET, COMMUNITY_CHEST, TAX_INCOME, RAILROAD, CHANCE, JAIL, UTILITY, FREE_PARKING, GO_TO_JAIL, LUXURY_TAX
 }

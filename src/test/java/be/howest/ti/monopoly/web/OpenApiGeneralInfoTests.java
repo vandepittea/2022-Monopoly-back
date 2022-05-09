@@ -60,7 +60,7 @@ class OpenApiGeneralInfoTests extends OpenApiTestsBase {
         service.setDelegate( new ServiceAdapter(){
             @Override
             public Tile getTile(String name) {
-                return new SimpleTile(0, "Go", TileType.Go);
+                return new SimpleTile(0, "Go", TileType.GO);
             }
         });
 
@@ -77,7 +77,7 @@ class OpenApiGeneralInfoTests extends OpenApiTestsBase {
         service.setDelegate( new ServiceAdapter(){
             @Override
             public Tile getTile(int position) {
-                return new SimpleTile(0, "Go", TileType.Go);
+                return new SimpleTile(0, "Go", TileType.GO);
             }
         });
 

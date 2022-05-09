@@ -15,7 +15,7 @@ public class Street extends Property {
 
     public Street(int position, String name, int cost, int mortgage, int groupSize, String color,
                   Integer[] rentOfHouses, int housePrice, String streetColor, int rent) {
-        super(position, name, cost, mortgage, groupSize, color, TileType.street);
+        super(position, name, cost, mortgage, groupSize, color, TileType.STREET);
         this.housePrice = housePrice;
         this.streetColor = streetColor;
         this.rentOfHouses = rentOfHouses;
