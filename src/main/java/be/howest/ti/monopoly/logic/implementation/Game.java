@@ -5,6 +5,7 @@ import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
+import be.howest.ti.monopoly.logic.implementation.turn.TurnType;
 import be.howest.ti.monopoly.web.views.PropertyView;
 
 import java.util.*;
@@ -178,6 +179,7 @@ public class Game {
     public void handlePropertySale() {
         canRoll = true;
         directSale = null;
+        changeCurrentPlayer(false);
     }
 
     public void rollDice(String playerName) {
@@ -187,8 +189,25 @@ public class Game {
             Turn turn = new Turn(currentPlayer);
             lastDiceRoll = turn.generateRoll();
 
-            movePlayer(turn, lastDiceRoll);
+            if (currentPlayer.isJailed()) {
+                checkRollInJail(turn);
+            } else if (doesCurrentPlayerGetJailed()) {
+                JailCurrentPlayer(turn);
+            } else {
+                movePlayer(turn, lastDiceRoll);
+            }
             turns.add(turn);
+        }
+    }
+
+    private void checkRollInJail(Turn turn) {
+        if (lastDiceRoll[0].equals(lastDiceRoll[1])) {
+            currentPlayer.getOutOfJail();
+            movePlayer(turn, lastDiceRoll);
+        } else {
+            turn.addMove("Jail", "");
+            turn.setType(TurnType.JAIL_STAY);
+            changeCurrentPlayer(true);
         }
     }
 
@@ -205,9 +224,32 @@ public class Game {
             throw new IllegalMonopolyActionException("It is not your turn.");
         }
 
+        if (currentPlayer.getDebt() > 0) {
+            throw new IllegalMonopolyActionException("The player is in debt");
+        }
+
         if (directSale != null) {
             throw new IllegalMonopolyActionException("The current player has to decide on a property");
         }
+    }
+
+    private boolean doesCurrentPlayerGetJailed() {
+        if (turns.size() >= 2) {
+            Turn previousTurn = turns.get(turns.size() - 1);
+            Turn beforePreviousTurn = turns.get(turns.size() - 2);
+
+            if ((currentPlayer.getName().equals(previousTurn.getPlayer())) && (currentPlayer.getName().equals(beforePreviousTurn.getPlayer()))) {
+                return lastDiceRoll[0].equals(lastDiceRoll[1]);
+            }
+        }
+        return false;
+    }
+
+    private void JailCurrentPlayer(Turn turn) {
+        Tile jail = service.getTile("Jail");
+        currentPlayer.goToJail(jail);
+        turn.setType(TurnType.GO_TO_JAIL);
+        decideNextAction(jail, turn);
     }
 
     private void movePlayer(Turn turn, Integer[] roll) {
@@ -215,38 +257,49 @@ public class Game {
         Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
         int nextTileIdx = currentPlayerTile.getPosition() + roll[0] + roll[1];
         if (nextTileIdx >= tiles.size()) {
+            //TODO: receive money for passing GO
             nextTileIdx -= tiles.size();
         }
         Tile newTile = service.getTile(nextTileIdx);
-        currentPlayer.MoveTo(newTile);
+        currentPlayer.moveTo(newTile);
 
-        turn.addMove(newTile.getName(), "Description");
+        turn.setType(TurnType.DEFAULT);
 
-        decideNextAction();
+        decideNextAction(newTile, turn);
     }
 
-    private void decideNextAction() {
-        Tile newTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
-
+    private void decideNextAction(Tile newTile, Turn turn) {
         switch (newTile.getActualType()) {
             case street:
                 if (!propertyOwnedByOtherPlayer(newTile)) {
                     directSale = newTile.getName();
                     canRoll = false;
+                    turn.addMove(newTile.getName(), "Can buy this property in a direct sale");
                     break;
                 }
-                changeCurrentPlayer();
+                turn.addMove(newTile.getName(), "Can be asked to pay rent if the property isn't mortgaged");
+                changeCurrentPlayer(true);
                 break;
+            case Go_to_Jail:
+                Tile jail = service.getTile("Jail");
+                currentPlayer.goToJail(jail);
+                turn.addMove(newTile.getName(), "");
+                turn.addMove("Jail", "");
+                changeCurrentPlayer(true);
+                break;
+            case Jail:
+            case Free_Parking:
             case Go:
             default:
-                changeCurrentPlayer();
+                turn.addMove(newTile.getName(), "");
+                changeCurrentPlayer(false);
                 break;
         }
     }
 
     private boolean propertyOwnedByOtherPlayer(Tile newTile) {
         for (Player player : players) {
-            if (player.getProperties().equals(currentPlayer.getName())) {
+            if (player.getName().equals(currentPlayer.getName())) {
                 continue;
             }
 
@@ -261,8 +314,8 @@ public class Game {
         return false;
     }
 
-    private void changeCurrentPlayer() {
-        if (Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
+    private void changeCurrentPlayer(boolean endTurn) {
+        if (!endTurn && Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
             return;
         }
 
