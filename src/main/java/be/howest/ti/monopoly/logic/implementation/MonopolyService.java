@@ -256,10 +256,11 @@ public class MonopolyService extends ServiceAdapter {
         return true;
     }
 
+    @Override
     public int buyHouse(String gameId, String playerName, String propertyName) {
         Game game = getGame(gameId);
         Player p = game.getPlayer(playerName);
         Street s = (Street) getTile(propertyName);
-        return p.buyHouse(s);
+        return p.buyHouse(s, this);
     }
 }

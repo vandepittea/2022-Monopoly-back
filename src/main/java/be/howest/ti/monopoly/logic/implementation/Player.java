@@ -190,8 +190,23 @@ public class Player {
         return checkDescription && checkTitle;
     }
 
-    public int buyHouse(Street s){
-        return 0;
+    public int buyHouse(Street s, MonopolyService service){
+        if(checkOwnershipWholeStreet(s, service)){
+            throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
+        }
+
+    }
+
+    private boolean checkOwnershipWholeStreet(Street streetToBuildHouseOn, MonopolyService service){
+        for(Tile t: service.getTiles()){
+            Street streetOfGroup = (Street) t;
+            if(streetOfGroup.getStreetColor().equals(streetToBuildHouseOn.getStreetColor())){
+                if(checkForOwnership(streetOfGroup)){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
