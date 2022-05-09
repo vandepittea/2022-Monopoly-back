@@ -1,11 +1,11 @@
 package be.howest.ti.monopoly.logic.implementation;
 
 public enum ChanceCards {
-    ADV_BOARDWALK,
+    ADV_BOWSER_CASTLE,
     ADV_GO,
-    ADV_ILL,
-    ADV_CHARLES,
-    ADV_RR,
+    ADV_SHERBET,
+    ADV_DELFINO,
+    ADV_POWERUP,
     ADV_UT,
     REC_BANK_50,
     JAIL_CARD,
@@ -13,7 +13,7 @@ public enum ChanceCards {
     GO_JAIL,
     PAY_REPAIRS,
     PAY_15,
-    GO_READING,
+    GO_FLOWER,
     PAY_PLAYERS_50,
     REC_150
 }

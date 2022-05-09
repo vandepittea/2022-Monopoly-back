@@ -280,7 +280,7 @@ public class Game {
             case COMMUNITY_CHEST:
             case CHANCE:
                 CardExecutingTile execTile = (CardExecutingTile) newTile;
-                execTile.execute();
+                execTile.execute(this, turn);
                 changeCurrentPlayer(false);
                 break;
             default:
