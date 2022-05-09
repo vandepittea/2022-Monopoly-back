@@ -55,7 +55,7 @@ public class CardExecutingTile extends Tile {
         communityChests.put(CommunityChests.PAY_DOCTOR_FEE, "You are sick and go to Doctor Mario. Pay 50 coins");
         communityChests.put(CommunityChests.REC_SOLD_STOCK, "You found a hidden chest with coins. You get 50 coins");
         communityChests.put(CommunityChests.GET_JAIL_CARD, "Get Out of Jail Free");
-        communityChests.put(CommunityChests.GO_JAIL, "Go to Jail. Go directly to jail, do not pass Go, do not collect $200)");
+        communityChests.put(CommunityChests.GO_JAIL, "Go to Jail. Go directly to jail, do not pass Peach's Castle, do not collect $200)");
         communityChests.put(CommunityChests.REC_DELFINO, "You guide tourists around Delfino Island. Receive 100 coins");
         communityChests.put(CommunityChests.REC_BANK_OWES, "The toad Bank owes you some coins. Collect 20 coins");
         communityChests.put(CommunityChests.REC_BIRTHDAY, "It is your birthday. Collect 10 coins from every player");
@@ -64,8 +64,8 @@ public class CardExecutingTile extends Tile {
         communityChests.put(CommunityChests.PAY_STAR, "You lose a star and need to buy a new one for 50 coins");
         communityChests.put(CommunityChests.REC_FRUIT, "Receive 25 coins from selling fruit");
         communityChests.put(CommunityChests.PAY_REPAIRS, "You are assessed for street repair. $40 per house. $115 per castle");
-        communityChests.put(CommunityChests.REC_PRIZE, "You have won second prize in a run contest against Coopa. Collect 10 coind");
-        communityChests.put(CommunityChests.REC_ROSALINA, "Rosalina sends you a gift from space. Recieve 100 coins ");
+        communityChests.put(CommunityChests.REC_PRIZE, "You have won second prize in a run contest against some Coopas. Collect 10 coins");
+        communityChests.put(CommunityChests.REC_ROSALINA, "Rosalina sends you a gift from space. Receive 100 coins ");
     }
 
     public void execute(Game game, Turn turn) {
