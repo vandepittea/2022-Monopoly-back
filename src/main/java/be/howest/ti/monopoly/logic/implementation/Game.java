@@ -25,7 +25,7 @@ public class Game {
     private boolean canRoll;
     private boolean ended;
     private Player currentPlayer;
-    private String winner;
+    private Player winner;
     private Tile startingTile;
 
     private MonopolyService service;
@@ -106,7 +106,7 @@ public class Game {
     }
 
     public String getWinner() {
-        return winner;
+        return winner.getName();
     }
 
     public void setDirectSale(String directSale) {
@@ -185,19 +185,17 @@ public class Game {
     public void rollDice(String playerName) {
         checkIllegalRollDiceActions(playerName);
 
-        if(!currentPlayer.isBankrupt()){
-            Turn turn = new Turn(currentPlayer);
-            lastDiceRoll = turn.generateRoll();
+        Turn turn = new Turn(currentPlayer);
+        lastDiceRoll = turn.generateRoll();
 
-            if (currentPlayer.isJailed()) {
-                checkRollInJail(turn);
-            } else if (doesCurrentPlayerGetJailed()) {
-                JailCurrentPlayer(turn);
-            } else {
-                movePlayer(turn, lastDiceRoll);
-            }
-            turns.add(turn);
+        if (currentPlayer.isJailed()) {
+            checkRollInJail(turn);
+        } else if (doesCurrentPlayerGetJailed()) {
+            JailCurrentPlayer(turn);
+        } else {
+            movePlayer(turn, lastDiceRoll);
         }
+        turns.add(turn);
     }
 
     private void checkRollInJail(Turn turn) {
@@ -217,7 +215,7 @@ public class Game {
         }
 
         if (ended) {
-            throw new IllegalMonopolyActionException("The game has already ended");
+            throw new IllegalMonopolyActionException("The game has already ended.");
         }
 
         if (!currentPlayer.getName().equals(playerName)) {
@@ -225,11 +223,15 @@ public class Game {
         }
 
         if (currentPlayer.getDebt() > 0) {
-            throw new IllegalMonopolyActionException("The player is in debt");
+            throw new IllegalMonopolyActionException("The player is in debt.");
         }
 
         if (directSale != null) {
-            throw new IllegalMonopolyActionException("The current player has to decide on a property");
+            throw new IllegalMonopolyActionException("The current player has to decide on a property.");
+        }
+
+        if (currentPlayer.isBankrupt()) {
+            throw new IllegalMonopolyActionException("You are bankrupt. Rolling the dice isn't allowed.");
         }
     }
 
@@ -320,22 +322,47 @@ public class Game {
         }
 
         int playerIdx = players.indexOf(currentPlayer);
-        playerIdx++;
-        if (playerIdx >= players.size()) {
-            playerIdx = 0;
-        }
-        currentPlayer = players.get(playerIdx);
+        do {
+            playerIdx++;
+            if (playerIdx >= players.size()) {
+                playerIdx = 0;
+            }
+            currentPlayer = players.get(playerIdx);
+        } while (currentPlayer.isBankrupt());
     }
 
-    public void declareBankruptcy(String playerName){
+    public void declareBankruptcy(String playerName) {
         Player p = getPlayer(playerName);
-        if(p.getCreditor() != null){
+        if (p.getCreditor() != null) {
             p.turnOverAssetsTo(p.getCreditor());
-        }
-        else{
+        } else {
             p.turnOverAssetsToBank();
         }
+
         p.becomeBankrupt();
+        checkForWinner();
+        changePlayerIfItsYourTurn(playerName);
+    }
+
+    private void checkForWinner() {
+        int alivePlayers = 0;
+        Player lastAlivePlayer = null;
+        for(Player player: players){
+            if(!player.isBankrupt()){
+                alivePlayers++;
+                lastAlivePlayer = player;
+            }
+        }
+        if(alivePlayers == 1){
+            ended = true;
+            winner = lastAlivePlayer;
+        }
+    }
+
+    private void changePlayerIfItsYourTurn(String playerName){
+        if (currentPlayer.getName().equals(playerName)) {
+            changeCurrentPlayer(true);
+        }
     }
 
     @Override
