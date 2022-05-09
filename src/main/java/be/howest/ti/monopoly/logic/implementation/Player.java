@@ -122,7 +122,7 @@ public class Player {
         }
     }
 
-    private void getMoney(int amount){
+    private void receiveMoney(int amount){
         money += amount;
     }
 
@@ -134,7 +134,7 @@ public class Player {
         for(Property pr: properties){
             p.addProperty(pr);
         }
-        p.getMoney(money);
+        p.receiveMoney(money);
 
         money = 0;
         debt = 0;
@@ -162,7 +162,7 @@ public class Player {
         else{
             int rent = calculateRent(pr, pl, g);
             pl.payDebt(rent, this);
-            getMoney(rent);
+            receiveMoney(rent);
         }
     }
 

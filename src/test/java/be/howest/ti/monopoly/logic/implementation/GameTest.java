@@ -180,11 +180,14 @@ class GameTest {
 
     @Test
     void declareBankruptcy(){
-        Game g = service.createGame(2, "group17");
+        Game g = service.createGame(3, "group17");
 
         g.joinGame("Bob");
+        g.joinGame("Jan");
+        g.joinGame("Tim");
         g.declareBankruptcy("Bob");
 
+        assertNotEquals("Bob", game.getCurrentPlayer());
         assertTrue(g.getPlayers().get(0).isBankrupt());
         assertTrue(g.getPlayers().get(0).getProperties().isEmpty());
         assertEquals(0, g.getPlayers().get(0).getMoney());
