@@ -60,7 +60,7 @@ public class Street extends Property {
             if(t.getType() == TileType.street){
                 Street s = (Street) t;
                 if(s.getStreetColor().equals(this.getStreetColor())){
-                    int difference = Math.abs(s.getHouseCount() - this.houseCount);
+                    int difference = Math.abs(s.getHouseCount() - (this.houseCount + 1));
                     if(difference > 1){
                         return false;
                     }

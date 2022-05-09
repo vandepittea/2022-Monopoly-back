@@ -194,7 +194,7 @@ public class Player {
         if(!checkOwnershipWholeStreet(s, service)){
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
-        if(s.checkStreetHouseDifference(service)){
+        if(!s.checkStreetHouseDifference(service)){
             throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
                     "not be higher than one.");
         }

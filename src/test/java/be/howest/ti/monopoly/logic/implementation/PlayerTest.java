@@ -159,4 +159,20 @@ class PlayerTest {
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.buyHouse(s, service));
     }
+
+    @Test
+    void buyHousePlayerFailStreetHouseDifference(){
+        MonopolyService service = new MonopolyService();
+        Player p = new Player("Bob", null);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, "PURPLE",
+                new Integer[]{20, 60, 180, 320, 450}, 50, "PURPLE", 4);
+
+        p.buyProperty(s);
+        p.buyProperty(s2);
+        p.buyHouse(s, service);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.buyHouse(s, service));
+    }
 }
