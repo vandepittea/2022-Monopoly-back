@@ -6,7 +6,6 @@ import be.howest.ti.monopoly.logic.implementation.turn.Move;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.logic.implementation.tile.Street;
-import be.howest.ti.monopoly.web.views.PropertyView;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -190,7 +189,7 @@ public class Player {
         return checkDescription && checkTitle;
     }
 
-    public int buyHouse(Street s, MonopolyService service){
+    public int buyHouseOrHotel(Street s, MonopolyService service){
         if(!checkOwnershipWholeStreet(s, service)){
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
@@ -199,16 +198,37 @@ public class Player {
                     "not be higher than one.");
         }
         else{
-            boolean successfulPayment = payMoney(s.getHousePrice());
-
-            if (successfulPayment) {
-                s.buyHouse();
-            } else {
-                throw new IllegalMonopolyActionException("You don't have enough money to buy a house for this property.");
+            if(s.getHouseCount() < 4){
+                return buyHouse(s);
             }
-
-            return s.getHouseCount();
+            else{
+                return buyHotel(s);
+            }
         }
+    }
+
+    private int buyHouse(Street s){
+        boolean successfulPayment = payMoney(s.getHousePrice());
+
+        if (successfulPayment) {
+            s.buyHouse();
+        } else {
+            throw new IllegalMonopolyActionException("You don't have enough money to buy a house for this property.");
+        }
+
+        return s.getHouseCount();
+    }
+
+    private int buyHotel(Street s){
+        boolean successfulPayment = payMoney(s.getHousePrice());
+
+        if (successfulPayment) {
+            s.buyHotel();
+        } else {
+            throw new IllegalMonopolyActionException("You don't have enough money to buy a hotel for this property.");
+        }
+
+        return s.getHotelCount();
     }
 
     private boolean checkOwnershipWholeStreet(Street streetToBuildHouseOn, MonopolyService service){

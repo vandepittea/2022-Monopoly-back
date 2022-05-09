@@ -4,7 +4,6 @@ import be.howest.ti.monopoly.logic.ServiceAdapter;
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -261,6 +260,11 @@ public class MonopolyService extends ServiceAdapter {
         Game game = getGame(gameId);
         Player p = game.getPlayer(playerName);
         Street s = (Street) getTile(propertyName);
-        return p.buyHouse(s, this);
+        return p.buyHouseOrHotel(s, this);
+    }
+
+    @Override
+    public int buyHotel(String gameId, String playerName, String propertyName){
+        return buyHouse(gameId, playerName, propertyName);
     }
 }
