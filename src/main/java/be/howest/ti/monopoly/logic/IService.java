@@ -3,7 +3,6 @@ package be.howest.ti.monopoly.logic;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 
 import java.util.List;
-import java.util.Set;
 
 import be.howest.ti.monopoly.logic.implementation.Game;
 
@@ -19,5 +18,5 @@ public interface IService {
     String[] getCommunityChest();
     void joinGame(String gameId, String playerName);
     String buyProperty(String gameId, String playerName, String propertyName);
-    int getHouseCount();
+    int buyHouse(String gameId, String playerName, String propertyName);
 }
