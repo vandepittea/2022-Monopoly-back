@@ -185,17 +185,19 @@ public class Game {
     public void rollDice(String playerName) {
         checkIllegalRollDiceActions(playerName);
 
-        Turn turn = new Turn(currentPlayer);
-        lastDiceRoll = turn.generateRoll();
+        if(!currentPlayer.isBankrupt()){
+            Turn turn = new Turn(currentPlayer);
+            lastDiceRoll = turn.generateRoll();
 
-        if (currentPlayer.isJailed()) {
-            checkRollInJail(turn);
-        } else if (doesCurrentPlayerGetJailed()) {
-            JailCurrentPlayer(turn);
-        } else {
-            movePlayer(turn, lastDiceRoll);
+            if (currentPlayer.isJailed()) {
+                checkRollInJail(turn);
+            } else if (doesCurrentPlayerGetJailed()) {
+                JailCurrentPlayer(turn);
+            } else {
+                movePlayer(turn, lastDiceRoll);
+            }
+            turns.add(turn);
         }
-        turns.add(turn);
     }
 
     private void checkRollInJail(Turn turn) {
@@ -301,8 +303,8 @@ public class Game {
                 continue;
             }
 
-            for (PropertyView property : player.getProperties()) {
-                if (property.getProperty().equals(newTile.getName())) {
+            for (Property property : player.getProperties()) {
+                if (property.getName().equals(newTile.getName())) {
                     if (!Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
                         return true;
                     }
@@ -323,6 +325,17 @@ public class Game {
             playerIdx = 0;
         }
         currentPlayer = players.get(playerIdx);
+    }
+
+    public void declareBankruptcy(String playerName){
+        Player p = getPlayer(playerName);
+        if(p.getCreditor() != null){
+            p.turnOverAssetsTo(p.getCreditor());
+        }
+        else{
+            p.turnOverAssetsToBank();
+        }
+        p.becomeBankrupt();
     }
 
     @Override

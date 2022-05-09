@@ -1,5 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
+import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.Player;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,8 +11,6 @@ public abstract class Property extends Tile {
     private final String color;
 
     private boolean mortgaged;
-    private int houseCount;
-    private int hotelCount;
 
     public Property(int position, String name, int cost, int mortgage, int groupSize, String color, TileType type) {
         super(position, name, type);
@@ -20,8 +19,6 @@ public abstract class Property extends Tile {
         this.groupSize = groupSize;
         this.color = color;
         this.mortgaged = false;
-        this.houseCount = 0;
-        this.hotelCount = 0;
     }
 
     public int getCost() {
@@ -40,14 +37,6 @@ public abstract class Property extends Tile {
     public boolean isMortgaged() {
         return mortgaged;
     }
-    @JsonIgnore
-    public int getHouseCount() {
-        return houseCount;
-    }
-    @JsonIgnore
-    public int getHotelCount() {
-        return hotelCount;
-    }
 
     public void takeMortgage(){
         mortgaged = true;
@@ -56,4 +45,6 @@ public abstract class Property extends Tile {
     public void payMortgage(){
         mortgaged = false;
     }
+
+    public abstract int calculateRent(Player p, Game g);
 }

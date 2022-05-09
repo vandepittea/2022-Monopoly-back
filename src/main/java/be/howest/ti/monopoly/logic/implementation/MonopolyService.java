@@ -59,7 +59,7 @@ public class MonopolyService extends ServiceAdapter {
         tiles.add(new Railroad(25, "Mario Cart", 200, 100, 4, "Black", 25));
         tiles.add(new Street(26, "DK Mountain", 260, 130, 3, "YELLOW", new Integer[]{110, 330, 800, 975, 1150}, 150, "YELLOW", 22));
         tiles.add(new Street(27, "Wario's Goldmine", 260, 130, 3, "YELLOW", new Integer[]{110, 330, 800, 975, 1150,}, 150, "YELLOW", 22));
-        tiles.add(new Utility(28, "Gas Puump", 150, 75, 2, "WHITE", "4 or 10 times the dice roll"));
+        tiles.add(new Utility(28, "Gas Pump", 150, 75, 2, "WHITE", "4 or 10 times the dice roll"));
         tiles.add(new Street(29, "Grumble Volcano", 280, 140, 3, "YELLOW", new Integer[]{120, 360, 850, 1025, 1200}, 150, "YELLOW", 24));
         tiles.add(new SimpleTile(30, "Go to Jail", TileType.Go_to_Jail));
         tiles.add(new Street(31, "Steam Gardens", 300, 150, 3, "DARKGREEN", new Integer[]{130, 390, 900, 1100, 1275}, 200, "DARKGREEN", 26));
@@ -223,13 +223,6 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public Game rollDice(String gameId, String playerName) {
-        Game game = getGame(gameId);
-        game.rollDice(playerName);
-        return game;
-    }
-
-    @Override
     public Game getGame(String gameId) {
         for (Game game : games) {
             if (game.getId().equals(gameId)) {
@@ -237,5 +230,29 @@ public class MonopolyService extends ServiceAdapter {
             }
         }
         throw new MonopolyResourceNotFoundException("The game you are looking for does not exist. Double check the ID.");
+    }
+
+    @Override
+    public Game rollDice(String gameId, String playerName) {
+        Game game = getGame(gameId);
+        game.rollDice(playerName);
+        return game;
+    }
+
+    @Override
+    public Game declareBankruptcy(String gameId, String playerName){
+        Game g = getGame(gameId);
+        g.declareBankruptcy(playerName);
+        return g;
+    }
+
+    @Override
+    public boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName){
+        Game g = getGame(gameId);
+        Player pl = g.getPlayer(playerName);
+        Player d = g.getPlayer(debtorName);
+        Property pr = (Property) getTile(propertyName);
+        pl.collectDebt(pr, d, g);
+        return true;
     }
 }

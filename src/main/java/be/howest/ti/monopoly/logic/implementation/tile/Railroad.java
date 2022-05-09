@@ -1,5 +1,8 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
+import be.howest.ti.monopoly.logic.implementation.Game;
+import be.howest.ti.monopoly.logic.implementation.Player;
+
 public class Railroad extends Property {
     private final int rent;
 
@@ -9,6 +12,11 @@ public class Railroad extends Property {
     }
 
     public int getRent() {
+        return rent;
+    }
+
+    @Override
+    public int calculateRent(Player p, Game g) {
         return rent;
     }
 }

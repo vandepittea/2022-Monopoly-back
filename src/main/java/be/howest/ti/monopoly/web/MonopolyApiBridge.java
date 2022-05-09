@@ -236,7 +236,22 @@ public class MonopolyApiBridge {
     }
 
     private void declareBankruptcy(RoutingContext ctx) {
-        throw new NotYetImplementedException("declareBankruptcy");
+        Request request = Request.from(ctx);
+
+        String gameId = request.getGameId();
+        String playerName = request.getPlayerNameOfPath();
+
+        if (!request.isAuthorized(gameId, playerName))
+        {
+            throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you passed " +
+                    "along is valid token for this game and is the token that gives this player access.");
+        }
+
+        try{
+            Response.sendJsonResponse(ctx, 200, service.declareBankruptcy(gameId, playerName));
+        } catch (MonopolyResourceNotFoundException exception) {
+            Response.sendFailure(ctx, 404, exception.getMessage());
+        }
     }
 
     private void buyProperty(RoutingContext ctx) {
@@ -284,7 +299,26 @@ public class MonopolyApiBridge {
     }
 
     private void collectDebt(RoutingContext ctx) {
-        throw new NotYetImplementedException("collectDebt");
+        Request request = Request.from(ctx);
+
+        String gameId = request.getGameId();
+        String playerName = request.getPlayerNameOfPath();
+        String propertyName = request.getPropertyName();
+        String debtorName = request.getDebtorName();
+
+        if (!request.isAuthorized(gameId, playerName)) {
+            throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you passed " +
+                    "along is valid token for this game and is the token that gives this player access.");
+        }
+
+        try {
+            boolean changeDebt = service.collectDebt(gameId, playerName, propertyName, debtorName);
+            Response.sendJsonResponse(ctx, 200, new JsonObject().put("true", changeDebt));
+        } catch (IllegalMonopolyActionException exception) {
+            Response.sendFailure(ctx, 409, exception.getMessage());
+        } catch (MonopolyResourceNotFoundException exception) {
+            Response.sendFailure(ctx, 404, exception.getMessage());
+        }
     }
 
     private void takeMortgage(RoutingContext ctx) {
