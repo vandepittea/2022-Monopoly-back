@@ -9,7 +9,7 @@ import java.util.Random;
 public class Turn {
     private Player player;
     private Integer[] roll;
-    private String type;
+    private TurnType type;
     private List<Move> moves;
 
     public Turn(Player player) {
@@ -26,7 +26,7 @@ public class Turn {
         return roll;
     }
 
-    public String getType() {
+    public TurnType getType() {
         return type;
     }
 
@@ -43,5 +43,8 @@ public class Turn {
 
     public void addMove(String title, String description) {
         moves.add(new Move(title, description));
+    }
+    public void setType(TurnType type) {
+        this.type = type;
     }
 }

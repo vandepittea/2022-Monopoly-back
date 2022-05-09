@@ -2,8 +2,13 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
+import be.howest.ti.monopoly.logic.implementation.tile.Tile;
+import be.howest.ti.monopoly.logic.implementation.turn.Turn;
+import be.howest.ti.monopoly.logic.implementation.turn.TurnType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -74,6 +79,7 @@ class GameTest {
     }
 
     //TODO: make rollDice test for an ended game
+    //TODO: make rollDice test for a player in debt, when debt is properly implemented
 
     @Test
     void rollDiceWrongPlayer() {
@@ -93,6 +99,61 @@ class GameTest {
         }
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Jonas"));
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Thomas"));
+    }
+
+    @Test
+    void rollDiceToJail() {
+        Game game = service.createGame(2, "group17");
+        game.joinGame("Jonas");
+        game.joinGame("Thomas");
+
+        Turn lastTurn = null;
+        do {
+            game.rollDice(game.getCurrentPlayer());
+            lastTurn = game.getTurns().get(game.getTurns().size() - 1);
+
+            if (game.getDirectSale() != null) {
+                service.dontBuyProperty(game.getId(), game.getCurrentPlayer(), Tile.decideNameAsPathParameter(game.getDirectSale()));
+            }
+        } while (lastTurn.getType() != TurnType.GO_TO_JAIL);
+
+        Player currentPlayer = game.getPlayer(game.getCurrentPlayer());
+        List<Turn> turns = game.getTurns();
+        for (int i = 2; i < turns.size(); i++) {
+            Turn turn1 = turns.get(i - 2);
+            Turn turn2 = turns.get(i - 1);
+            Turn turn3 = turns.get(i);
+
+            if (turn1.getPlayer().equals(turn2.getPlayer()) && turn2.getPlayer().equals(turn3.getPlayer())) {
+                Integer[] roll1 = turn1.getRoll();
+                Integer[] roll2 = turn2.getRoll();
+                Integer[] roll3 = turn3.getRoll();
+
+                if ((roll1[0] == roll1[1]) && (roll2[0] == roll2[1]) && (roll3[0] == roll3[1])) {
+                    assertEquals(i, turns.size() - 1);
+                    assertTrue(currentPlayer.isJailed());
+                }
+            }
+        }
+    }
+
+    @Test
+    void rollDiceGoToJailTile() {
+        Game game = service.createGame(2, "group17");
+        game.joinGame("Jonas");
+        game.joinGame("Thomas");
+
+        Turn lastTurn = null;
+        do {
+            game.rollDice(game.getCurrentPlayer());
+            lastTurn = game.getTurns().get(game.getTurns().size() - 1);
+
+            if (game.getDirectSale() != null) {
+                service.dontBuyProperty(game.getId(), game.getCurrentPlayer(), Tile.decideNameAsPathParameter(game.getDirectSale()));
+            }
+        } while (!lastTurn.getMoves().get(0).getTitle().equals("Go to Jail"));
+
+        assertTrue(game.getPlayer(lastTurn.getPlayer()).isJailed());
     }
 
     @Test
