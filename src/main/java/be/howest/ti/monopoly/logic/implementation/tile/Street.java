@@ -1,5 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
+import be.howest.ti.monopoly.logic.implementation.Game;
+import be.howest.ti.monopoly.logic.implementation.Player;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Street extends Property {
@@ -51,14 +53,14 @@ public class Street extends Property {
         hotelCount = 1;
     }
 
-    public int calculateRent(){
-        int amountOfHousesNeededToBuyAHotel = 4;
+    @Override
+    public int calculateRent(Player p, Game g){
 
         if(houseCount > 0){
             return rentOfHouses[houseCount - 1];
         }
         else if(hotelCount > 0){
-            return rentOfHouses[amountOfHousesNeededToBuyAHotel];
+            return rentOfHouses[rentOfHouses.length - 1];
         }
         else{
             return rent;

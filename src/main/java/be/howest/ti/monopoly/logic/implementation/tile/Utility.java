@@ -14,6 +14,7 @@ public class Utility extends Property {
         return rent;
     }
 
+    @Override
     public int calculateRent(Player p, Game g){
         int totalDiceRoll = calculateDiceRoll(g);
 

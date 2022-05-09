@@ -10,7 +10,7 @@ class StreetTest {
         Street s = new Street(1, "Peach's Garden", 60, 30, 2,
                 "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
 
-        assertEquals(2, s.calculateRent());
+        assertEquals(2, s.calculateRent(null, null));
     }
 
     @Test
@@ -22,7 +22,7 @@ class StreetTest {
         s.buyHouse();
         s.buyHouse();
 
-        assertEquals(90, s.calculateRent());
+        assertEquals(90, s.calculateRent(null, null));
     }
 
     @Test
@@ -36,6 +36,6 @@ class StreetTest {
         s.buyHouse();
         s.buyHotel();
 
-        assertEquals(250, s.calculateRent());
+        assertEquals(250, s.calculateRent(null, null));
     }
 }

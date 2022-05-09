@@ -158,18 +158,7 @@ public class Player {
     }
 
     private int calculateRent(Property pr, Player pl, Game g){
-        if(pr.getType().equals("street")){
-            Street s = (Street) pr;
-            return s.calculateRent();
-        }
-        else if(pr.getType().equals("utility")){
-            Utility u = (Utility) pr;
-            return u.calculateRent(pl, g);
-        }
-        else{
-            Railroad r = (Railroad) pr;
-            return r.getRent();
-        }
+        return pr.calculateRent(pl, g);
     }
 
     private boolean checkForOwnership(Property p){
