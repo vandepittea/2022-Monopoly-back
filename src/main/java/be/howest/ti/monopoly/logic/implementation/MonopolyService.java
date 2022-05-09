@@ -211,4 +211,13 @@ public class MonopolyService extends ServiceAdapter {
         }
         throw new MonopolyResourceNotFoundException("The game you are looking for does not exist. Double check the ID.");
     }
+
+    public void buyHouse(String gameId, String playerName, String propertyName) {
+        Game game = getGame(gameId);
+        Player pl = game.getPlayer(playerName);
+        Tile tile = getTile(propertyName);
+        Property prop = (Property) tile;
+
+
+    }
 }

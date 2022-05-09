@@ -1,12 +1,13 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
+import be.howest.ti.monopoly.logic.implementation.Player;
+
 public class Street extends Property {
     private final String type;
     private Integer[] rentOfHouses;
     private final int housePrice;
     private final String streetColor;
     private final int rent;
-
     private int amountOfHouses;
 
     public Street(int position, String name, int cost, int mortgage, int groupSize, String color,
@@ -35,11 +36,23 @@ public class Street extends Property {
         return rent;
     }
 
+    @Override
+    public int getHouseCount() {
+        return amountOfHouses;
+    }
+
     public void addHouse(){
         amountOfHouses++;
     }
 
     public int calculateRent(){
         return rentOfHouses[amountOfHouses - 1];
+    }
+
+    public void buyHouse(Player player) {
+        if (player.getMoney() >= getHousePrice()) {
+            player.setMoney(player.getMoney() - getHousePrice());
+            addHouse();
+        } //else exception "not enough money"
     }
 }
