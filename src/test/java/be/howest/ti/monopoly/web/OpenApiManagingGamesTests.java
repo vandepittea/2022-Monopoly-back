@@ -257,25 +257,4 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
                 response -> assertErrorResponse(response, 400)
         );
     }
-
-    @Test
-    void clearGameList(final VertxTestContext testContext) {
-        delete(
-                testContext,
-                "/games",
-                "some-token",
-                response -> assertNotYetImplemented(response, "clearGameList")
-        );
-    }
-
-    @Test
-    void clearGameListUnauthorized(final VertxTestContext testContext) {
-        delete(
-                testContext,
-                "/games",
-                null,
-                response -> assertErrorResponse(response, 401)
-        );
-    }
-
 }

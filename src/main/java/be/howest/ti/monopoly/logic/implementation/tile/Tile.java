@@ -1,16 +1,20 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
 
-public class Tile {
+public abstract class Tile {
+    protected final TileType type;
     private final String name;
     private final int position;
     private final String nameAsPathParameter;
 
-    public Tile(int position, String name) {
+    public Tile(int position, String name, TileType type) {
         this.position = position;
         this.name = name;
-        this.nameAsPathParameter = decideNameAsPathParameter();
+        this.nameAsPathParameter = Tile.decideNameAsPathParameter(name);
+        this.type = type;
     }
 
     public String getName() {
@@ -22,9 +26,17 @@ public class Tile {
     public String getNameAsPathParameter() {
         return nameAsPathParameter;
     }
+    public String getType() {
+        return this.type.toString().replace("_", " ");
+    }
 
-    public String decideNameAsPathParameter(){
-        return name.replaceAll(" ", "_");
+    @JsonIgnore
+    public TileType getActualType() {
+        return type;
+    }
+
+    public static String decideNameAsPathParameter(String tileName){
+        return tileName.replace(" ", "_");
     }
 
     @Override
