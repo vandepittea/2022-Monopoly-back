@@ -275,4 +275,35 @@ class PlayerTest {
         assertEquals(1500 - 60 - 60 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50, p.getMoney());
         assertEquals(12 - 1, g.getAvailableHotels());
     }
+
+    @Test
+    void getOutOfJailFreeNoCards(){
+        Player p = new Player("Bob", null);
+        p.goToJail(null);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.getOutOfJailFree());
+    }
+
+    @Test
+    void getOutOfJailFreeNotJailed(){
+        Player p = new Player("Bob", null);
+        p.receiveGetOutOfJailCard();
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.getOutOfJailFree());
+    }
+
+    @Test
+    void getOutOfJailFreeSuccessful(){
+        Player p = new Player("Bob", null);
+        p.goToJail(null);
+        p.receiveGetOutOfJailCard();
+
+        assertTrue(p.isJailed());
+        assertEquals(1, p.getGetOutOfJailCards());
+
+        p.getOutOfJailFree();
+
+        assertFalse(p.isJailed());
+        assertEquals(0, p.getGetOutOfJailCards());
+    }
 }
