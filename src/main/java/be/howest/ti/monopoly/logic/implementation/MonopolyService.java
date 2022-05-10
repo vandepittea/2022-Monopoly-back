@@ -257,10 +257,10 @@ public class MonopolyService extends ServiceAdapter {
 
     @Override
     public int buyHouse(String gameId, String playerName, String propertyName) {
-        Game game = getGame(gameId);
-        Player p = game.getPlayer(playerName);
+        Game g = getGame(gameId);
+        Player p = g.getPlayer(playerName);
         Street s = (Street) getTile(propertyName);
-        return p.buyHouseOrHotel(s, this);
+        return p.buyHouseOrHotel(this, g, s);
     }
 
     @Override

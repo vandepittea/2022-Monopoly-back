@@ -189,46 +189,46 @@ public class Player {
         return checkDescription && checkTitle;
     }
 
-    public int buyHouseOrHotel(Street s, MonopolyService service){
+    public int buyHouseOrHotel(MonopolyService service, Game g, Street s){
         if(!checkOwnershipWholeStreet(s, service)){
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
-        if(!s.checkStreetHouseDifference(service)){
+        if(!s.checkStreetHouseDifference(service, g)){
             throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
                     "not be higher than one.");
         }
         else{
-            if(s.getHouseCount() < 4){
-                return buyHouse(s);
+            if(g.receiveHouseCount(s) < 4){
+                return buyHouse(g, s);
             }
             else{
-                return buyHotel(s);
+                return buyHotel(g, s);
             }
         }
     }
 
-    private int buyHouse(Street s){
+    private int buyHouse(Game g, Street s){
         boolean successfulPayment = payMoney(s.getHousePrice());
 
         if (successfulPayment) {
-            s.buyHouse();
+            s.buyHouse(g);
         } else {
             throw new IllegalMonopolyActionException("You don't have enough money to buy a house for this property.");
         }
 
-        return s.getHouseCount();
+        return g.receiveHouseCount(s);
     }
 
-    private int buyHotel(Street s){
+    private int buyHotel(Game g, Street s){
         boolean successfulPayment = payMoney(s.getHousePrice());
 
         if (successfulPayment) {
-            s.buyHotel();
+            s.buyHotel(g);
         } else {
             throw new IllegalMonopolyActionException("You don't have enough money to buy a hotel for this property.");
         }
 
-        return s.getHotelCount();
+        return g.receiveHotelCount(s);
     }
 
     private boolean checkOwnershipWholeStreet(Street streetToBuildHouseOn, MonopolyService service){

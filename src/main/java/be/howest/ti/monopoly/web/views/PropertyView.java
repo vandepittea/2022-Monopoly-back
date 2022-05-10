@@ -18,7 +18,7 @@ public class PropertyView {
     public boolean isMortgage() {
         return property.isMortgaged();
     }
-    public int getHouseCount() {
+    /*public int getHouseCount() {
         if(property.getType().equals("street")){
             Street street = (Street) property;
             return street.getHouseCount();
@@ -26,8 +26,8 @@ public class PropertyView {
         else{
             return 0;
         }
-    }
-    public int getHotelCount() {
+    }*/
+    /*public int getHotelCount() {
         if(property.getType().equals("street")){
             Street street = (Street) property;
             return street.getHotelCount();
@@ -35,7 +35,7 @@ public class PropertyView {
         else{
             return 0;
         }
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {
