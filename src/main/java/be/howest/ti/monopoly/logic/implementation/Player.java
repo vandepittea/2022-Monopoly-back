@@ -91,6 +91,10 @@ public class Player {
         this.jailed = false;
     }
 
+    public void receiveGetOutOfJailCard() {
+        getOutOfJailCards++;
+    }
+
     public void buyProperty(Property pr) {
         boolean successfulPayment = payMoney(pr.getCost());
 
