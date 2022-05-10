@@ -116,9 +116,4 @@ public class TestService implements IService {
     public void getOutOfJailFine(String gameId, String playerName) {
         delegate.getOutOfJailFine(gameId,playerName);
     }
-
-    @Override
-    public int buyHouse(String gameId, String playerName, String propertyName) {
-        return delegate.buyHouse(gameId, playerName, propertyName);
-    }
 }
