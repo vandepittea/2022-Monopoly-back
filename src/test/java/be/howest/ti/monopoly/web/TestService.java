@@ -97,6 +97,11 @@ public class TestService implements IService {
     }
 
     @Override
+    public void getOutOfJailFree(String gameId, String playerName) {
+        delegate.getOutOfJailFree(gameId, playerName);
+    }
+
+    @Override
     public int buyHouse(String gameId, String playerName, String propertyName) {
         return delegate.buyHouse(gameId, playerName, propertyName);
     }
