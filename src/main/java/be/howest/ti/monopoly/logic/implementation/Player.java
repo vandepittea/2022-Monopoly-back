@@ -211,7 +211,7 @@ public class Player {
             throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
                     "not be higher than one.");
         }
-        if (g.receiveHouseCount(s) < 4) {
+        if (g.receiveHotelCount(s) != 1) {
             return sellHouse(g, s);
         } else {
             return sellHotel(g, s);
@@ -263,7 +263,13 @@ public class Player {
     }
 
     private int sellHotel(Game g, Street s) {
-        return 0;
+        if (g.getAvailableHouses() < 5) {
+            throw new IllegalMonopolyActionException("You can't sell your hotel since there are no houses left in the bank.");
+        }
+
+        s.sellHouse(g);
+        receiveMoney(s.getHousePrice() / 2);
+        return g.receiveHotelCount(s);
     }
 
     private boolean checkOwnershipWholeStreet(Street streetToBuildHouseOn, MonopolyService service) {
