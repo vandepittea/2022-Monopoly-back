@@ -58,11 +58,18 @@ class OpenApiImprovingPropertyTests extends OpenApiTestsBase {
     //
     @Test
     void buyHotel(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public int buyHotel(String gameId, String playerName, String propertyName) {
+                return 0;
+            }
+        });
+
         post(
                 testContext,
-                "/games/game-id/players/Alice/properties/some-property/hotel",
-                "some-token",
-                response -> assertNotYetImplemented(response, "buyHotel")
+                "/games/000/players/Alice/properties/some-property/hotel",
+                "000-Alice",
+                response -> assertOkResponse(response)
         );
     }
 
