@@ -45,6 +45,11 @@ public class Player {
         return currentTile.getName();
     }
 
+    @JsonIgnore
+    public Tile getCurrentTileObject() {
+        return currentTile;
+    }
+
     public boolean isJailed() {
         return jailed;
     }

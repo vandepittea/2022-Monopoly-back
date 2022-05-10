@@ -16,6 +16,5 @@ public enum CommunityChests {
     REC_FRUIT,
     PAY_REPAIRS,
     REC_PRIZE,
-    REC_ROSALINA,
-    REC_INHERIT
+    REC_ROSALINA
 }

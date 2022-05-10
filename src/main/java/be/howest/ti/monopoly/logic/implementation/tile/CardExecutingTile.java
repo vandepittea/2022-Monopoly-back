@@ -73,7 +73,7 @@ public class CardExecutingTile extends Tile {
         chances.put(ChanceCards.ADV_POWERUP, "Advance to the nearest Powerup. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled");
         chances.put(ChanceCards.ADV_UT, "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.");
         chances.put(ChanceCards.REC_BANK_50, "The Toad Bank pays you dividend of 50 coins");
-        chances.put(ChanceCards.JAIL_CARD, "Get Out of Jail Free");
+        chances.put(ChanceCards.GET_JAIL_CARD, "Get Out of Jail Free");
         chances.put(ChanceCards.RETURN_3, "Go Back 3 Spaces");
         chances.put(ChanceCards.GO_JAIL, "Go to Jail. Go directly to Jail, do not pass Go, do not collect 200 coins");
         chances.put(ChanceCards.PAY_REPAIRS, "Make general repairs on all your property. For each house pay 25 coins. For each castle pay 100 coins");
@@ -131,15 +131,20 @@ public class CardExecutingTile extends Tile {
                 goToTile(service, 24, turn, type, game, true);
                 break;
             case ADV_DELFINO:
-                goToTile(service, 13, turn, type, game, true);
+                goToTile(service, 11, turn, type, game, true);
                 break;
             case ADV_POWERUP:
+                boolean moved = false;
                 for (Integer powerupPosition : powerupLocations) {
                     if (getPosition() < powerupPosition) {
                         goToTile(service, powerupPosition, turn, type, game, false);
+                        moved = true;
+                        break;
                     }
                 }
-                goToTile(service, powerupLocations.get(0), turn, type, game, false);
+                if (!moved) {
+                    goToTile(service, powerupLocations.get(0), turn, type, game, false);
+                }
                 break;
             case ADV_UT:
                 for (Integer utilityPosition : utilityLocations) {
@@ -154,13 +159,13 @@ public class CardExecutingTile extends Tile {
                 turn.addMove(getName(), chances.get(type));
                 game.changeCurrentPlayer(false);
                 break;
-            case JAIL_CARD:
+            case GET_JAIL_CARD:
                 game.getCurrentplayerObject().receiveGetOutOfJailCard();
                 turn.addMove(getName(), chances.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case RETURN_3:
-                int currentTileIdx = service.getTile(game.getCurrentplayerObject().getCurrentTile()).getPosition();
+                int currentTileIdx = game.getCurrentplayerObject().getCurrentTileObject().getPosition();
                 currentTileIdx -= 3;
                 if (currentTileIdx < 0) {
                     currentTileIdx = service.getTiles().size() - currentTileIdx;
@@ -200,6 +205,7 @@ public class CardExecutingTile extends Tile {
                         continue;
                     }
                     currentPlayer.payDebt(50, player);
+                    player.receiveMoney(50);
                 }
                 turn.addMove(getName(), chances.get(type));
                 game.changeCurrentPlayer(false);
@@ -254,7 +260,7 @@ public class CardExecutingTile extends Tile {
                 break;
             case REC_DELFINO:
             case REC_KOOPALING:
-            case REC_INHERIT:
+            case REC_ROSALINA:
                 game.getCurrentplayerObject().receiveMoney(100);
                 turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
@@ -271,6 +277,7 @@ public class CardExecutingTile extends Tile {
                         continue;
                     }
                     player.payDebt(10, currentPlayer);
+                    currentPlayer.receiveMoney(10);
                 }
 
                 turn.addMove(getName(), communityChests.get(type));
@@ -310,7 +317,6 @@ public class CardExecutingTile extends Tile {
     private void goToTile(MonopolyService service, int tileToAdvance, Turn turn, CommunityChests chanceType, Game game, boolean passGo) {
         Tile newTile = service.getTile(tileToAdvance);
         turn.addMove(this.getName(), communityChests.get(chanceType));
-        game.getCurrentplayerObject().moveTo(newTile);
         game.movePlayer(passGo, turn, newTile);
     }
 }

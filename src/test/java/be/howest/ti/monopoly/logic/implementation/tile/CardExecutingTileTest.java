@@ -1,22 +1,17 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
-import be.howest.ti.monopoly.logic.implementation.ChanceCards;
-import be.howest.ti.monopoly.logic.implementation.Game;
-import be.howest.ti.monopoly.logic.implementation.MonopolyService;
-import be.howest.ti.monopoly.logic.implementation.Player;
+import be.howest.ti.monopoly.logic.implementation.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CardExecutingTileTest {
-
     @Test
-    void execute() {
+    void executeChanceCards() {
         Set<ChanceCards> gottenChanceCards = new HashSet<>();
 
         while (gottenChanceCards.size() != ChanceCards.values().length) {
@@ -31,12 +26,12 @@ class CardExecutingTileTest {
             player.buyProperty((Property) service.getTile(3));
             player.buyHouseOrHotel(service, game, street);
 
-            Tile newTile = service.getTile(12);
+            Tile newTile = service.getTile(7);
             player.moveTo(newTile);
             Turn turn = new Turn(player);
 
-            CardExecutingTile chanceCard = (CardExecutingTile) service.getTile(7);
-            chanceCard.execute(service, game, turn);
+            CardExecutingTile chanceTile = (CardExecutingTile) service.getTile(7);
+            chanceTile.execute(service, game, turn);
 
             Player currentplayerObject = game.getCurrentplayerObject();
             ChanceCards type = CardExecutingTile.getChanceType(turn.getMoves().get(0).getDescription());
@@ -56,26 +51,26 @@ class CardExecutingTileTest {
                     break;
                 case ADV_DELFINO:
                     assertEquals("Delfino Airship", currentplayerObject.getCurrentTile());
-                    assertEquals(1530, currentplayerObject.getMoney());
+                    assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case ADV_POWERUP:
                     assertEquals("F.L.U.D.D.", currentplayerObject.getCurrentTile());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case ADV_UT:
-                    assertEquals("Gas Pump", currentplayerObject.getCurrentTile());
+                    assertEquals("Electric Koopa Farm", currentplayerObject.getCurrentTile());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case REC_BANK_50:
                     assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
                     assertEquals(1380, currentplayerObject.getMoney());
                     break;
-                case JAIL_CARD:
+                case GET_JAIL_CARD:
                     assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
                     assertEquals(1, currentplayerObject.getGetOutOfJailCards());
                     break;
                 case RETURN_3:
-                    Tile returnedTile = service.getTile(9);
+                    Tile returnedTile = service.getTile(4);
                     assertEquals(returnedTile.getName(), currentplayerObject.getCurrentTile());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
@@ -103,6 +98,93 @@ class CardExecutingTileTest {
                 case REC_150:
                     assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
                     assertEquals(1480, currentplayerObject.getMoney());
+                    break;
+            }
+        }
+    }
+
+    @Test
+    void executeCommunityCards() {
+        Set<CommunityChests> gottenCommmunityChests = new HashSet<>();
+
+        while (gottenCommmunityChests.size() != CommunityChests.values().length) {
+            MonopolyService service = new MonopolyService();
+            Game game = service.createGame(2, "group17");
+            game.joinGame("Jonas");
+            game.joinGame("Thomas");
+
+            Player player = game.getPlayer("Jonas");
+            Street street = (Street) service.getTile(1);
+            player.buyProperty(street);
+            player.buyProperty((Property) service.getTile(3));
+            player.buyHouseOrHotel(service, game, street);
+
+            Tile newTile = service.getTile(17);
+            player.moveTo(newTile);
+            Turn turn = new Turn(player);
+
+            CardExecutingTile communityTile = (CardExecutingTile) service.getTile(17);
+            communityTile.execute(service, game, turn);
+
+            Player currentplayerObject = game.getCurrentplayerObject();
+            CommunityChests type = CardExecutingTile.getCommunityType(turn.getMoves().get(0).getDescription());
+            gottenCommmunityChests.add(type);
+            switch (type) {
+                case ADV_GO:
+                    assertEquals("Peach Castle", currentplayerObject.getCurrentTile());
+                    assertEquals(1530, currentplayerObject.getMoney());
+                    break;
+                case REC_BANK_ERR:
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(1530, currentplayerObject.getMoney());
+                    break;
+                case PAY_DOCTOR_FEE:
+                case PAY_STAR:
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(1280, currentplayerObject.getMoney());
+                    break;
+                case REC_SOLD_STOCK:
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(1380, currentplayerObject.getMoney());
+                    break;
+                case GET_JAIL_CARD:
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(1, currentplayerObject.getGetOutOfJailCards());
+                    break;
+                case GO_JAIL:
+                    assertEquals("Jail", currentplayerObject.getCurrentTile());
+                    assertEquals(1330, currentplayerObject.getMoney());
+                    break;
+                case REC_DELFINO:
+                case REC_KOOPALING:
+                case REC_ROSALINA:
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(1430, currentplayerObject.getMoney());
+                    break;
+                case REC_BANK_OWES:
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(1350, currentplayerObject.getMoney());
+                    break;
+                case REC_BIRTHDAY:
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(1340, currentplayerObject.getMoney());
+                    assertEquals(1490, game.getPlayer("Thomas").getMoney());
+                    break;
+                case PAY_BOO:
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(1230, currentplayerObject.getMoney());
+                    break;
+                case REC_FRUIT:
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(1355, currentplayerObject.getMoney());
+                    break;
+                case PAY_REPAIRS:
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(1290, currentplayerObject.getMoney());
+                    break;
+                case REC_PRIZE:
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(1340, currentplayerObject.getMoney());
                     break;
             }
         }

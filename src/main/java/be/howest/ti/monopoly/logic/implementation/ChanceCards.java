@@ -8,7 +8,7 @@ public enum ChanceCards {
     ADV_POWERUP,
     ADV_UT,
     REC_BANK_50,
-    JAIL_CARD,
+    GET_JAIL_CARD,
     RETURN_3,
     GO_JAIL,
     PAY_REPAIRS,

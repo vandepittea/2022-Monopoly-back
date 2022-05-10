@@ -341,7 +341,6 @@ public class Game {
             case CHANCE:
                 CardExecutingTile execTile = (CardExecutingTile) newTile;
                 execTile.execute(service, this, turn);
-                changeCurrentPlayer(false);
                 break;
             default:
                 turn.addMove(newTile.getName(), "");
