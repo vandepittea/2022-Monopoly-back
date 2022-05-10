@@ -238,7 +238,7 @@ public class Player {
 
     private int sellHouse(Game g, Street s) {
         if (g.receiveHouseCount(s) < 1) {
-            throw new IllegalMonopolyActionException("There are no houses or hotels on this property.");
+            throw new IllegalMonopolyActionException("There are no houses on this property.");
         }
         s.sellHouse(g);
         receiveMoney(s.getHousePrice() / 2);

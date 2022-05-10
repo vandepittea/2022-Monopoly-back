@@ -116,7 +116,6 @@ public class Game {
     }
 
     public void sellHouse(Street street) {
-        addStreetToHouseAndHotelCountIfNeeded(street);
         Integer[] houseAndHotelCount = streetHouseAndHotelCount.get(street);
         houseAndHotelCount[0]--;
         availableHouses++;
