@@ -19,6 +19,7 @@ public interface IService {
     void joinGame(String gameId, String playerName);
     String buyProperty(String gameId, String playerName, String propertyName);
     int buyHouse(String gameId, String playerName, String propertyName);
+    int sellHouse(String gameId, String playerName, String propertyName);
     Game rollDice(String gameId, String playerName);
     Game declareBankruptcy(String gameId, String playerName);
     String dontBuyProperty(String gameId, String playerName, String propertyName);
