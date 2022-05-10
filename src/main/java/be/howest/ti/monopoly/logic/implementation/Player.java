@@ -259,6 +259,11 @@ public class Player {
         if(getOutOfJailCards < 1){
             throw  new IllegalMonopolyActionException("You don't have get out of jail cards. You're still in jail.");
         }
+        if(!jailed){
+            throw new IllegalMonopolyActionException("You're not in jail. You can't use this endpoint.");
+        }
+        getOutOfJailCards--;
+        jailed = false;
     }
 
     @Override
