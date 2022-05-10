@@ -89,6 +89,10 @@ public class Player {
         this.jailed = false;
     }
 
+    public void receiveGetOutOfJailCard() {
+        getOutOfJailCards++;
+    }
+
     public void buyProperty(Property pr) {
         boolean successfulPayment = payMoney(pr.getCost());
 
@@ -112,7 +116,7 @@ public class Player {
         }
     }
 
-    private void payDebt(int amount, Player debtor){
+    public void payDebt(int amount, Player debtor){
         boolean successfulPayment = payMoney(amount);
         if(!successfulPayment){
             debt += amount;
@@ -122,7 +126,7 @@ public class Player {
         }
     }
 
-    private void receiveMoney(int amount){
+    public void receiveMoney(int amount){
         money += amount;
     }
 
