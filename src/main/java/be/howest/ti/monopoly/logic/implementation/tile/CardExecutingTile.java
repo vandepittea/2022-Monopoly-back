@@ -177,8 +177,8 @@ public class CardExecutingTile extends Tile {
                 for (Property property : properties) {
                     if (property.type == TileType.STREET){
                         Street street = (Street) property;
-                        cost += street.getHouseCount() * 25;
-                        cost += street.getHotelCount() * 100;
+                        cost += game.receiveHouseCount(street) * 25;
+                        cost += game.receiveHotelCount(street) * 100;
                     }
                 }
                 game.getCurrentplayerObject().payDebt(cost, null);
@@ -215,7 +215,6 @@ public class CardExecutingTile extends Tile {
     private void goToTile(MonopolyService service, int tileToAdvance, Turn turn, ChanceCards chanceType, Game game, boolean passGo) {
         Tile newTile = service.getTile(tileToAdvance);
         turn.addMove(this.getName(), chances.get(chanceType));
-        game.getCurrentplayerObject().moveTo(newTile);
         game.movePlayer(passGo, turn, newTile);
     }
 
@@ -293,8 +292,8 @@ public class CardExecutingTile extends Tile {
                 for (Property property : properties) {
                     if (property.type == TileType.STREET){
                         Street street = (Street) property;
-                        cost += street.getHouseCount() * 40;
-                        cost += street.getHotelCount() * 115;
+                        cost += game.receiveHouseCount(street) * 40;
+                        cost += game.receiveHotelCount(street) * 115;
                     }
                 }
                 game.getCurrentplayerObject().payDebt(cost, null);
