@@ -9,11 +9,18 @@ class OpenApiPrisonTests extends OpenApiTestsBase {
 
     @Test
     void getOutOfJailFine(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public void getOutOfJailFine(String gameId, String playerName) {
+
+            }
+        });
+
         post(
                 testContext,
-                "/games/game-id/prison/Alice/fine",
-                "some-token",
-                response -> assertNotYetImplemented(response, "getOutOfJailFine")
+                "/games/000/prison/Alice/fine",
+                "000-Alice",
+                response -> assertOkResponse(response)
         );
     }
 
