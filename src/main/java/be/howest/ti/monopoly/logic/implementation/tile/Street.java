@@ -45,12 +45,17 @@ public class Street extends Property {
         game.buyHotel(this);
     }
 
-    public boolean checkStreetHouseDifference(MonopolyService service, Game g){
+    public boolean checkStreetHouseDifference(MonopolyService service, Game g, boolean buyOrSell){
+        int difference;
         for(Tile t: service.getTiles()){
             if(t.getType() == TileType.street){
                 Street s = (Street) t;
                 if(s.getStreetColor().equals(this.getStreetColor())){
-                    int difference = Math.abs(g.receiveHouseCount(s) - (g.receiveHouseCount(this) + 1));
+                    if (!buyOrSell) {
+                        difference = Math.abs(g.receiveHouseCount(s) - (g.receiveHouseCount(this) - 1));
+                    } else {
+                        difference = Math.abs(g.receiveHouseCount(s) - (g.receiveHouseCount(this) + 1));
+                    }
                     if(difference > 1){
                         return false;
                     }

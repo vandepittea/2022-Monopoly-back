@@ -193,7 +193,7 @@ public class Player {
         if(!checkOwnershipWholeStreet(s, service)){
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
-        if(!s.checkStreetHouseDifference(service, g)){
+        if(!s.checkStreetHouseDifference(service, g, true)){
             throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
                     "not be higher than one.");
         }
@@ -211,7 +211,7 @@ public class Player {
         if(!checkOwnershipWholeStreet(s, service)){
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
-        if(!s.checkStreetHouseDifference(service, g)){
+        if(!s.checkStreetHouseDifference(service, g, false)){
             throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
                     "not be higher than one.");
         }
