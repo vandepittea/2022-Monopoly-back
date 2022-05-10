@@ -105,4 +105,11 @@ public class TestService implements IService {
     public int buyHotel(String gameId, String playerName, String propertyName) {
         return delegate.buyHotel(gameId, playerName, propertyName);
     }
+
+
+    @Override
+    public void getOutOfJailFree(String gameId, String playerName) {
+        delegate.getOutOfJailFree(gameId, playerName);
+    }
+
 }

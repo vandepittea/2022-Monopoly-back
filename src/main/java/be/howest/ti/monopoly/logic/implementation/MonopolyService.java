@@ -275,4 +275,11 @@ public class MonopolyService extends ServiceAdapter {
     public int buyHotel(String gameId, String playerName, String propertyName){
         return buyHouse(gameId, playerName, propertyName);
     }
+
+    @Override
+    public void getOutOfJailFree(String gameId, String playerName){
+        Game g = getGame(gameId);
+        Player p = g.getPlayer(playerName);
+        p.getOutOfJailFree();
+    }
 }
