@@ -83,8 +83,12 @@ public class Game {
         return availableHotels;
     }
 
-    public void setAvailableHotels(int availableHotels) {
+    public void setAvailableHotels(int availableHotels) { /* for tests */
         this.availableHotels = availableHotels;
+    }
+
+    public void setAvailableHouses(int availableHouses) { /* for tests */
+        this.availableHouses = availableHouses;
     }
 
     private void addStreetToHouseAndHotelCountIfNeeded(Street street){
