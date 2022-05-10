@@ -208,6 +208,11 @@ public class Player {
     }
 
     private int buyHouse(Game g, Street s){
+        if(g.getAvailableHouses() < 1){
+            throw new IllegalMonopolyActionException("The limit for the maximum number of houses has been reached. " +
+                    "No more houses can be built.");
+        }
+
         boolean successfulPayment = payMoney(s.getHousePrice());
 
         if (successfulPayment) {
