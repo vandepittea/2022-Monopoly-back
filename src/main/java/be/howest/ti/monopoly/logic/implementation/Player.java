@@ -78,7 +78,7 @@ public class Player {
         return creditor;
     }
 
-    public void becomeBankrupt(){
+    public void becomeBankrupt() {
         this.bankrupt = true;
     }
 
@@ -120,7 +120,7 @@ public class Player {
 
     public void payDebt(int amount, Player debtor){
         boolean successfulPayment = payMoney(amount);
-        if(!successfulPayment){
+        if (!successfulPayment) {
             debt += amount;
             creditor = debtor;
             throw new IllegalMonopolyActionException("You do not have enough money. You will have to sell properties " +
@@ -128,7 +128,7 @@ public class Player {
         }
     }
 
-    private void receiveMoney(int amount){
+    private void receiveMoney(int amount) {
         money += amount;
     }
 
@@ -136,8 +136,8 @@ public class Player {
         currentTile = newTile;
     }
 
-    public void turnOverAssetsTo(Player p){
-        for(Property pr: properties){
+    public void turnOverAssetsTo(Player p) {
+        for (Property pr : properties) {
             p.addProperty(pr);
         }
         p.receiveMoney(money);
@@ -147,7 +147,7 @@ public class Player {
         properties.clear();
     }
 
-    public void turnOverAssetsToBank(){
+    public void turnOverAssetsToBank() {
         //TODO: start auction
 
         money = 0;
@@ -155,36 +155,33 @@ public class Player {
         properties.clear();
     }
 
-    public void collectDebt(Property pr, Player pl, Game g){
-        if(!checkForOwnership(pr)){
+    public void collectDebt(Property pr, Player pl, Game g) {
+        if (!checkForOwnership(pr)) {
             throw new IllegalMonopolyActionException("This property is not owned by you.");
-        }
-        else if(!checkIfDebtorIsOnYourProperty(pr, pl)){
+        } else if (!checkIfDebtorIsOnYourProperty(pr, pl)) {
             throw new IllegalMonopolyActionException("The specified player is not on this property.");
-        }
-        else if(checkForNextRollDice(g, pr)){
+        } else if (checkForNextRollDice(g, pr)) {
             throw new IllegalMonopolyActionException("You're too late. The next dice roll is already over.");
-        }
-        else{
+        } else {
             int rent = calculateRent(pr, pl, g);
             pl.payDebt(rent, this);
             receiveMoney(rent);
         }
     }
 
-    private int calculateRent(Property pr, Player pl, Game g){
+    private int calculateRent(Property pr, Player pl, Game g) {
         return pr.calculateRent(pl, g);
     }
 
-    private boolean checkForOwnership(Property p){
+    private boolean checkForOwnership(Property p) {
         return properties.contains(p);
     }
 
-    private boolean checkIfDebtorIsOnYourProperty(Property pr, Player pl){
+    private boolean checkIfDebtorIsOnYourProperty(Property pr, Player pl) {
         return pr.getName().equals(pl.currentTile.getName());
     }
 
-    private boolean checkForNextRollDice(Game g, Property p){
+    private boolean checkForNextRollDice(Game g, Property p) {
         Move move = g.getTurns().get(g.getTurns().size() - 1).getMoves().get(0);
         String descriptionLastRoll = move.getDescription();
         String propertyTitle = move.getTitle();
@@ -193,26 +190,37 @@ public class Player {
         return checkDescription && checkTitle;
     }
 
-    public int buyHouseOrHotel(MonopolyService service, Game g, Street s){
-        if(!checkOwnershipWholeStreet(s, service)){
+    public int buyHouseOrHotel(MonopolyService service, Game g, Street s) {
+        if (!checkOwnershipWholeStreet(s, service)) {
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
-        if(!s.checkStreetHouseDifference(service, g)){
+        if (!s.checkStreetHouseDifference(service, g, true)) {
             throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
                     "not be higher than one.");
-        }
-        else{
-            if(g.receiveHouseCount(s) < 4){
+        } else {
+            if (g.receiveHouseCount(s) < 4) {
                 return buyHouse(g, s);
-            }
-            else{
+            } else {
                 return buyHotel(g, s);
             }
         }
     }
 
-    private int buyHouse(Game g, Street s){
-        if(g.getAvailableHouses() < 1){
+    public int sellHouseOrHotel(MonopolyService service, Game g, Street s) {
+        if (!s.checkStreetHouseDifference(service, g, false)) {
+            throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
+                    "not be higher than one.");
+        }
+        if (g.receiveHouseCount(s) < 4) {
+            return sellHouse(g, s);
+        } else {
+            return sellHotel(g, s);
+        }
+
+    }
+
+    private int buyHouse(Game g, Street s) {
+        if (g.getAvailableHouses() < 1) {
             throw new IllegalMonopolyActionException("The limit for the maximum number of houses has been reached. " +
                     "No more houses can be built.");
         }
@@ -228,8 +236,17 @@ public class Player {
         return g.receiveHouseCount(s);
     }
 
-    private int buyHotel(Game g, Street s){
-        if(g.getAvailableHotels() < 1){
+    private int sellHouse(Game g, Street s) {
+        if (g.receiveHouseCount(s) < 1) {
+            throw new IllegalMonopolyActionException("There are no houses on this property.");
+        }
+        s.sellHouse(g);
+        receiveMoney(s.getHousePrice() / 2);
+        return g.receiveHouseCount(s);
+    }
+
+    private int buyHotel(Game g, Street s) {
+        if (g.getAvailableHotels() < 1) {
             throw new IllegalMonopolyActionException("The limit for the maximum number of hotels has been reached. " +
                     "No more hotels can be built.");
         }
@@ -245,12 +262,16 @@ public class Player {
         return g.receiveHotelCount(s);
     }
 
-    private boolean checkOwnershipWholeStreet(Street streetToBuildHouseOn, MonopolyService service){
-        for(Tile t: service.getTiles()){
-            if(t.getType() == TileType.street){
+    private int sellHotel(Game g, Street s) {
+        return 0;
+    }
+
+    private boolean checkOwnershipWholeStreet(Street streetToBuildHouseOn, MonopolyService service) {
+        for (Tile t : service.getTiles()) {
+            if (t.getType() == TileType.street) {
                 Street streetOfGroup = (Street) t;
-                if(streetOfGroup.getStreetColor().equals(streetToBuildHouseOn.getStreetColor())){
-                    if(!checkForOwnership(streetOfGroup)){
+                if (streetOfGroup.getStreetColor().equals(streetToBuildHouseOn.getStreetColor())) {
+                    if (!checkForOwnership(streetOfGroup)) {
                         return false;
                     }
                 }

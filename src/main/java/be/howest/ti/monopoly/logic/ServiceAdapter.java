@@ -102,4 +102,9 @@ public class ServiceAdapter implements IService {
     public int buyHouse(String gameId, String playerName, String propertyName) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public int sellHouse(String gameId, String playerName, String propertyName) {
+        throw new UnsupportedOperationException();
+    }
 }
