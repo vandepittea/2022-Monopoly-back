@@ -118,7 +118,7 @@ public class Player {
         }
     }
 
-    private void payDebt(int amount, Player debtor){
+    public void payDebt(int amount, Player debtor){
         boolean successfulPayment = payMoney(amount);
         if(!successfulPayment){
             debt += amount;
