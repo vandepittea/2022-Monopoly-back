@@ -92,12 +92,17 @@ public class TestService implements IService {
     }
 
     @Override
-    public int buyHotel(String gameId, String playerName, String propertyName) {
-        return delegate.buyHotel(gameId, playerName, propertyName);
+    public int buyHouse(String gameId, String playerName, String propertyName) {
+        return delegate.buyHouse(gameId, playerName, propertyName);
     }
 
     @Override
-    public int buyHouse(String gameId, String playerName, String propertyName) {
-        return delegate.buyHouse(gameId, playerName, propertyName);
+    public int sellHouse(String gameId, String playerName, String propertyName) {
+        return delegate.sellHouse(gameId, playerName, propertyName);
+    }
+
+    @Override
+    public int buyHotel(String gameId, String playerName, String propertyName) {
+        return delegate.buyHotel(gameId, playerName, propertyName);
     }
 }
