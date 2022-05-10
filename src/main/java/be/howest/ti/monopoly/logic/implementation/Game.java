@@ -266,7 +266,7 @@ public class Game {
         Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
 
         if (passGo && (newTile.getPosition() < currentPlayerTile.getPosition())) {
-            //TODO: recieve money for passing GO
+            currentPlayer.receiveMoney(200);
         }
 
         currentPlayer.moveTo(newTile);
@@ -278,7 +278,7 @@ public class Game {
         Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
         int nextTileIdx = currentPlayerTile.getPosition() + roll[0] + roll[1];
         if (nextTileIdx >= tiles.size()) {
-            //TODO: receive money for passing GO
+            currentPlayer.receiveMoney(200);
             nextTileIdx -= tiles.size();
         }
         Tile newTile = service.getTile(nextTileIdx);
