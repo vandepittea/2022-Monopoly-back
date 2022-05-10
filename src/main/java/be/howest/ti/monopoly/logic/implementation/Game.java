@@ -83,8 +83,12 @@ public class Game {
         return availableHotels;
     }
 
-    public void setAvailableHotels(int availableHotels) {
+    public void setAvailableHotels(int availableHotels) { /* for tests */
         this.availableHotels = availableHotels;
+    }
+
+    public void setAvailableHouses(int availableHouses) { /* for tests */
+        this.availableHouses = availableHouses;
     }
 
     private void addStreetToHouseAndHotelCountIfNeeded(Street street){
@@ -107,6 +111,7 @@ public class Game {
         addStreetToHouseAndHotelCountIfNeeded(street);
         Integer[] houseAndHotelCount = streetHouseAndHotelCount.get(street);
         houseAndHotelCount[0]++;
+        availableHouses--;
         streetHouseAndHotelCount.put(street, houseAndHotelCount);
     }
 
@@ -114,6 +119,7 @@ public class Game {
         Integer[] houseAndHotelCount = streetHouseAndHotelCount.get(street);
         houseAndHotelCount[0] = 0;
         houseAndHotelCount[1]++;
+        availableHotels--;
         streetHouseAndHotelCount.put(street, houseAndHotelCount);
     }
 
