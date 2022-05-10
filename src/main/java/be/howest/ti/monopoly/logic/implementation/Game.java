@@ -111,6 +111,7 @@ public class Game {
         addStreetToHouseAndHotelCountIfNeeded(street);
         Integer[] houseAndHotelCount = streetHouseAndHotelCount.get(street);
         houseAndHotelCount[0]++;
+        availableHouses--;
         streetHouseAndHotelCount.put(street, houseAndHotelCount);
     }
 
@@ -118,6 +119,7 @@ public class Game {
         Integer[] houseAndHotelCount = streetHouseAndHotelCount.get(street);
         houseAndHotelCount[0] = 0;
         houseAndHotelCount[1]++;
+        availableHotels--;
         streetHouseAndHotelCount.put(street, houseAndHotelCount);
     }
 

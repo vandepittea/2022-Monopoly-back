@@ -224,6 +224,7 @@ class PlayerTest {
         assertEquals(1, p.buyHouseOrHotel(service, g, s));
         assertEquals(1, g.receiveHouseCount(s));
         assertEquals(1500 - 60 - 60 - 50, p.getMoney());
+        assertEquals(32 - 1, g.getAvailableHouses());
     }
 
     @Test
@@ -272,5 +273,6 @@ class PlayerTest {
         assertEquals(0, g.receiveHouseCount(s));
         assertEquals(1, g.receiveHotelCount(s));
         assertEquals(1500 - 60 - 60 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50, p.getMoney());
+        assertEquals(12 - 1, g.getAvailableHotels());
     }
 }
