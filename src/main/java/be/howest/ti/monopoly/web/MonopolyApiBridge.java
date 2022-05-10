@@ -389,7 +389,26 @@ public class MonopolyApiBridge {
     }
 
     private void getOutOfJailFine(RoutingContext ctx) {
-        throw new NotYetImplementedException("getOutOfJailFine");
+        Request request = Request.from(ctx);
+
+        String gameId = request.getGameId();
+        String playerName = request.getPlayerNameOfPath();
+
+        if(!request.isAuthorized(gameId, playerName)){
+            throw new ForbiddenAccessException("This is a protected endpoint. Make sure the security-token you " +
+                    "passed along is a valid token for this game and is the token that gives this player access.");
+        } else {
+            try {
+                service.getOutOfJailFine(gameId, playerName);
+                Response.sendJsonResponse(ctx, 200, new JsonObject().put("empty", "empty"));
+            }
+            catch (IllegalMonopolyActionException exception) {
+                Response.sendFailure(ctx, 409, exception.getMessage());
+            }
+            catch(MonopolyResourceNotFoundException exception){
+                Response.sendFailure(ctx, 404, exception.getMessage());
+            }
+        }
     }
 
     private void getOutOfJailFree(RoutingContext ctx) {
