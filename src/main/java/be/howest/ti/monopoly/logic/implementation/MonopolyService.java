@@ -204,4 +204,24 @@ public class MonopolyService extends ServiceAdapter {
         pl.collectDebt(pr, d, g);
         return true;
     }
+
+    @Override
+    public int buyHouse(String gameId, String playerName, String propertyName) {
+        Game g = getGame(gameId);
+        Player p = g.getPlayer(playerName);
+        Street s = (Street) getTile(propertyName);
+        return p.buyHouseOrHotel(this, g, s);
+    }
+
+    @Override
+    public int buyHotel(String gameId, String playerName, String propertyName){
+        return buyHouse(gameId, playerName, propertyName);
+    }
+
+    @Override
+    public void getOutOfJailFree(String gameId, String playerName){
+        Game g = getGame(gameId);
+        Player p = g.getPlayer(playerName);
+        p.getOutOfJailFree();
+    }
 }

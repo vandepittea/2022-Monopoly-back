@@ -26,8 +26,8 @@ public abstract class Tile {
     public String getNameAsPathParameter() {
         return nameAsPathParameter;
     }
-    public String getType() {
-        return this.type.toString().replace("_", " ");
+    public TileType getType() {
+        return type;
     }
 
     @JsonIgnore

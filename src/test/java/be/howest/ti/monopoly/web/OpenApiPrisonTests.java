@@ -1,5 +1,6 @@
 package be.howest.ti.monopoly.web;
 
+import be.howest.ti.monopoly.logic.ServiceAdapter;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
 
@@ -28,11 +29,18 @@ class OpenApiPrisonTests extends OpenApiTestsBase {
 
     @Test
     void getOutOfJailFree(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public void getOutOfJailFree(String gameId, String playerName) {
+
+            }
+        });
+
         post(
                 testContext,
-                "/games/game-id/prison/Alice/free",
-                "some-token",
-                response -> assertNotYetImplemented(response, "getOutOfJailFree")
+                "/games/000/prison/Alice/free",
+                "000-Alice",
+                response -> assertOkResponse(response)
         );
     }
 

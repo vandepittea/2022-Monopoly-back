@@ -1,5 +1,7 @@
 package be.howest.ti.monopoly.web;
 
+import be.howest.ti.monopoly.logic.ServiceAdapter;
+import be.howest.ti.monopoly.logic.implementation.Game;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
 
@@ -8,11 +10,18 @@ class OpenApiImprovingPropertyTests extends OpenApiTestsBase {
 
     @Test
     void buyHouse(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public int buyHouse(String gameId, String playerName, String propertyName) {
+                return 0;
+            }
+        });
+
         post(
                 testContext,
-                "/games/game-id/players/Alice/properties/some-property/houses",
-                "some-token",
-                response -> assertNotYetImplemented(response, "buyHouse")
+                "/games/000/players/Alice/properties/some-property/houses",
+                "000-Alice",
+                response -> assertOkResponse(response)
         );
     }
 
@@ -49,11 +58,18 @@ class OpenApiImprovingPropertyTests extends OpenApiTestsBase {
     //
     @Test
     void buyHotel(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public int buyHotel(String gameId, String playerName, String propertyName) {
+                return 0;
+            }
+        });
+
         post(
                 testContext,
-                "/games/game-id/players/Alice/properties/some-property/hotel",
-                "some-token",
-                response -> assertNotYetImplemented(response, "buyHotel")
+                "/games/000/players/Alice/properties/some-property/hotel",
+                "000-Alice",
+                response -> assertOkResponse(response)
         );
     }
 

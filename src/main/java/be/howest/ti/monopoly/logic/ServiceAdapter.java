@@ -82,4 +82,19 @@ public class ServiceAdapter implements IService {
     public boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public int buyHotel(String gameId, String playerName, String propertyName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getOutOfJailFree(String gameId, String playerName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int buyHouse(String gameId, String playerName, String propertyName) {
+        throw new UnsupportedOperationException();
+    }
 }
