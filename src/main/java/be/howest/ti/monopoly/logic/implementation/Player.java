@@ -225,6 +225,10 @@ public class Player {
                     "No more houses can be built.");
         }
 
+        if (g.receiveHotelCount(s) == 1) {
+            throw new IllegalMonopolyActionException("You can only have 1 hotel on a street!");
+        }
+
         boolean successfulPayment = payMoney(s.getHousePrice());
 
         if (successfulPayment) {

@@ -251,6 +251,30 @@ class PlayerTest {
     }
 
     @Test
+    void buyHotelMultipleHotels(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("Bob", null);
+        Street s = (Street) service.getTile("Peach's_Garden");
+        Street s2 = (Street) service.getTile("Yoshi_Valley");
+
+        p.buyProperty(s);
+        p.buyProperty(s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        assertEquals(1, p.buyHouseOrHotel(service, g, s));
+        assertEquals(1, g.receiveHotelCount(s));
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.buyHouseOrHotel(service, g, s));
+    }
+
+    @Test
     void buyHotelSuccessful(){
         MonopolyService service = new MonopolyService();
         Game g = service.createGame(2, "group17");
