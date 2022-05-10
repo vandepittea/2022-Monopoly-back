@@ -207,6 +207,24 @@ public class Player {
         }
     }
 
+    public int sellHouseOrHotel(MonopolyService service, Game g, Street s){
+        if(!checkOwnershipWholeStreet(s, service)){
+            throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
+        }
+        if(!s.checkStreetHouseDifference(service, g)){
+            throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
+                    "not be higher than one.");
+        }
+        else{
+            if(g.receiveHouseCount(s) > 4){
+                return sellHouse(g, s);
+            }
+            else{
+                return sellHotel(g, s);
+            }
+        }
+    }
+
     private int buyHouse(Game g, Street s){
         if(g.getAvailableHouses() < 1){
             throw new IllegalMonopolyActionException("The limit for the maximum number of houses has been reached. " +
@@ -221,6 +239,15 @@ public class Player {
             throw new IllegalMonopolyActionException("You don't have enough money to buy a house for this property.");
         }
 
+        return g.receiveHouseCount(s);
+    }
+
+    private int sellHouse(Game g, Street s){
+        if(g.receiveHouseCount(s) < 1){
+            throw new IllegalMonopolyActionException("There are no more houses or hotels on this property.");
+        }
+        s.sellHouse(g);
+        receiveMoney(s.getHousePrice()/2);
         return g.receiveHouseCount(s);
     }
 

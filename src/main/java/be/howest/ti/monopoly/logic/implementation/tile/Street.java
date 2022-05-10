@@ -37,6 +37,10 @@ public class Street extends Property {
     public void buyHouse(Game game){
         game.buyHouse(this);
     }
+
+    public void sellHouse(Game game){
+        game.sellHouse(this);
+    }
     public void buyHotel(Game game) {
         game.buyHotel(this);
     }
