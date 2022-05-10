@@ -255,6 +255,12 @@ public class Player {
         return true;
     }
 
+    public void getOutOfJailFree() {
+        if(getOutOfJailCards < 1){
+            throw  new IllegalMonopolyActionException("You don't have get out of jail cards. You're still in jail.");
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

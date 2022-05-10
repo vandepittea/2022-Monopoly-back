@@ -404,7 +404,7 @@ public class MonopolyApiBridge {
         } else {
             try {
                 service.getOutOfJailFree(gameId, playerName);
-                Response.sendJsonResponse(ctx, 200, new JsonObject().put("empty", "empty");
+                Response.sendJsonResponse(ctx, 200, new JsonObject().put("empty", "empty"));
             }
             catch (IllegalMonopolyActionException exception) {
                 Response.sendFailure(ctx, 409, exception.getMessage());
