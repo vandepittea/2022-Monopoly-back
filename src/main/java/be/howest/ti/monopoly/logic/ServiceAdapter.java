@@ -99,6 +99,11 @@ public class ServiceAdapter implements IService {
     }
 
     @Override
+    public void getOutOfJailFine(String gameId, String playerName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public int buyHouse(String gameId, String playerName, String propertyName) {
         throw new UnsupportedOperationException();
     }

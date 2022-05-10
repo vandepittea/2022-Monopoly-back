@@ -115,4 +115,8 @@ public class TestService implements IService {
         delegate.getOutOfJailFree(gameId, playerName);
     }
 
+    @Override
+    public void getOutOfJailFine(String gameId, String playerName) {
+        delegate.getOutOfJailFine(gameId,playerName);
+    }
 }

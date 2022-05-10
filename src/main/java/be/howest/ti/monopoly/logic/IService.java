@@ -27,4 +27,5 @@ public interface IService {
     int buyHotel(String gameId, String playerName, String propertyName);
     int sellHotel(String gameId, String playerName, String propertyName);
     void getOutOfJailFree(String gameId, String playerName);
+    void getOutOfJailFine(String gameId, String playerName);
 }

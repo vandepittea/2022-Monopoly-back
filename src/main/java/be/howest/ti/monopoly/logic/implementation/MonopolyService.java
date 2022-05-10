@@ -287,4 +287,11 @@ public class MonopolyService extends ServiceAdapter {
         Player p = g.getPlayer(playerName);
         p.getOutOfJailFree();
     }
+
+    @Override
+    public void getOutOfJailFine(String gameId, String playerName) {
+        Game g = getGame(gameId);
+        Player p = g.getPlayer(playerName);
+        p.getOutOfJailFine();
+    }
 }

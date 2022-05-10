@@ -118,7 +118,7 @@ public class Player {
         }
     }
 
-    private void payDebt(int amount, Player debtor) {
+    public void payDebt(int amount, Player debtor){
         boolean successfulPayment = payMoney(amount);
         if (!successfulPayment) {
             debt += amount;
@@ -299,6 +299,19 @@ public class Player {
         }
         getOutOfJailCards--;
         jailed = false;
+    }
+
+    public void getOutOfJailFine() {
+        if(!jailed){
+            throw new IllegalMonopolyActionException("You're not in jail. You can't use this endpoint.");
+        }
+        boolean successfulPayment = payMoney(50);
+        if (!successfulPayment){
+            throw new IllegalMonopolyActionException("You don't have enough money to go out of jail.");
+        }
+        else {
+            jailed = false;
+        }
     }
 
     @Override

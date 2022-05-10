@@ -484,4 +484,32 @@ class PlayerTest {
         assertFalse(p.isJailed());
         assertEquals(0, p.getGetOutOfJailCards());
     }
+
+    @Test
+    void getOutOfJailFineNotInJail(){
+        Player p = new Player("Bob", null);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.getOutOfJailFine());
+    }
+
+    @Test
+    void getOutOfJailFineNotEnoughMoney(){
+        Player p = new Player("Bob", null);
+
+        p.goToJail(null);
+        p.payDebt(1470, null);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.getOutOfJailFine());
+    }
+
+    @Test
+    void GetOutOfJailFineSuccessful(){
+        Player p = new Player("Bob", null);
+
+        p.goToJail(null);
+        p.getOutOfJailFine();
+
+        assertFalse(p.isJailed());
+        assertEquals(1500-50, p.getMoney());
+    }
 }
