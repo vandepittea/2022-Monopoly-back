@@ -83,6 +83,10 @@ public class Game {
         return availableHotels;
     }
 
+    public void setAvailableHotels(int availableHotels) {
+        this.availableHotels = availableHotels;
+    }
+
     private void addStreetToHouseAndHotelCountIfNeeded(Street street){
         if (!streetHouseAndHotelCount.containsKey(street)) {
             Integer[] houseAndHotelCount = new Integer[]{0, 0};
