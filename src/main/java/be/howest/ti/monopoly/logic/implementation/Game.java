@@ -346,7 +346,7 @@ public class Game {
         return false;
     }
 
-    private void changeCurrentPlayer(boolean endTurn) {
+    public void changeCurrentPlayer(boolean endTurn) {
         if (!endTurn && Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
             return;
         }
