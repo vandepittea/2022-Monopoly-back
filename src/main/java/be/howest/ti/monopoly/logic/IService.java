@@ -25,4 +25,5 @@ public interface IService {
     boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName);
     int buyHotel(String gameId, String playerName, String propertyName);
     void getOutOfJailFree(String gameId, String playerName);
+    void getOutOfJailFine(String gameId, String playerName);
 }
