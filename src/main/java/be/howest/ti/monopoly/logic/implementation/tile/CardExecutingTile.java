@@ -45,6 +45,26 @@ public class CardExecutingTile extends Tile {
         return new ArrayList<>(communityChests.values());
     }
 
+    @JsonIgnore
+    public static ChanceCards getChanceType(String message) {
+        for (ChanceCards type : chances.keySet()) {
+            if (chances.get(type).equals(message)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
+    @JsonIgnore
+    public static CommunityChests getCommunityType(String message) {
+        for (CommunityChests type : communityChests.keySet()) {
+            if (communityChests.get(type).equals(message)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
     private static void generateChances() {
         chances.put(ChanceCards.ADV_BOWSER_CASTLE, "You got launched by a cannon right to Bowsers Castle");
         chances.put(ChanceCards.ADV_GO, "Head to Peach's Castle (Collect 200 coins)");
