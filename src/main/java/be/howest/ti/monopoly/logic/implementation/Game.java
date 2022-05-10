@@ -8,6 +8,7 @@ import be.howest.ti.monopoly.logic.implementation.tile.SimpleTile;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.logic.implementation.turn.TurnType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
 
@@ -104,6 +105,11 @@ public class Game {
             return null;
         }
         return currentPlayer.getName();
+    }
+
+    @JsonIgnore
+    public Player getCurrentplayerObject() {
+        return currentPlayer;
     }
 
     public String getWinner() {
@@ -253,6 +259,18 @@ public class Game {
         decideNextAction(jail, turn);
     }
 
+    public void movePlayer(boolean passGo, Turn turn, Tile newTile) {
+        List<Tile> tiles = service.getTiles();
+        Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
+
+        if (passGo && (newTile.getPosition() < currentPlayerTile.getPosition())) {
+            //TODO: recieve money for passing GO
+        }
+
+        currentPlayer.moveTo(newTile);
+        decideNextAction(newTile, turn);
+    }
+
     private void movePlayer(Turn turn, Integer[] roll) {
         List<Tile> tiles = service.getTiles();
         Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
@@ -280,7 +298,7 @@ public class Game {
             case COMMUNITY_CHEST:
             case CHANCE:
                 CardExecutingTile execTile = (CardExecutingTile) newTile;
-                execTile.execute(this, turn);
+                execTile.execute(service, this, turn);
                 changeCurrentPlayer(false);
                 break;
             default:

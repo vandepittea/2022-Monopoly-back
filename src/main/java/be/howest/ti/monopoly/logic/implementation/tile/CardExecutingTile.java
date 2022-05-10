@@ -1,8 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
-import be.howest.ti.monopoly.logic.implementation.ChanceCards;
-import be.howest.ti.monopoly.logic.implementation.CommunityChests;
-import be.howest.ti.monopoly.logic.implementation.Game;
+import be.howest.ti.monopoly.logic.implementation.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,6 +9,8 @@ import java.util.*;
 public class CardExecutingTile extends Tile {
     private static final Map<ChanceCards, String> chances = new EnumMap<>(ChanceCards.class);
     private static final Map<CommunityChests, String> communityChests = new EnumMap<>(CommunityChests.class);
+    private static final List<Integer> powerupLocations = new ArrayList<>();
+    private static final List<Integer> utilityLocations = new ArrayList<>();
 
     public CardExecutingTile(int position, String name, TileType type) {
         super(position, name, type);
@@ -18,7 +18,21 @@ public class CardExecutingTile extends Tile {
         if (chances.size() == 0) {
             generateChances();
             generateCommunityChests();
+            generatePowerupLocations();
+            generateUtilityLocations();
         }
+    }
+
+    private void generateUtilityLocations() {
+        utilityLocations.add(12);
+        utilityLocations.add(28);
+    }
+
+    private void generatePowerupLocations() {
+        powerupLocations.add(5);
+        powerupLocations.add(15);
+        powerupLocations.add(25);
+        powerupLocations.add(35);
     }
 
     @JsonIgnore
@@ -68,38 +82,55 @@ public class CardExecutingTile extends Tile {
         communityChests.put(CommunityChests.REC_ROSALINA, "Rosalina sends you a gift from space. Receive 100 coins ");
     }
 
-    public void execute(Game game, Turn turn) {
+    public void execute(MonopolyService service, Game game, Turn turn) {
         switch (type) {
             case COMMUNITY_CHEST:
-                executeRandomCommunityChest(game, turn);
+                executeRandomCommunityChest(service, game, turn);
                 break;
             case CHANCE:
-                executeRandomChance(game, turn);
+                executeRandomChance(service, game, turn);
                 break;
             default:
                 break;
         }
     }
 
-    private void executeRandomChance(Game game, Turn turn) {
+    private void executeRandomChance(MonopolyService service, Game game, Turn turn) {
         Random random = new Random();
         int randomChance = random.nextInt(chances.size());
 
-        switch (ChanceCards.values()[randomChance]) {
+        ChanceCards type = ChanceCards.values()[randomChance];
+        switch (type) {
             case ADV_BOWSER_CASTLE:
-
+                goToTile(service, 39, turn, type, game, false);
                 break;
             case ADV_GO:
+                goToTile(service, 0, turn, type, game, true);
                 break;
             case ADV_SHERBET:
+                goToTile(service, 24, turn, type, game, true);
                 break;
             case ADV_DELFINO:
+                goToTile(service, 13, turn, type, game, true);
                 break;
             case ADV_POWERUP:
+                for (Integer powerupPosition : powerupLocations) {
+                    if (getPosition() < powerupPosition) {
+                        goToTile(service, powerupPosition, turn, type, game, false);
+                    }
+                }
+                goToTile(service, powerupLocations.get(0), turn, type, game, false);
                 break;
             case ADV_UT:
+                for (Integer utilityPosition : utilityLocations) {
+                    if (getPosition() < utilityPosition) {
+                        goToTile(service, utilityPosition, turn, type, game, false);
+                    }
+                }
+                goToTile(service, utilityLocations.get(0), turn, type, game, false);
                 break;
             case REC_BANK_50:
+                game.getCurrentplayerObject().getMoney(50);
                 break;
             case JAIL_CARD:
                 break;
@@ -120,7 +151,14 @@ public class CardExecutingTile extends Tile {
         }
     }
 
-    private void executeRandomCommunityChest(Game game, Turn turn) {
+    private void goToTile(MonopolyService service, int tileToAdvance, Turn turn, ChanceCards advBowserCastle, Game game, boolean passGo) {
+        Tile newTile = service.getTile(tileToAdvance);
+        turn.addMove(this.getName(), chances.get(advBowserCastle));
+        game.getCurrentplayerObject().moveTo(newTile);
+        game.movePlayer(passGo, turn, newTile);
+    }
+
+    private void executeRandomCommunityChest(MonopolyService service, Game game, Turn turn) {
         Random random = new Random();
         int randomUtility = random.nextInt(communityChests.size());
 
