@@ -271,7 +271,7 @@ public class Player {
             throw new IllegalMonopolyActionException("You can't sell your hotel since there are no houses left in the bank.");
         }
 
-        s.sellHouse(g);
+        s.sellHotel(g);
         receiveMoney(s.getHousePrice() / 2);
         return g.receiveHotelCount(s);
     }

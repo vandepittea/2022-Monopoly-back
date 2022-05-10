@@ -99,7 +99,7 @@ class OpenApiImprovingPropertyTests extends OpenApiTestsBase {
         });
         delete(
                 testContext,
-                "/games/000/players/Alice/properties/some-property/houses",
+                "/games/000/players/Alice/properties/some-property/hotel",
                 "000-Alice",
                 response -> assertOkResponse(response)
         );
