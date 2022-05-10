@@ -92,9 +92,20 @@ public class TestService implements IService {
     }
 
     @Override
+    public int buyHouse(String gameId, String playerName, String propertyName) {
+        return delegate.buyHouse(gameId, playerName, propertyName);
+    }
+
+    @Override
+    public int sellHouse(String gameId, String playerName, String propertyName) {
+        return delegate.sellHouse(gameId, playerName, propertyName);
+    }
+
+    @Override
     public int buyHotel(String gameId, String playerName, String propertyName) {
         return delegate.buyHotel(gameId, playerName, propertyName);
     }
+
 
     @Override
     public void getOutOfJailFree(String gameId, String playerName) {
@@ -102,7 +113,7 @@ public class TestService implements IService {
     }
 
     @Override
-    public int buyHouse(String gameId, String playerName, String propertyName) {
-        return delegate.buyHouse(gameId, playerName, propertyName);
+    public void getOutOfJailFine(String gameId, String playerName) {
+        delegate.getOutOfJailFine(gameId,playerName);
     }
 }
