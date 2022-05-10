@@ -4,11 +4,8 @@ import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.implementation.tile.Railroad;
 import be.howest.ti.monopoly.logic.implementation.tile.Street;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
-import be.howest.ti.monopoly.web.views.PropertyView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -146,5 +143,117 @@ class PlayerTest {
         p.collectDebt(s, p2, g);
         assertEquals(1500 - 20, p2.getMoney());
         assertEquals(1500 + 20, p.getMoney());
+    }
+
+    @Test
+    void buyHousePlayerFailOwnershipStreetGroup(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("Bob", null);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+
+        p.buyProperty(s);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.buyHouseOrHotel(service, g, s));
+    }
+
+    @Test
+    void buyHousePlayerFailStreetHouseDifference(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("Bob", null);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, "PURPLE",
+                new Integer[]{20, 60, 180, 320, 450}, 50, "PURPLE", 4);
+
+        p.buyProperty(s);
+        p.buyProperty(s2);
+        p.buyHouseOrHotel(service, g, s);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.buyHouseOrHotel(service, g, s));
+    }
+
+    @Test
+    void buyHouseNotEnoughMoney(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("Bob", null);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 1505, "PURPLE", 2);
+        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, "PURPLE",
+                new Integer[]{20, 60, 180, 320, 450}, 50, "PURPLE", 4);
+
+        p.buyProperty(s);
+        p.buyProperty(s2);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.buyHouseOrHotel(service, g, s));
+    }
+
+    @Test
+    void buyHouseSuccessful(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("Bob", null);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
+                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, "PURPLE",
+                new Integer[]{20, 60, 180, 320, 450}, 50, "PURPLE", 4);
+
+        p.buyProperty(s);
+        p.buyProperty(s2);
+
+        assertEquals(1, p.buyHouseOrHotel(service, g, s));
+        assertEquals(1, g.receiveHouseCount(s));
+        assertEquals(1500 - 60 - 60 - 50, p.getMoney());
+    }
+
+    @Test
+    void buyHotelNoHotelsAvailable(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("Bob", null);
+        Street s = (Street) service.getTile("Peach's_Garden");
+        Street s2 = (Street) service.getTile("Yoshi_Valley");
+
+        p.buyProperty(s);
+        p.buyProperty(s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        g.setAvailableHotels(0);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.buyHouseOrHotel(service, g, s));
+    }
+
+    @Test
+    void buyHotelSuccessful(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("Bob", null);
+        Street s = (Street) service.getTile("Peach's_Garden");
+        Street s2 = (Street) service.getTile("Yoshi_Valley");
+
+        p.buyProperty(s);
+        p.buyProperty(s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+
+        assertEquals(1, p.buyHouseOrHotel(service, g, s));
+        assertEquals(0, g.receiveHouseCount(s));
+        assertEquals(1, g.receiveHotelCount(s));
+        assertEquals(1500 - 60 - 60 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50, p.getMoney());
     }
 }

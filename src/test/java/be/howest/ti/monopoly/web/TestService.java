@@ -90,4 +90,14 @@ public class TestService implements IService {
     public boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName) {
         return delegate.collectDebt(gameId, playerName, propertyName, debtorName);
     }
+
+    @Override
+    public int buyHotel(String gameId, String playerName, String propertyName) {
+        return delegate.buyHotel(gameId, playerName, propertyName);
+    }
+
+    @Override
+    public int buyHouse(String gameId, String playerName, String propertyName) {
+        return delegate.buyHouse(gameId, playerName, propertyName);
+    }
 }
