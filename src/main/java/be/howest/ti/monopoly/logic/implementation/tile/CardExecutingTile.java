@@ -4,6 +4,7 @@ import be.howest.ti.monopoly.logic.implementation.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.security.SecureRandom;
 import java.util.*;
 
 public class CardExecutingTile extends Tile {
@@ -11,6 +12,7 @@ public class CardExecutingTile extends Tile {
     private static final Map<CommunityChests, String> communityChests = new EnumMap<>(CommunityChests.class);
     private static final List<Integer> powerupLocations = new ArrayList<>();
     private static final List<Integer> utilityLocations = new ArrayList<>();
+    private static final SecureRandom random = new SecureRandom();
 
     public CardExecutingTile(int position, String name, TileType type) {
         super(position, name, type);
@@ -47,9 +49,9 @@ public class CardExecutingTile extends Tile {
 
     @JsonIgnore
     public static ChanceCards getChanceType(String message) {
-        for (ChanceCards type : chances.keySet()) {
-            if (chances.get(type).equals(message)) {
-                return type;
+        for (Map.Entry<ChanceCards, String> entry : chances.entrySet()) {
+            if (entry.getValue().equals(message)) {
+                return entry.getKey();
             }
         }
         return null;
@@ -57,9 +59,9 @@ public class CardExecutingTile extends Tile {
 
     @JsonIgnore
     public static CommunityChests getCommunityType(String message) {
-        for (CommunityChests type : communityChests.keySet()) {
-            if (communityChests.get(type).equals(message)) {
-                return type;
+        for (Map.Entry<CommunityChests, String> entry : communityChests.entrySet()) {
+            if (entry.getValue().equals(message)) {
+                return entry.getKey();
             }
         }
         return null;
@@ -116,10 +118,10 @@ public class CardExecutingTile extends Tile {
     }
 
     private void executeRandomChance(MonopolyService service, Game game, Turn turn) {
-        Random random = new Random();
         int randomChance = random.nextInt(chances.size());
 
         ChanceCards type = ChanceCards.values()[randomChance];
+        turn.addMove(getName(), chances.get(type));
         switch (type) {
             case ADV_BOWSER_CASTLE:
                 goToTile(service, 39, turn, type, game, false);
@@ -156,12 +158,10 @@ public class CardExecutingTile extends Tile {
                 break;
             case REC_BANK_50:
                 game.getCurrentplayerObject().receiveMoney(50);
-                turn.addMove(getName(), chances.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case GET_JAIL_CARD:
                 game.getCurrentplayerObject().receiveGetOutOfJailCard();
-                turn.addMove(getName(), chances.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case RETURN_3:
@@ -187,12 +187,10 @@ public class CardExecutingTile extends Tile {
                     }
                 }
                 game.getCurrentplayerObject().payDebt(cost, null);
-                turn.addMove(getName(), chances.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case PAY_15:
                 game.getCurrentplayerObject().payDebt(15, null);
-                turn.addMove(getName(), chances.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case GO_FLOWER:
@@ -207,12 +205,10 @@ public class CardExecutingTile extends Tile {
                     currentPlayer.payDebt(50, player);
                     player.receiveMoney(50);
                 }
-                turn.addMove(getName(), chances.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case REC_150:
                 game.getCurrentplayerObject().receiveMoney(150);
-                turn.addMove(getName(), chances.get(type));
                 game.changeCurrentPlayer(false);
                 break;
         }
@@ -225,33 +221,29 @@ public class CardExecutingTile extends Tile {
     }
 
     private void executeRandomCommunityChest(MonopolyService service, Game game, Turn turn) {
-        Random random = new Random();
         int randomCommunityChest = random.nextInt(communityChests.size());
 
         CommunityChests type = CommunityChests.values()[randomCommunityChest];
+        turn.addMove(getName(), communityChests.get(type));
         switch (type) {
             case ADV_GO:
                 goToTile(service, 0, turn, type, game, true);
                 break;
             case REC_BANK_ERR:
                 game.getCurrentplayerObject().receiveMoney(200);
-                turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case PAY_DOCTOR_FEE:
             case PAY_STAR:
                 game.getCurrentplayerObject().payDebt(50, null);
-                turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case REC_SOLD_STOCK:
                 game.getCurrentplayerObject().receiveMoney(50);
-                turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case GET_JAIL_CARD:
                 game.getCurrentplayerObject().receiveGetOutOfJailCard();
-                turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case GO_JAIL:
@@ -262,12 +254,10 @@ public class CardExecutingTile extends Tile {
             case REC_KOOPALING:
             case REC_ROSALINA:
                 game.getCurrentplayerObject().receiveMoney(100);
-                turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case REC_BANK_OWES:
                 game.getCurrentplayerObject().receiveMoney(20);
-                turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case REC_BIRTHDAY:
@@ -280,17 +270,14 @@ public class CardExecutingTile extends Tile {
                     currentPlayer.receiveMoney(10);
                 }
 
-                turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case PAY_BOO:
                 game.getCurrentplayerObject().payDebt(100, null);
-                turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case REC_FRUIT:
                 game.getCurrentplayerObject().receiveMoney(25);
-                turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case PAY_REPAIRS:
@@ -304,12 +291,10 @@ public class CardExecutingTile extends Tile {
                     }
                 }
                 game.getCurrentplayerObject().payDebt(cost, null);
-                turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
                 break;
             case REC_PRIZE:
                 game.getCurrentplayerObject().receiveMoney(10);
-                turn.addMove(getName(), communityChests.get(type));
                 game.changeCurrentPlayer(false);
                 break;
         }
