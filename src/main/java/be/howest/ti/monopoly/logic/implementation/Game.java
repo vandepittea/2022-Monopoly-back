@@ -127,7 +127,17 @@ public class Game {
         Integer[] houseAndHotelCount = streetHouseAndHotelCount.get(street);
         houseAndHotelCount[0] = 0;
         houseAndHotelCount[1]++;
+        availableHouses += 4;
         availableHotels--;
+        streetHouseAndHotelCount.put(street, houseAndHotelCount);
+    }
+
+    public void sellHotel(Street street) {
+        Integer[] houseAndHotelCount = streetHouseAndHotelCount.get(street);
+        houseAndHotelCount[0] += 4;
+        houseAndHotelCount[1]--;
+        availableHouses -= 4;
+        availableHotels++;
         streetHouseAndHotelCount.put(street, houseAndHotelCount);
     }
 
