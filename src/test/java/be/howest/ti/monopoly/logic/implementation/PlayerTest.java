@@ -251,6 +251,30 @@ class PlayerTest {
     }
 
     @Test
+    void buyHotelMultipleHotels(){
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("Bob", null);
+        Street s = (Street) service.getTile("Peach's_Garden");
+        Street s2 = (Street) service.getTile("Yoshi_Valley");
+
+        p.buyProperty(s);
+        p.buyProperty(s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        assertEquals(1, p.buyHouseOrHotel(service, g, s));
+        assertEquals(1, g.receiveHotelCount(s));
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.buyHouseOrHotel(service, g, s));
+    }
+
+    @Test
     void buyHotelSuccessful(){
         MonopolyService service = new MonopolyService();
         Game g = service.createGame(2, "group17");
@@ -342,6 +366,92 @@ class PlayerTest {
         p.buyHouseOrHotel(service, g, s);
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.sellHouseOrHotel(service, g, s2));
+    }
+
+    @Test
+    void sellHotelNoHousesLeft() {
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("Bob", null);
+        Street s = (Street) service.getTile("Peach's_Garden");
+        Street s2 = (Street) service.getTile("Yoshi_Valley");
+
+        p.buyProperty(s);
+        p.buyProperty(s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        g.setAvailableHouses(0);
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.sellHouseOrHotel(service, g, s));
+    }
+
+    @Test
+    void sellHotelCheckReturnPrice() {
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("James", null);
+        Street s = (Street) service.getTile("Peach's_Garden");
+        Street s2 = (Street) service.getTile("Yoshi_Valley");
+
+        p.buyProperty(s);
+        p.buyProperty(s2);
+
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+        p.buyHouseOrHotel(service, g, s);
+        int moneyBeforeSelling = p.getMoney();
+        p.sellHouseOrHotel(service, g, s);
+        int moneyAfterSelling = p.getMoney();
+
+        assertEquals(moneyAfterSelling - moneyBeforeSelling, s.getHousePrice()/2);
+    }
+
+    @Test
+    void sellHotelSuccessfull() {
+        MonopolyService service = new MonopolyService();
+        Game g = service.createGame(2, "group17");
+        Player p = new Player("James", null);
+        Street s = (Street) service.getTile("Peach's_Garden");
+        Street s2 = (Street) service.getTile("Yoshi_Valley");
+
+        p.buyProperty(s);
+        p.buyProperty(s2);
+
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s2);
+
+        p.buyHouseOrHotel(service, g, s);
+
+
+        assertEquals(0, p.sellHouseOrHotel(service, g, s));
+        assertEquals(4, g.receiveHouseCount(s));
+        assertEquals(0, g.receiveHotelCount(s));
+        assertEquals(1500 - 60 - 60 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50 + 25, p.getMoney());
+        assertEquals(11 + 1, g.getAvailableHotels());
+
     }
 
     @Test
