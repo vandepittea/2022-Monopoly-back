@@ -17,10 +17,10 @@ public class Utility extends Property {
     }
 
     @Override
-    public int calculateRent(Player p, Game g){
-        int totalDiceRoll = calculateDiceRoll(g);
+    public int calculateRent(Player player, Game game){
+        int totalDiceRoll = calculateDiceRoll(game);
 
-        return totalDiceRoll * decideFourOrTenTimesDiceRoll(p);
+        return totalDiceRoll * decideFourOrTenTimesDiceRoll(player);
     }
 
     private int calculateDiceRoll(Game g){

@@ -17,7 +17,7 @@ public class Railroad extends Property {
     }
 
     @Override
-    public int calculateRent(Player p, Game g) {
+    public int calculateRent(Player player, Game game) {
         return rent;
     }
 }

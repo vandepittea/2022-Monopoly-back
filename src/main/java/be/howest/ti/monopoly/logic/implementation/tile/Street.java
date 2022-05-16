@@ -56,11 +56,11 @@ public class Street extends Property {
     }
 
     @Override
-    public int calculateRent(Player p, Game g){
-        if(p.getPropertyView(this).getHouseCount() > 0){
-            return rentOfHouses[p.getPropertyView(this).getHouseCount() - 1];
+    public int calculateRent(Player player, Game game){
+        if(player.getPropertyView(this).getHouseCount() > 0){
+            return rentOfHouses[player.getPropertyView(this).getHouseCount() - 1];
         }
-        else if(p.getPropertyView(this).getHotelCount() > 0){
+        else if(player.getPropertyView(this).getHotelCount() > 0){
             return rentOfHouses[rentOfHouses.length - 1];
         }
         else{

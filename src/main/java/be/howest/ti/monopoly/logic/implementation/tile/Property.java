@@ -15,37 +15,43 @@ public abstract class Property extends Tile {
 
     public Property(int position, String name, int cost, int mortgage, int groupSize, String color, TileType type) {
         super(position, name, type);
+        this.mortgaged = false;
+
         this.cost = cost;
         this.mortgage = mortgage;
         this.groupSize = groupSize;
+
         this.color = color;
-        this.mortgaged = false;
     }
 
     public int getCost() {
         return cost;
     }
+
     public int getMortgage() {
         return mortgage;
     }
+
     public int getGroupSize() {
         return groupSize;
     }
+
     public String getColor() {
         return color;
     }
+
     @JsonIgnore
     public boolean isMortgaged() {
         return mortgaged;
     }
 
-    public void takeMortgage(){
+    public void takeMortgage() {
         mortgaged = true;
     }
 
-    public void payMortgage(){
+    public void payMortgage() {
         mortgaged = false;
     }
 
-    public abstract int calculateRent(Player p, Game g);
+    public abstract int calculateRent(Player player, Game game);
 }
