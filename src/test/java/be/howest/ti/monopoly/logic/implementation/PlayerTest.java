@@ -19,7 +19,7 @@ class PlayerTest {
         pl.buyProperty(pr);
 
         assertEquals(1500 - 5, pl.getMoney());
-        assertTrue(pl.getProperties().contains(pr));
+        assertTrue(pl.getProperties().contains(new PropertyView(pr)));
     }
 
     @Test
@@ -50,9 +50,9 @@ class PlayerTest {
         assertEquals(0, p2.getMoney());
         assertTrue(p2.getProperties().isEmpty());
         assertEquals(1500 - 280 + (1500 - 240 - 260), p.getMoney());
-        assertTrue(p.getProperties().contains(s));
-        assertTrue(p.getProperties().contains(s2));
-        assertTrue(p.getProperties().contains(s3));
+        assertTrue(p.getProperties().contains(new PropertyView(s)));
+        assertTrue(p.getProperties().contains(new PropertyView(s2)));
+        assertTrue(p.getProperties().contains(new PropertyView(s3)));
     }
 
     @Test

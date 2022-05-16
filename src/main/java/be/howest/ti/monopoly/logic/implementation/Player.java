@@ -270,7 +270,7 @@ public class Player {
         }
 
         boolean successfulPayment = payMoney(street.getHousePrice());
-        if (successfulPayment) {
+        if (!successfulPayment) {
             throw new IllegalMonopolyActionException("You don't have enough money to buy a hotel for this property.");
         }
 
