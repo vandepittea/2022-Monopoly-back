@@ -10,8 +10,9 @@ import java.util.*;
 
 
 public class MonopolyService extends ServiceAdapter {
-    private Set<Game> games;
     private final List<Tile> tiles;
+
+    private Set<Game> games;
 
     public MonopolyService() {
         games = new HashSet<>();
