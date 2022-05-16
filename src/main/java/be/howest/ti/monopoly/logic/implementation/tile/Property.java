@@ -5,6 +5,8 @@ import be.howest.ti.monopoly.logic.implementation.Player;
 import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Objects;
+
 public abstract class Property extends Tile {
     private final int cost;
     private final int mortgage;
@@ -54,4 +56,18 @@ public abstract class Property extends Tile {
     }
 
     public abstract int calculateRent(Player player, Game game);
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Property property = (Property) o;
+        return cost == property.cost && mortgage == property.mortgage && groupSize == property.groupSize && color.equals(property.color);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), cost, mortgage, groupSize, color);
+    }
 }
