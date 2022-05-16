@@ -5,6 +5,7 @@ import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.logic.implementation.turn.TurnType;
+import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
@@ -20,7 +21,6 @@ public class Game {
     private String directSale;
     private int availableHouses;
     private int availableHotels;
-    private Map<Street, Integer[]> streetHouseAndHotelCount;
     private List<Turn> turns;
     private Integer[] lastDiceRoll;
     private boolean canRoll;
@@ -45,7 +45,6 @@ public class Game {
         this.directSale = null;
         this.availableHouses = 32;
         this.availableHotels = 12;
-        this.streetHouseAndHotelCount = new HashMap<>();
         this.turns = new ArrayList<>();
         this.lastDiceRoll = new Integer[2];
         this.canRoll = true;
@@ -90,55 +89,6 @@ public class Game {
 
     public void setAvailableHouses(int availableHouses) { /* for tests */
         this.availableHouses = availableHouses;
-    }
-
-    private void addStreetToHouseAndHotelCountIfNeeded(Street street){
-        if (!streetHouseAndHotelCount.containsKey(street)) {
-            Integer[] houseAndHotelCount = new Integer[]{0, 0};
-            streetHouseAndHotelCount.put(street, houseAndHotelCount);
-        }
-    }
-
-    public Integer receiveHouseCount(Street street) {
-        addStreetToHouseAndHotelCountIfNeeded(street);
-        return streetHouseAndHotelCount.get(street)[0];
-    }
-
-    public Integer receiveHotelCount(Street street) {
-        return streetHouseAndHotelCount.get(street)[1];
-    }
-
-    public void buyHouse(Street street) {
-        addStreetToHouseAndHotelCountIfNeeded(street);
-        Integer[] houseAndHotelCount = streetHouseAndHotelCount.get(street);
-        houseAndHotelCount[0]++;
-        availableHouses--;
-        streetHouseAndHotelCount.put(street, houseAndHotelCount);
-    }
-
-    public void sellHouse(Street street) {
-        Integer[] houseAndHotelCount = streetHouseAndHotelCount.get(street);
-        houseAndHotelCount[0]--;
-        availableHouses++;
-        streetHouseAndHotelCount.put(street, houseAndHotelCount);
-    }
-
-    public void buyHotel(Street street) {
-        Integer[] houseAndHotelCount = streetHouseAndHotelCount.get(street);
-        houseAndHotelCount[0] = 0;
-        houseAndHotelCount[1]++;
-        availableHouses += 4;
-        availableHotels--;
-        streetHouseAndHotelCount.put(street, houseAndHotelCount);
-    }
-
-    public void sellHotel(Street street) {
-        Integer[] houseAndHotelCount = streetHouseAndHotelCount.get(street);
-        houseAndHotelCount[0] += 4;
-        houseAndHotelCount[1]--;
-        availableHouses -= 4;
-        availableHotels++;
-        streetHouseAndHotelCount.put(street, houseAndHotelCount);
     }
 
     public List<Turn> getTurns() {
@@ -391,8 +341,8 @@ public class Game {
                 continue;
             }
 
-            for (Property property : player.getProperties()) {
-                if (property.getName().equals(newTile.getName())) {
+            for (PropertyView property : player.getProperties()) {
+                if (property.getPropertyObject().getName().equals(newTile.getName())) {
                     if (!Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
                         return true;
                     }

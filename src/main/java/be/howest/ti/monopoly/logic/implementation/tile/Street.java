@@ -3,11 +3,13 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
 import be.howest.ti.monopoly.logic.implementation.Player;
+import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import be.howest.ti.monopoly.logic.implementation.Player;
 
 public class Street extends Property {
+    public static final int NUMBER_OF_HOUSES_IN_ONE_HOTEL = 4;
     private Integer[] rentOfHouses;
     private final int housePrice;
     private final String streetColor;
@@ -34,23 +36,7 @@ public class Street extends Property {
         return rent;
     }
 
-    public void buyHouse(Game game){
-        game.buyHouse(this);
-    }
-
-    public void sellHouse(Game game){
-        game.sellHouse(this);
-    }
-
-    public void buyHotel(Game game) {
-        game.buyHotel(this);
-    }
-
-    public void sellHotel(Game game) {
-        game.sellHotel(this);
-    }
-
-    public boolean checkStreetHouseDifference(MonopolyService service, Game g, boolean buy){
+    public boolean checkStreetHouseDifference(MonopolyService service, Player player, boolean buy){
         int decideBuyOrSell = 1;
         if(!buy){
             decideBuyOrSell *= -1;
@@ -60,8 +46,8 @@ public class Street extends Property {
             if(t.getType() == TileType.STREET){
                 Street s = (Street) t;
                 if(s.getStreetColor().equals(this.getStreetColor())){
-                    int housesStreet1 = g.receiveHouseCount(s) + (g.receiveHotelCount(s)*4);
-                    int housesStreet2 = g.receiveHouseCount(this) + (g.receiveHotelCount(this)*4);
+                    int housesStreet1 = player.getPropertyView(s).getHouseCount() + (player.getPropertyView(s).getHotelCount() * NUMBER_OF_HOUSES_IN_ONE_HOTEL);
+                    int housesStreet2 = player.getPropertyView(this).getHouseCount() + (player.getPropertyView(this).getHotelCount() * NUMBER_OF_HOUSES_IN_ONE_HOTEL);
                     int difference = Math.abs(housesStreet1 - (housesStreet2 + decideBuyOrSell));
                     if(difference > 1){
                         return false;
@@ -74,7 +60,7 @@ public class Street extends Property {
 
     @Override
     public int calculateRent(Player p, Game g){
-
+        /*
         if(g.receiveHouseCount(this) > 0){
             return rentOfHouses[g.receiveHouseCount(this) - 1];
         }
@@ -84,5 +70,9 @@ public class Street extends Property {
         else{
             return rent;
         }
+
+         */
+
+        return 0;
     }
 }
