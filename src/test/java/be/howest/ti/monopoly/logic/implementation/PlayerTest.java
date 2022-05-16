@@ -145,7 +145,7 @@ class PlayerTest {
         assertEquals(1500 - 20, p2.getMoney());
         assertEquals(1500 + 20, p.getMoney());
     }
-    //-----House buying tests-----//
+
     @Test
     void buyHousePlayerFailOwnershipStreetGroup(){
         MonopolyService service = new MonopolyService();
