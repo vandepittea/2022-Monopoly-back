@@ -152,7 +152,9 @@ public class Player {
                     "so that you can pay off your debt. You have time until it is your turn again.");
         }
 
-        debtor.receiveMoney(amount);
+        if (debtor != null) {
+            debtor.receiveMoney(amount);
+        }
     }
 
     public void receiveMoney(int amount) {
