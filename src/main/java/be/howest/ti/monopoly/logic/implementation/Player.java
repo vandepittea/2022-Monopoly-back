@@ -170,23 +170,25 @@ public class Player {
     public void collectDebt(Property pr, Player pl, Game g) {
         if (!checkForOwnership(pr)) {
             throw new IllegalMonopolyActionException("This property is not owned by you.");
-        } else if (!checkIfDebtorIsOnYourProperty(pr, pl)) {
-            throw new IllegalMonopolyActionException("The specified player is not on this property.");
-        } else if (checkForNextRollDice(g, pr)) {
-            throw new IllegalMonopolyActionException("You're too late. The next dice roll is already over.");
-        } else {
-            int rent = calculateRent(pr, pl, g);
-            pl.payDebt(rent, this);
-            receiveMoney(rent);
         }
+        if (!checkIfDebtorIsOnYourProperty(pr, pl)) {
+            throw new IllegalMonopolyActionException("The specified player is not on this property.");
+        }
+        if (checkForNextRollDice(g, pr)) {
+            throw new IllegalMonopolyActionException("You're too late. The next dice roll is already over.");
+        }
+
+        int rent = calculateRent(pr, pl, g);
+        pl.payDebt(rent, this);
+        receiveMoney(rent);
     }
 
     private int calculateRent(Property pr, Player pl, Game g) {
-        return pr.calculateRent(pl, g);
+        return pr.calculateRent(this, g);
     }
 
     private boolean checkForOwnership(Property p) {
-        return properties.keySet().contains(p);
+        return properties.containsKey(p);
     }
 
     private boolean checkIfDebtorIsOnYourProperty(Property pr, Player pl) {

@@ -114,7 +114,7 @@ class PlayerTest {
         Player p = new Player("Bob", null);
         Player p2 = new Player("Jan", s);
 
-        p.getProperties().add(new PropertyView(s));
+        p.buyProperty(s);
 
         Turn turn = new Turn(p2);
         turn.addMove(s.getName(), "should pay rent");
@@ -135,7 +135,7 @@ class PlayerTest {
         Player p = new Player("Bob", null);
         Player p2 = new Player("Jan", s);
 
-        p.getProperties().add(new PropertyView(s));
+        p.buyProperty(s);
 
         Turn turn = new Turn(p2);
         turn.addMove(s.getName(), "should pay rent");
@@ -143,7 +143,7 @@ class PlayerTest {
 
         p.collectDebt(s, p2, g);
         assertEquals(1500 - 20, p2.getMoney());
-        assertEquals(1500 + 20, p.getMoney());
+        assertEquals(1500 - 60 + 20, p.getMoney());
     }
 
     @Test

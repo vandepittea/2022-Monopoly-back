@@ -4,6 +4,7 @@ import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
 import be.howest.ti.monopoly.logic.implementation.Player;
 import be.howest.ti.monopoly.web.views.PropertyView;
+import jdk.jshell.execution.Util;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,15 +34,13 @@ class UtilityTest {
         MonopolyService s = new MonopolyService();
         Game g = s.createGame(2, "group17");
         Player p = new Player("Bob", null);
-        Utility u = new Utility(12, "Electric Koopa Farm", 150, 75, 2,
-                "WHITE", "4 or 10 times the dice roll");
-        Utility u2 = new Utility(28, "Gas Pump", 150, 75, 2,
-                "WHITE", "4 or 10 times the dice roll");
+        Utility u = (Utility) s.getTile(12);
+        Utility u2 = (Utility) s.getTile(28);
 
         g.joinGame("Bob");
         g.joinGame("Jan");
-        p.getProperties().add(new PropertyView(u));
-        p.getProperties().add(new PropertyView(u2));
+        p.buyProperty(u);
+        p.buyProperty(u2);
         g.rollDice("Bob");
 
         Integer[] roll = g.getLastDiceRoll();
