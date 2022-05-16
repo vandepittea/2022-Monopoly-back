@@ -155,8 +155,8 @@ public class Game {
                     "already started, or you used a name that is already taken in this game.");
         }
 
-        Player p = new Player(playerName, startingTile);
-        players.add(p);
+        Player player = new Player(playerName, startingTile);
+        players.add(player);
         changeStartedIfNeeded();
     }
 
@@ -172,8 +172,8 @@ public class Game {
     }
 
     private boolean isExistingUser(String playerName) {
-        for (Player p : players) {
-            if (p.getName().equals(playerName)) {
+        for (Player player : players) {
+            if (player.getName().equals(playerName)) {
                 return true;
             }
         }
@@ -181,9 +181,9 @@ public class Game {
     }
 
     public Player getPlayer(String playerName) {
-        for (Player p : players) {
-            if (p.getName().equals(playerName)) {
-                return p;
+        for (Player player : players) {
+            if (player.getName().equals(playerName)) {
+                return player;
             }
         }
 
