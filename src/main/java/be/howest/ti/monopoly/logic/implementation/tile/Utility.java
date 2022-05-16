@@ -5,6 +5,8 @@ import be.howest.ti.monopoly.logic.implementation.Player;
 import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import be.howest.ti.monopoly.web.views.PropertyView;
 
+import java.util.Objects;
+
 public class Utility extends Property {
     private final String rent;
 
@@ -47,5 +49,19 @@ public class Utility extends Property {
         }
 
         return amountOfUtilities;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Utility utility = (Utility) o;
+        return rent.equals(utility.rent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), rent);
     }
 }
