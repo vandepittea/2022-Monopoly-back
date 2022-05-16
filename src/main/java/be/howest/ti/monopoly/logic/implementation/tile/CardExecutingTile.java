@@ -1,9 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.*;
-import be.howest.ti.monopoly.logic.implementation.enums.ChanceCards;
-import be.howest.ti.monopoly.logic.implementation.enums.CommunityChests;
-import be.howest.ti.monopoly.logic.implementation.enums.TileType;
+import be.howest.ti.monopoly.logic.implementation.enums.*;
 import be.howest.ti.monopoly.logic.implementation.generator.Generator;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.web.views.PropertyView;
@@ -15,29 +13,12 @@ import java.util.*;
 public class CardExecutingTile extends Tile {
     private static final Map<ChanceCards, String> chances = Generator.generateChances();
     private static final Map<CommunityChests, String> communityChests = Generator.generateCommunityChests();
-    private static final List<Integer> powerupLocations = new ArrayList<>();
-    private static final List<Integer> utilityLocations = new ArrayList<>();
+    private static final Map<PowerUps, Integer> powerUpLocations = Generator.generatePowerUpLocations();
+    private static final Map<Utilities, Integer> utilityLocations = Generator.generateUtilityLocations();
     private static final SecureRandom random = new SecureRandom();
 
     public CardExecutingTile(int position, String name, TileType type) {
         super(position, name, type);
-
-        if (chances.size() == 0) {
-            generatePowerupLocations();
-            generateUtilityLocations();
-        }
-    }
-
-    private void generateUtilityLocations() {
-        utilityLocations.add(12);
-        utilityLocations.add(28);
-    }
-
-    private void generatePowerupLocations() {
-        powerupLocations.add(5);
-        powerupLocations.add(15);
-        powerupLocations.add(25);
-        powerupLocations.add(35);
     }
 
     @JsonIgnore
@@ -103,19 +84,19 @@ public class CardExecutingTile extends Tile {
                 break;
             case ADV_POWERUP:
                 boolean moved = false;
-                for (Integer powerupPosition : powerupLocations) {
-                    if (getPosition() < powerupPosition) {
-                        goToTile(service, powerupPosition, turn, type, game, false);
+                for (Integer powerUpPosition : powerUpLocations.values()) {
+                    if (getPosition() < powerUpPosition) {
+                        goToTile(service, powerUpPosition, turn, type, game, false);
                         moved = true;
                         break;
                     }
                 }
                 if (!moved) {
-                    goToTile(service, powerupLocations.get(0), turn, type, game, false);
+                    goToTile(service, powerUpLocations.get(0), turn, type, game, false);
                 }
                 break;
             case ADV_UT:
-                for (Integer utilityPosition : utilityLocations) {
+                for (Integer utilityPosition : utilityLocations.values()) {
                     if (getPosition() < utilityPosition) {
                         goToTile(service, utilityPosition, turn, type, game, false);
                     }
@@ -159,7 +140,7 @@ public class CardExecutingTile extends Tile {
                 game.changeCurrentPlayer(false);
                 break;
             case GO_FLOWER:
-                goToTile(service, 5, turn, type, game, true);
+                goToTile(service, powerUpLocations.get(PowerUps.FIRE_FLOWER), turn, type, game, true);
                 break;
             case PAY_PLAYERS_50:
                 Player currentPlayer = game.getCurrentplayerObject();

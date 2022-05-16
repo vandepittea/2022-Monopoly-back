@@ -1,8 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation.generator;
 
-import be.howest.ti.monopoly.logic.implementation.enums.ChanceCards;
-import be.howest.ti.monopoly.logic.implementation.enums.CommunityChests;
-import be.howest.ti.monopoly.logic.implementation.enums.TileType;
+import be.howest.ti.monopoly.logic.implementation.enums.*;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 
 import java.util.ArrayList;
@@ -10,7 +8,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Generator {
+public class Generator {
+    private Generator() {}
+
     public static List<Tile> generateTiles() {
         List<Tile> tiles = new ArrayList<>();
 
@@ -101,5 +101,25 @@ public abstract class Generator {
         communityChests.put(CommunityChests.REC_ROSALINA, "Rosalina sends you a gift from space. Receive 100 coins ");
 
         return communityChests;
+    }
+
+    public static Map<Utilities, Integer> generateUtilityLocations() {
+        Map<Utilities, Integer> utilityLocations = new EnumMap<>(Utilities.class);
+
+        utilityLocations.put(Utilities.ELECTRIC_KOOPA_FARM, 12);
+        utilityLocations.put(Utilities.GAS_PUMP, 28);
+
+        return utilityLocations;
+    }
+
+    public static Map<PowerUps, Integer> generatePowerUpLocations() {
+        Map<PowerUps, Integer> powerUpLocations = new EnumMap<>(PowerUps.class);
+
+        powerUpLocations.put(PowerUps.FIRE_FLOWER, 5);
+        powerUpLocations.put(PowerUps.FLUTT, 15);
+        powerUpLocations.put(PowerUps.MARIO_CART, 25);
+        powerUpLocations.put(PowerUps.CAPPY, 35);
+
+        return powerUpLocations;
     }
 }
