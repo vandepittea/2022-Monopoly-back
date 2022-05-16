@@ -125,9 +125,9 @@ class GameTest {
             Turn turn3 = turns.get(i);
 
             if (turn1.getPlayer().equals(turn2.getPlayer()) && turn2.getPlayer().equals(turn3.getPlayer())) {
-                Integer[] roll1 = turn1.getRoll();
-                Integer[] roll2 = turn2.getRoll();
-                Integer[] roll3 = turn3.getRoll();
+                Integer[] roll1 = turn1.getRoll().getRoll();
+                Integer[] roll2 = turn2.getRoll().getRoll();
+                Integer[] roll3 = turn3.getRoll().getRoll();
 
                 if ((roll1[0] == roll1[1]) && (roll2[0] == roll2[1]) && (roll3[0] == roll3[1])) {
                     assertEquals(i, turns.size() - 1);
@@ -186,7 +186,8 @@ class GameTest {
         }
 
         assertEquals(1, game.getTurns().size());
-        assertEquals(game.getLastDiceRoll(), game.getTurns().get(game.getTurns().size() - 1).getRoll());
+        assertEquals(game.getLastDiceRoll()[0], game.getTurns().get(game.getTurns().size() - 1).getRoll().getRoll()[0]);
+        assertEquals(game.getLastDiceRoll()[1], game.getTurns().get(game.getTurns().size() - 1).getRoll().getRoll()[1]);
     }
 
     @Test

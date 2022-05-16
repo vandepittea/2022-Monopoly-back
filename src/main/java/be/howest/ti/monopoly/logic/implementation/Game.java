@@ -22,7 +22,7 @@ public class Game {
     private int availableHouses;
     private int availableHotels;
     private List<Turn> turns;
-    private Integer[] lastDiceRoll;
+    private DiceRoll lastDiceRoll;
     private boolean canRoll;
     private boolean ended;
     private Player currentPlayer;
@@ -46,7 +46,7 @@ public class Game {
         this.availableHouses = 32;
         this.availableHotels = 12;
         this.turns = new ArrayList<>();
-        this.lastDiceRoll = new Integer[2];
+        this.lastDiceRoll = new DiceRoll(0, 0);
         this.canRoll = true;
         this.ended = false;
         this.currentPlayer = null;
@@ -96,7 +96,7 @@ public class Game {
     }
 
     public Integer[] getLastDiceRoll() {
-        return lastDiceRoll;
+        return lastDiceRoll.getRoll();
     }
 
     public boolean isCanRoll() {
@@ -200,7 +200,7 @@ public class Game {
         checkIllegalRollDiceActions(playerName);
 
         Turn turn = new Turn(currentPlayer);
-        lastDiceRoll = turn.generateRoll();
+        lastDiceRoll = turn.getRoll();
 
         if (currentPlayer.isJailed()) {
             checkRollInJail(turn);
@@ -213,7 +213,7 @@ public class Game {
     }
 
     private void checkRollInJail(Turn turn) {
-        if (lastDiceRoll[0].equals(lastDiceRoll[1])) {
+        if (lastDiceRoll.isDoubleRoll()) {
             currentPlayer.getOutOfJail();
             movePlayer(turn, lastDiceRoll);
         } else {
@@ -255,7 +255,7 @@ public class Game {
             Turn beforePreviousTurn = turns.get(turns.size() - 2);
 
             if ((currentPlayer.getName().equals(previousTurn.getPlayer())) && (currentPlayer.getName().equals(beforePreviousTurn.getPlayer()))) {
-                return lastDiceRoll[0].equals(lastDiceRoll[1]);
+                return lastDiceRoll.isDoubleRoll();
             }
         }
         return false;
@@ -280,10 +280,10 @@ public class Game {
         decideNextAction(newTile, turn);
     }
 
-    private void movePlayer(Turn turn, Integer[] roll) {
+    private void movePlayer(Turn turn, DiceRoll roll) {
         List<Tile> tiles = service.getTiles();
         Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
-        int nextTileIdx = currentPlayerTile.getPosition() + roll[0] + roll[1];
+        int nextTileIdx = currentPlayerTile.getPosition() + roll.getDie1() + roll.getDie2();
         if (nextTileIdx >= tiles.size()) {
             currentPlayer.receiveMoney(200);
             nextTileIdx -= tiles.size();
@@ -343,9 +343,7 @@ public class Game {
 
             for (PropertyView property : player.getProperties()) {
                 if (property.getPropertyObject().getName().equals(newTile.getName())) {
-                    if (!Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
-                        return true;
-                    }
+                    return true;
                 }
             }
         }
@@ -353,7 +351,7 @@ public class Game {
     }
 
     public void changeCurrentPlayer(boolean endTurn) {
-        if (!endTurn && Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
+        if (!endTurn && lastDiceRoll.isDoubleRoll()) {
             return;
         }
 

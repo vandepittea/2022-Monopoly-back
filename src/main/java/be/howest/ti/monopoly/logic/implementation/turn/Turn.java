@@ -1,5 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation.turn;
 
+import be.howest.ti.monopoly.logic.implementation.DiceRoll;
 import be.howest.ti.monopoly.logic.implementation.Player;
 
 import java.util.ArrayList;
@@ -8,13 +9,13 @@ import java.util.Random;
 
 public class Turn {
     private Player player;
-    private Integer[] roll;
+    private DiceRoll roll;
     private TurnType type;
     private List<Move> moves;
 
     public Turn(Player player) {
         this.player = player;
-        this.roll = new Integer[2];
+        this.roll = new DiceRoll();
         this.moves = new ArrayList<>();
     }
 
@@ -22,7 +23,7 @@ public class Turn {
         return player.getName();
     }
 
-    public Integer[] getRoll() {
+    public DiceRoll getRoll() {
         return roll;
     }
 
@@ -32,13 +33,6 @@ public class Turn {
 
     public List<Move> getMoves() {
         return moves;
-    }
-
-    public Integer[] generateRoll() {
-        Random r = new Random();
-        roll[0] = r.nextInt(6) + 1;
-        roll[1] = r.nextInt(6) + 1;
-        return roll;
     }
 
     public void addMove(String title, String description) {
