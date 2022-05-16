@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.Player;
+import be.howest.ti.monopoly.web.views.PropertyView;
 
 public class Utility extends Property {
     private final String rent;
@@ -35,11 +36,11 @@ public class Utility extends Property {
         }
     }
 
-    private int amountOfUtilitiesInOwnership(Player pl){
+    private int amountOfUtilitiesInOwnership(Player player){
         int amountOfUtilities = 0;
 
-        for(Property pr: pl.getProperties()){
-            if(pr.getType().equals(TileType.UTILITY)){
+        for(PropertyView propertyView: player.getProperties()){
+            if(propertyView.getPropertyObject().getType().equals(TileType.UTILITY)){
                 amountOfUtilities++;
             }
         }

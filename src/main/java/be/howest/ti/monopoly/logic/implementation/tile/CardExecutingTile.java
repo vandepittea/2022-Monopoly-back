@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
+import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.security.SecureRandom;
@@ -178,12 +179,11 @@ public class CardExecutingTile extends Tile {
                 break;
             case PAY_REPAIRS:
                 int cost = 0;
-                Set<Property> properties = game.getCurrentplayerObject().getProperties();
-                for (Property property : properties) {
-                    if (property.type == TileType.STREET){
-                        Street street = (Street) property;
-                        cost += game.receiveHouseCount(street) * 25;
-                        cost += game.receiveHotelCount(street) * 100;
+                Set<PropertyView> properties = game.getCurrentplayerObject().getProperties();
+                for (PropertyView propertyView : properties) {
+                    if (propertyView.getPropertyObject().type == TileType.STREET){
+                        cost += propertyView.getHouseCount() * 25;
+                        cost += propertyView.getHotelCount() * 100;
                     }
                 }
                 game.getCurrentplayerObject().payDebt(cost, null);
@@ -282,12 +282,11 @@ public class CardExecutingTile extends Tile {
                 break;
             case PAY_REPAIRS:
                 int cost = 0;
-                Set<Property> properties = game.getCurrentplayerObject().getProperties();
-                for (Property property : properties) {
-                    if (property.type == TileType.STREET){
-                        Street street = (Street) property;
-                        cost += game.receiveHouseCount(street) * 40;
-                        cost += game.receiveHotelCount(street) * 115;
+                Set<PropertyView> properties = game.getCurrentplayerObject().getProperties();
+                for (PropertyView propertyView : properties) {
+                    if (propertyView.getPropertyObject().type == TileType.STREET){
+                        cost += propertyView.getHouseCount() * 40;
+                        cost += propertyView.getHotelCount() * 115;
                     }
                 }
                 game.getCurrentplayerObject().payDebt(cost, null);
