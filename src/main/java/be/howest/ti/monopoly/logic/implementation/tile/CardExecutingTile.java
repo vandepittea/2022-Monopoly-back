@@ -15,6 +15,7 @@ public class CardExecutingTile extends Tile {
     private static final Map<CommunityChests, String> communityChests = Generator.generateCommunityChests();
     private static final Map<PowerUps, Integer> powerUpLocations = Generator.generatePowerUpLocations();
     private static final Map<Utilities, Integer> utilityLocations = Generator.generateUtilityLocations();
+    private static final Map<TilesToAdvance, Integer> tilesToAdvance = Generator.generateTilesToAdvance();
     private static final SecureRandom random = new SecureRandom();
 
     public CardExecutingTile(int position, String name, TileType type) {
@@ -71,16 +72,16 @@ public class CardExecutingTile extends Tile {
         turn.addMove(getName(), chances.get(type));
         switch (type) {
             case ADV_BOWSER_CASTLE:
-                goToTile(service, 39, turn, type, game, false);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.BOWSER_CASTLE), turn, type, game, false);
                 break;
             case ADV_GO:
-                goToTile(service, 0, turn, type, game, true);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.GO), turn, type, game, true);
                 break;
             case ADV_SHERBET:
-                goToTile(service, 24, turn, type, game, true);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.SHERBET), turn, type, game, true);
                 break;
             case ADV_DELFINO:
-                goToTile(service, 11, turn, type, game, true);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.DELFINO), turn, type, game, true);
                 break;
             case ADV_POWERUP:
                 boolean moved = false;
@@ -92,7 +93,7 @@ public class CardExecutingTile extends Tile {
                     }
                 }
                 if (!moved) {
-                    goToTile(service, powerUpLocations.get(0), turn, type, game, false);
+                    goToTile(service, powerUpLocations.get(PowerUps.FIRE_FLOWER), turn, type, game, false);
                 }
                 break;
             case ADV_UT:
@@ -101,7 +102,7 @@ public class CardExecutingTile extends Tile {
                         goToTile(service, utilityPosition, turn, type, game, false);
                     }
                 }
-                goToTile(service, utilityLocations.get(0), turn, type, game, false);
+                goToTile(service, utilityLocations.get(Utilities.ELECTRIC_KOOPA_FARM), turn, type, game, false);
                 break;
             case REC_BANK_50:
                 game.getCurrentplayerObject().receiveMoney(50);
@@ -120,8 +121,7 @@ public class CardExecutingTile extends Tile {
                 goToTile(service, currentTileIdx, turn, type, game, false);
                 break;
             case GO_JAIL:
-                int jailTileIdx = service.getTile("Jail").getPosition();
-                goToTile(service, jailTileIdx, turn, type, game, false);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.JAIL), turn, type, game, false);
                 break;
             case PAY_REPAIRS:
                 int cost = 0;
@@ -173,7 +173,7 @@ public class CardExecutingTile extends Tile {
         turn.addMove(getName(), communityChests.get(type));
         switch (type) {
             case ADV_GO:
-                goToTile(service, 0, turn, type, game, true);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.GO), turn, type, game, true);
                 break;
             case REC_BANK_ERR:
                 game.getCurrentplayerObject().receiveMoney(200);
@@ -193,8 +193,7 @@ public class CardExecutingTile extends Tile {
                 game.changeCurrentPlayer(false);
                 break;
             case GO_JAIL:
-                int jailTileIdx = service.getTile("Jail").getPosition();
-                goToTile(service, jailTileIdx, turn, type, game, false);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.JAIL), turn, type, game, false);
                 break;
             case REC_DELFINO:
             case REC_KOOPALING:

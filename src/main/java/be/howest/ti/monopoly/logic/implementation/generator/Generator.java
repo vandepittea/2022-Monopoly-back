@@ -122,4 +122,16 @@ public class Generator {
 
         return powerUpLocations;
     }
+
+    public static Map<TilesToAdvance, Integer> generateTilesToAdvance() {
+        Map<TilesToAdvance, Integer> tilesToAdvance = new EnumMap<>(TilesToAdvance.class);
+
+        tilesToAdvance.put(TilesToAdvance.GO, 0);
+        tilesToAdvance.put(TilesToAdvance.JAIL, 10);
+        tilesToAdvance.put(TilesToAdvance.DELFINO, 11);
+        tilesToAdvance.put(TilesToAdvance.SHERBET, 24);
+        tilesToAdvance.put(TilesToAdvance.BOWSER_CASTLE, 39);
+
+        return tilesToAdvance;
+    }
 }
