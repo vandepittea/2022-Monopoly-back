@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.Player;
+import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
 import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,11 +12,11 @@ public abstract class Property extends Tile {
     private final int cost;
     private final int mortgage;
     private final int groupSize;
-    private final String color;
+    private final StreetColor color;
 
     private boolean mortgaged;
 
-    public Property(int position, String name, int cost, int mortgage, int groupSize, String color, TileType type) {
+    public Property(int position, String name, int cost, int mortgage, int groupSize, StreetColor color, TileType type) {
         super(position, name, type);
         this.mortgaged = false;
 
@@ -38,7 +39,7 @@ public abstract class Property extends Tile {
         return groupSize;
     }
 
-    public String getColor() {
+    public StreetColor getColor() {
         return color;
     }
 

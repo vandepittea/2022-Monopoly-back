@@ -3,6 +3,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
 import be.howest.ti.monopoly.logic.implementation.Player;
+import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
 import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 
 import java.util.Arrays;
@@ -13,17 +14,17 @@ public class Street extends Property {
 
     private final int rent;
     private final int housePrice;
-    private final String streetColor;
+    private final StreetColor streetColor;
     private final Integer[] rentOfHouses;
 
-    public Street(int position, String name, int cost, int mortgage, int groupSize, String color,
-                  Integer[] rentOfHouses, int housePrice, String streetColor, int rent) {
+    public Street(int position, String name, int cost, int mortgage, int groupSize, StreetColor color,
+                  Integer[] rentOfHouses, int housePrice, int rent) {
         super(position, name, cost, mortgage, groupSize, color, TileType.STREET);
 
         this.rent = rent;
         this.housePrice = housePrice;
 
-        this.streetColor = streetColor;
+        this.streetColor = color;
         this.rentOfHouses = rentOfHouses;
     }
 
@@ -35,7 +36,7 @@ public class Street extends Property {
         return housePrice;
     }
 
-    public String getStreetColor() {
+    public StreetColor getStreetColor() {
         return streetColor;
     }
 
@@ -60,7 +61,7 @@ public class Street extends Property {
         return true;
     }
 
-    private boolean checkStreetColor(String s, String StreetColor) {
+    private boolean checkStreetColor(StreetColor s, StreetColor StreetColor) {
         return s.equals(StreetColor);
     }
 

@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.Player;
+import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
 import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import be.howest.ti.monopoly.web.views.PropertyView;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 public class Utility extends Property {
     private final String rent;
 
-    public Utility(int position, String name, int cost, int mortgage, int groupSize, String color, String rent) {
+    public Utility(int position, String name, int cost, int mortgage, int groupSize, StreetColor color, String rent) {
         super(position, name, cost, mortgage, groupSize, color, TileType.UTILITY);
         this.rent = rent;
     }

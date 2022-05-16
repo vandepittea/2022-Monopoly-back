@@ -1,6 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
+import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
 import be.howest.ti.monopoly.logic.implementation.tile.Railroad;
 import be.howest.ti.monopoly.logic.implementation.tile.Street;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
@@ -14,7 +15,7 @@ class PlayerTest {
     @Test
     void buyPropertySuccessful(){
         Player pl = new Player("Bob", null);
-        Railroad pr = new Railroad(1, "name", 5, 3, 2, "PURPLE", 20);
+        Railroad pr = new Railroad(1, "name", 5, 3, 2, StreetColor.PURPLE, 20);
 
         pl.buyProperty(pr);
 
@@ -25,7 +26,7 @@ class PlayerTest {
     @Test
     void buyPropertyFailPayment(){
         Player pl = new Player("Bob", null);
-        Railroad pr = new Railroad(1, "name", 1505, 3, 2, "PURPLE", 20);
+        Railroad pr = new Railroad(1, "name", 1505, 3, 2, StreetColor.PURPLE, 20);
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> pl.buyProperty(pr));
     }
@@ -34,12 +35,12 @@ class PlayerTest {
     void turnOverAssets(){
         Player p = new Player("Bob", null);
         Player p2 = new Player("Jan", null);
-        Street s = new Street(24, "Sherbet Land", 240, 120, 3, "RED",
-                new Integer[]{100, 300, 750, 925, 1100}, 150, "RED", 20);
-        Street s2 = new Street(27, "Wario's Goldmine", 260, 130, 3, "YELLOW",
-                new Integer[]{110, 330, 800, 975, 1150,}, 150, "YELLOW", 22);
-        Street s3 = new Street(29, "Grumble Volcano", 280, 140, 3, "YELLOW",
-                new Integer[]{120, 360, 850, 1025, 1200}, 150, "YELLOW", 24);
+        Street s = new Street(24, "Sherbet Land", 240, 120, 3, StreetColor.RED,
+                new Integer[]{100, 300, 750, 925, 1100}, 150, 20);
+        Street s2 = new Street(27, "Wario's Goldmine", 260, 130, 3, StreetColor.YELLOW,
+                new Integer[]{110, 330, 800, 975, 1150,}, 150, 22);
+        Street s3 = new Street(29, "Grumble Volcano", 280, 140, 3, StreetColor.YELLOW,
+                new Integer[]{120, 360, 850, 1025, 1200}, 150, 24);
 
         p2.buyProperty(s);
         p2.buyProperty(s2);
@@ -61,7 +62,7 @@ class PlayerTest {
         Game g = service.createGame(2, "group17");
         Player p = new Player("Bob", null);
         Street s = new Street(1, "Peach's Garden", 60, 30, 2,
-                "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+                StreetColor.PURPLE, new Integer[]{10, 30, 90, 160, 250}, 50, 2);
 
         g.joinGame("Bob");
 
@@ -73,9 +74,9 @@ class PlayerTest {
         MonopolyService service = new MonopolyService();
         Game game = service.createGame(2, "group17");
         Street s = new Street(1, "Peach's Garden", 60, 30, 2,
-                "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
-        Street s2 = new Street(16, "Sirena Beach", 180, 90, 3, "ORANGE",
-                new Integer[]{70, 200, 550, 750, 950}, 100, "ORANGE", 14);
+                StreetColor.PURPLE, new Integer[]{10, 30, 90, 160, 250}, 50, 2);
+        Street s2 = new Street(16, "Sirena Beach", 180, 90, 3, StreetColor.ORANGE,
+                new Integer[]{70, 200, 550, 750, 950}, 100, 14);
         Player p = new Player("Bob", null);
         Player p2 = new Player("Jan", s2);
 
@@ -89,7 +90,7 @@ class PlayerTest {
         MonopolyService service = new MonopolyService();
         Game g = service.createGame(2, "group17");
         Street s = new Street(1, "Peach's Garden", 60, 30, 2,
-                "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+                StreetColor.PURPLE, new Integer[]{10, 30, 90, 160, 250}, 50, 2);
         Player p = new Player("Bob", null);
         Player p2 = new Player("Jan", s);
 
@@ -110,7 +111,7 @@ class PlayerTest {
         MonopolyService service = new MonopolyService();
         Game g = service.createGame(2, "group17");
         Street s = new Street(1, "Peach's Garden", 60, 30, 2,
-                "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 1505);
+                StreetColor.PURPLE, new Integer[]{10, 30, 90, 160, 250}, 50, 1505);
         Player p = new Player("Bob", null);
         Player p2 = new Player("Jan", s);
 
@@ -131,7 +132,7 @@ class PlayerTest {
         MonopolyService service = new MonopolyService();
         Game g = service.createGame(2, "group17");
         Street s = new Street(1, "Peach's Garden", 60, 30, 2,
-                "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 20);
+                StreetColor.PURPLE, new Integer[]{10, 30, 90, 160, 250}, 50, 20);
         Player p = new Player("Bob", null);
         Player p2 = new Player("Jan", s);
 
@@ -151,8 +152,8 @@ class PlayerTest {
         MonopolyService service = new MonopolyService();
         Game g = service.createGame(2, "group17");
         Player p = new Player("Bob", null);
-        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
-                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, StreetColor.PURPLE,
+                new Integer[]{10, 30, 90, 160, 250}, 50, 2);
 
         p.buyProperty(s);
 
@@ -164,10 +165,10 @@ class PlayerTest {
         MonopolyService service = new MonopolyService();
         Game g = service.createGame(2, "group17");
         Player p = new Player("Bob", null);
-        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
-                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
-        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, "PURPLE",
-                new Integer[]{20, 60, 180, 320, 450}, 50, "PURPLE", 4);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, StreetColor.PURPLE,
+                new Integer[]{10, 30, 90, 160, 250}, 50, 2);
+        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, StreetColor.PURPLE,
+                new Integer[]{20, 60, 180, 320, 450}, 50, 4);
 
         p.buyProperty(s);
         p.buyProperty(s2);
@@ -181,10 +182,10 @@ class PlayerTest {
         MonopolyService service = new MonopolyService();
         Game g = service.createGame(2, "group17");
         Player p = new Player("Bob", null);
-        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
-                new Integer[]{10, 30, 90, 160, 250}, 1505, "PURPLE", 2);
-        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, "PURPLE",
-                new Integer[]{20, 60, 180, 320, 450}, 50, "PURPLE", 4);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, StreetColor.PURPLE,
+                new Integer[]{10, 30, 90, 160, 250}, 1505, 2);
+        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, StreetColor.PURPLE,
+                new Integer[]{20, 60, 180, 320, 450}, 50, 4);
 
         p.buyProperty(s);
         p.buyProperty(s2);
@@ -197,10 +198,10 @@ class PlayerTest {
         MonopolyService service = new MonopolyService();
         Game g = service.createGame(2, "group17");
         Player p = new Player("Bob", null);
-        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
-                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
-        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, "PURPLE",
-                new Integer[]{20, 60, 180, 320, 450}, 50, "PURPLE", 4);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, StreetColor.PURPLE,
+                new Integer[]{10, 30, 90, 160, 250}, 50, 2);
+        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, StreetColor.PURPLE,
+                new Integer[]{20, 60, 180, 320, 450}, 50, 4);
 
         p.buyProperty(s);
         p.buyProperty(s2);
@@ -214,10 +215,10 @@ class PlayerTest {
         MonopolyService service = new MonopolyService();
         Game g = service.createGame(2, "group17");
         Player p = new Player("Bob", null);
-        Street s = new Street(1, "Peach's Garden", 60, 30, 2, "PURPLE",
-                new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
-        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, "PURPLE",
-                new Integer[]{20, 60, 180, 320, 450}, 50, "PURPLE", 4);
+        Street s = new Street(1, "Peach's Garden", 60, 30, 2, StreetColor.PURPLE,
+                new Integer[]{10, 30, 90, 160, 250}, 50, 2);
+        Street s2 = new Street(3, "Yoshi Valley", 60, 30, 2, StreetColor.PURPLE,
+                new Integer[]{20, 60, 180, 320, 450}, 50, 4);
 
         p.buyProperty(s);
         p.buyProperty(s2);

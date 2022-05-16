@@ -3,6 +3,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
 import be.howest.ti.monopoly.logic.implementation.Player;
+import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
 import be.howest.ti.monopoly.web.views.PropertyView;
 import jdk.jshell.execution.Util;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ class UtilityTest {
         Game g = s.createGame(2, "group17");
         Player p = new Player("Bob", null);
         Utility u = new Utility(12, "Electric Koopa Farm", 150, 75, 2,
-                "WHITE", "4 or 10 times the dice roll");
+                StreetColor.WHITE, "4 or 10 times the dice roll");
 
         g.joinGame("Bob");
         g.joinGame("Jan");
