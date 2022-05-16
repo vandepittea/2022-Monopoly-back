@@ -7,15 +7,15 @@ import java.util.Objects;
 
 public abstract class Tile {
     protected final TileType type;
-    private final String name;
     private final int position;
+    private final String name;
     private final String nameAsPathParameter;
 
     public Tile(int position, String name, TileType type) {
+        this.type = type;
         this.position = position;
         this.name = name;
         this.nameAsPathParameter = Tile.decideNameAsPathParameter(name);
-        this.type = type;
     }
 
     public String getName() {
