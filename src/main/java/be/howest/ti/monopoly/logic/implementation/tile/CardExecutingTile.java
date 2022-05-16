@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.*;
 import be.howest.ti.monopoly.logic.implementation.enums.*;
+import be.howest.ti.monopoly.logic.implementation.enums.Utility;
 import be.howest.ti.monopoly.logic.implementation.generator.Generator;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.web.views.PropertyView;
@@ -11,10 +12,10 @@ import java.security.SecureRandom;
 import java.util.*;
 
 public class CardExecutingTile extends Tile {
-    private static final Map<ChanceCards, String> chances = Generator.generateChances();
-    private static final Map<CommunityChests, String> communityChests = Generator.generateCommunityChests();
-    private static final Map<PowerUps, Integer> powerUpLocations = Generator.generatePowerUpLocations();
-    private static final Map<Utilities, Integer> utilityLocations = Generator.generateUtilityLocations();
+    private static final Map<ChanceCard, String> chances = Generator.generateChances();
+    private static final Map<CommunityChest, String> communityChests = Generator.generateCommunityChests();
+    private static final Map<PowerUp, Integer> powerUpLocations = Generator.generatePowerUpLocations();
+    private static final Map<Utility, Integer> utilityLocations = Generator.generateUtilityLocations();
     private static final Map<TilesToAdvance, Integer> tilesToAdvance = Generator.generateTilesToAdvance();
     private static final SecureRandom random = new SecureRandom();
 
@@ -33,8 +34,8 @@ public class CardExecutingTile extends Tile {
     }
 
     @JsonIgnore
-    public static ChanceCards getChanceType(String message) {
-        for (Map.Entry<ChanceCards, String> entry : chances.entrySet()) {
+    public static ChanceCard getChanceType(String message) {
+        for (Map.Entry<ChanceCard, String> entry : chances.entrySet()) {
             if (entry.getValue().equals(message)) {
                 return entry.getKey();
             }
@@ -43,8 +44,8 @@ public class CardExecutingTile extends Tile {
     }
 
     @JsonIgnore
-    public static CommunityChests getCommunityType(String message) {
-        for (Map.Entry<CommunityChests, String> entry : communityChests.entrySet()) {
+    public static CommunityChest getCommunityType(String message) {
+        for (Map.Entry<CommunityChest, String> entry : communityChests.entrySet()) {
             if (entry.getValue().equals(message)) {
                 return entry.getKey();
             }
@@ -68,7 +69,7 @@ public class CardExecutingTile extends Tile {
     private void executeRandomChance(MonopolyService service, Game game, Turn turn) {
         int randomChance = random.nextInt(chances.size());
 
-        ChanceCards type = ChanceCards.values()[randomChance];
+        ChanceCard type = ChanceCard.values()[randomChance];
         turn.addMove(getName(), chances.get(type));
         switch (type) {
             case ADV_BOWSER_CASTLE:
@@ -93,7 +94,7 @@ public class CardExecutingTile extends Tile {
                     }
                 }
                 if (!moved) {
-                    goToTile(service, powerUpLocations.get(PowerUps.FIRE_FLOWER), turn, type, game, false);
+                    goToTile(service, powerUpLocations.get(PowerUp.FIRE_FLOWER), turn, type, game, false);
                 }
                 break;
             case ADV_UT:
@@ -102,7 +103,7 @@ public class CardExecutingTile extends Tile {
                         goToTile(service, utilityPosition, turn, type, game, false);
                     }
                 }
-                goToTile(service, utilityLocations.get(Utilities.ELECTRIC_KOOPA_FARM), turn, type, game, false);
+                goToTile(service, utilityLocations.get(Utility.ELECTRIC_KOOPA_FARM), turn, type, game, false);
                 break;
             case REC_BANK_50:
                 game.getCurrentplayerObject().receiveMoney(50);
@@ -140,7 +141,7 @@ public class CardExecutingTile extends Tile {
                 game.changeCurrentPlayer(false);
                 break;
             case GO_FLOWER:
-                goToTile(service, powerUpLocations.get(PowerUps.FIRE_FLOWER), turn, type, game, true);
+                goToTile(service, powerUpLocations.get(PowerUp.FIRE_FLOWER), turn, type, game, true);
                 break;
             case PAY_PLAYERS_50:
                 Player currentPlayer = game.getCurrentplayerObject();
@@ -160,7 +161,7 @@ public class CardExecutingTile extends Tile {
         }
     }
 
-    private void goToTile(MonopolyService service, int tileToAdvance, Turn turn, ChanceCards chanceType, Game game, boolean passGo) {
+    private void goToTile(MonopolyService service, int tileToAdvance, Turn turn, ChanceCard chanceType, Game game, boolean passGo) {
         Tile newTile = service.getTile(tileToAdvance);
         turn.addMove(this.getName(), chances.get(chanceType));
         game.movePlayer(passGo, turn, newTile);
@@ -169,7 +170,7 @@ public class CardExecutingTile extends Tile {
     private void executeRandomCommunityChest(MonopolyService service, Game game, Turn turn) {
         int randomCommunityChest = random.nextInt(communityChests.size());
 
-        CommunityChests type = CommunityChests.values()[randomCommunityChest];
+        CommunityChest type = CommunityChest.values()[randomCommunityChest];
         turn.addMove(getName(), communityChests.get(type));
         switch (type) {
             case ADV_GO:
@@ -243,7 +244,7 @@ public class CardExecutingTile extends Tile {
                 break;
         }
     }
-    private void goToTile(MonopolyService service, int tileToAdvance, Turn turn, CommunityChests chanceType, Game game, boolean passGo) {
+    private void goToTile(MonopolyService service, int tileToAdvance, Turn turn, CommunityChest chanceType, Game game, boolean passGo) {
         Tile newTile = service.getTile(tileToAdvance);
         turn.addMove(this.getName(), communityChests.get(chanceType));
         game.movePlayer(passGo, turn, newTile);

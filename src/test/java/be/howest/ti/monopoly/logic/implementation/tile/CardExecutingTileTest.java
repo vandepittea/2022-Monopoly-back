@@ -1,8 +1,8 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.*;
-import be.howest.ti.monopoly.logic.implementation.enums.ChanceCards;
-import be.howest.ti.monopoly.logic.implementation.enums.CommunityChests;
+import be.howest.ti.monopoly.logic.implementation.enums.ChanceCard;
+import be.howest.ti.monopoly.logic.implementation.enums.CommunityChest;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import org.junit.jupiter.api.Test;
 
@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class CardExecutingTileTest {
     @Test
     void executeChanceCards() {
-        Set<ChanceCards> gottenChanceCards = new HashSet<>();
+        Set<ChanceCard> gottenChanceCards = new HashSet<>();
 
-        while (gottenChanceCards.size() != ChanceCards.values().length) {
+        while (gottenChanceCards.size() != ChanceCard.values().length) {
             MonopolyService service = new MonopolyService();
             Game game = service.createGame(2, "group17");
             game.joinGame("Jonas");
@@ -36,7 +36,7 @@ class CardExecutingTileTest {
             chanceTile.execute(service, game, turn);
 
             Player currentplayerObject = game.getCurrentplayerObject();
-            ChanceCards type = CardExecutingTile.getChanceType(turn.getMoves().get(0).getDescription());
+            ChanceCard type = CardExecutingTile.getChanceType(turn.getMoves().get(0).getDescription());
             gottenChanceCards.add(type);
             switch (type) {
                 case ADV_BOWSER_CASTLE:
@@ -107,9 +107,9 @@ class CardExecutingTileTest {
 
     @Test
     void executeCommunityCards() {
-        Set<CommunityChests> gottenCommmunityChests = new HashSet<>();
+        Set<CommunityChest> gottenCommmunityChests = new HashSet<>();
 
-        while (gottenCommmunityChests.size() != CommunityChests.values().length) {
+        while (gottenCommmunityChests.size() != CommunityChest.values().length) {
             MonopolyService service = new MonopolyService();
             Game game = service.createGame(2, "group17");
             game.joinGame("Jonas");
@@ -129,7 +129,7 @@ class CardExecutingTileTest {
             communityTile.execute(service, game, turn);
 
             Player currentplayerObject = game.getCurrentplayerObject();
-            CommunityChests type = CardExecutingTile.getCommunityType(turn.getMoves().get(0).getDescription());
+            CommunityChest type = CardExecutingTile.getCommunityType(turn.getMoves().get(0).getDescription());
             gottenCommmunityChests.add(type);
             switch (type) {
                 case ADV_GO:

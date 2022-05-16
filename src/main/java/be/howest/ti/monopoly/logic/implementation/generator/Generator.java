@@ -1,6 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation.generator;
 
 import be.howest.ti.monopoly.logic.implementation.enums.*;
+import be.howest.ti.monopoly.logic.implementation.enums.Utility;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Generator {
         tiles.add(new Street(9, "Cheep-Cheep Oasis", 120, 60, 3, "LIGHTBLUE", new Integer[]{40, 100, 300, 450, 600}, 50, "LIGHTBLUE", 8));
         tiles.add(new SimpleTile(10, "Jail", TileType.JAIL));
         tiles.add(new Street(11, "Delfino Airship", 140, 70, 3, "VIOLET", new Integer[]{50, 150, 450, 625, 750}, 100, "VIOLET", 10));
-        tiles.add(new Utility(12, "Electric Koopa Farm", 150, 75, 2, "WHITE", "4 or 10 times the dice roll"));
+        tiles.add(new be.howest.ti.monopoly.logic.implementation.tile.Utility(12, "Electric Koopa Farm", 150, 75, 2, "WHITE", "4 or 10 times the dice roll"));
         tiles.add(new Street(13, "Delfino Plaza", 140, 70, 3, "VIOLET", new Integer[]{50, 150, 450, 625, 750}, 100, "VIOLET", 10));
         tiles.add(new Street(14, "MT Corona", 160, 80, 3, "VIOLET", new Integer[]{60, 180, 500, 700, 900}, 100, "VIOLET", 12));
         tiles.add(new Railroad(15, "F.L.U.D.D.", 200, 100, 4, "BLACK", 25));
@@ -42,7 +43,7 @@ public class Generator {
         tiles.add(new Railroad(25, "Mario Cart", 200, 100, 4, "Black", 25));
         tiles.add(new Street(26, "DK Mountain", 260, 130, 3, "YELLOW", new Integer[]{110, 330, 800, 975, 1150}, 150, "YELLOW", 22));
         tiles.add(new Street(27, "Wario's Goldmine", 260, 130, 3, "YELLOW", new Integer[]{110, 330, 800, 975, 1150,}, 150, "YELLOW", 22));
-        tiles.add(new Utility(28, "Gas Pump", 150, 75, 2, "WHITE", "4 or 10 times the dice roll"));
+        tiles.add(new be.howest.ti.monopoly.logic.implementation.tile.Utility(28, "Gas Pump", 150, 75, 2, "WHITE", "4 or 10 times the dice roll"));
         tiles.add(new Street(29, "Grumble Volcano", 280, 140, 3, "YELLOW", new Integer[]{120, 360, 850, 1025, 1200}, 150, "YELLOW", 24));
         tiles.add(new SimpleTile(30, "Go to Jail", TileType.GO_TO_JAIL));
         tiles.add(new Street(31, "Steam Gardens", 300, 150, 3, "DARKGREEN", new Integer[]{130, 390, 900, 1100, 1275}, 200, "DARKGREEN", 26));
@@ -58,67 +59,67 @@ public class Generator {
         return tiles;
     }
 
-    public static Map<ChanceCards, String> generateChances() {
-        Map<ChanceCards, String> chances = new EnumMap<>(ChanceCards.class);
+    public static Map<ChanceCard, String> generateChances() {
+        Map<ChanceCard, String> chances = new EnumMap<>(ChanceCard.class);
 
-        chances.put(ChanceCards.ADV_BOWSER_CASTLE, "You got launched by a cannon right to Bowsers Castle");
-        chances.put(ChanceCards.ADV_GO, "Head to Peach's Castle (Collect 200 coins)");
-        chances.put(ChanceCards.ADV_SHERBET, "You are sent to Sherbet Land. If you pass Peach's Castle, collect 200 coins");
-        chances.put(ChanceCards.ADV_DELFINO, "Take a plane to Delfino Airstrip. If you pass Peach's Castle, collect 200 coins");
-        chances.put(ChanceCards.ADV_POWERUP, "Advance to the nearest Powerup. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled");
-        chances.put(ChanceCards.ADV_UT, "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.");
-        chances.put(ChanceCards.REC_BANK_50, "The Toad Bank pays you dividend of 50 coins");
-        chances.put(ChanceCards.GET_JAIL_CARD, "Get Out of Jail Free");
-        chances.put(ChanceCards.RETURN_3, "Go Back 3 Spaces");
-        chances.put(ChanceCards.GO_JAIL, "Go to Jail. Go directly to Jail, do not pass Go, do not collect 200 coins");
-        chances.put(ChanceCards.PAY_REPAIRS, "Make general repairs on all your property. For each house pay 25 coins. For each castle pay 100 coins");
-        chances.put(ChanceCards.PAY_15, "Speeding fine 15 coins");
-        chances.put(ChanceCards.GO_FLOWER, "Take a trip to the FireFlower. If you pass Peach's Castle, collect 200 coins");
-        chances.put(ChanceCards.PAY_PLAYERS_50, "You lost a bet that you would defeat Bowser. Pay each player 50 coins");
-        chances.put(ChanceCards.REC_150, "You won an important race! Collect 150 coins");
+        chances.put(ChanceCard.ADV_BOWSER_CASTLE, "You got launched by a cannon right to Bowsers Castle");
+        chances.put(ChanceCard.ADV_GO, "Head to Peach's Castle (Collect 200 coins)");
+        chances.put(ChanceCard.ADV_SHERBET, "You are sent to Sherbet Land. If you pass Peach's Castle, collect 200 coins");
+        chances.put(ChanceCard.ADV_DELFINO, "Take a plane to Delfino Airstrip. If you pass Peach's Castle, collect 200 coins");
+        chances.put(ChanceCard.ADV_POWERUP, "Advance to the nearest Powerup. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled");
+        chances.put(ChanceCard.ADV_UT, "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.");
+        chances.put(ChanceCard.REC_BANK_50, "The Toad Bank pays you dividend of 50 coins");
+        chances.put(ChanceCard.GET_JAIL_CARD, "Get Out of Jail Free");
+        chances.put(ChanceCard.RETURN_3, "Go Back 3 Spaces");
+        chances.put(ChanceCard.GO_JAIL, "Go to Jail. Go directly to Jail, do not pass Go, do not collect 200 coins");
+        chances.put(ChanceCard.PAY_REPAIRS, "Make general repairs on all your property. For each house pay 25 coins. For each castle pay 100 coins");
+        chances.put(ChanceCard.PAY_15, "Speeding fine 15 coins");
+        chances.put(ChanceCard.GO_FLOWER, "Take a trip to the FireFlower. If you pass Peach's Castle, collect 200 coins");
+        chances.put(ChanceCard.PAY_PLAYERS_50, "You lost a bet that you would defeat Bowser. Pay each player 50 coins");
+        chances.put(ChanceCard.REC_150, "You won an important race! Collect 150 coins");
 
         return chances;
     }
 
-    public static Map<CommunityChests, String> generateCommunityChests() {
-        Map<CommunityChests, String> communityChests = new EnumMap<>(CommunityChests.class);
+    public static Map<CommunityChest, String> generateCommunityChests() {
+        Map<CommunityChest, String> communityChests = new EnumMap<>(CommunityChest.class);
 
-        communityChests.put(CommunityChests.ADV_GO, "Head to Peach's Castle (Collect 200 coins)");
-        communityChests.put(CommunityChests.REC_BANK_ERR, "The Toad Bank made an error in your favor. Collect 200 coins");
-        communityChests.put(CommunityChests.PAY_DOCTOR_FEE, "You are sick and go to Doctor Mario. Pay 50 coins");
-        communityChests.put(CommunityChests.REC_SOLD_STOCK, "You found a hidden chest with coins. You get 50 coins");
-        communityChests.put(CommunityChests.GET_JAIL_CARD, "Get Out of Jail Free");
-        communityChests.put(CommunityChests.GO_JAIL, "Go to Jail. Go directly to jail, do not pass Peach's Castle, do not collect $200)");
-        communityChests.put(CommunityChests.REC_DELFINO, "You guide tourists around Delfino Island. Receive 100 coins");
-        communityChests.put(CommunityChests.REC_BANK_OWES, "The toad Bank owes you some coins. Collect 20 coins");
-        communityChests.put(CommunityChests.REC_BIRTHDAY, "It is your birthday. Collect 10 coins from every player");
-        communityChests.put(CommunityChests.REC_KOOPALING, "You defeated a Koopaling. Collect 100 coins as a reward");
-        communityChests.put(CommunityChests.PAY_BOO, "A Boo scares you and steals some coins, you lose 100 coins");
-        communityChests.put(CommunityChests.PAY_STAR, "You lose a star and need to buy a new one for 50 coins");
-        communityChests.put(CommunityChests.REC_FRUIT, "Receive 25 coins from selling fruit");
-        communityChests.put(CommunityChests.PAY_REPAIRS, "You are assessed for street repair. $40 per house. $115 per castle");
-        communityChests.put(CommunityChests.REC_PRIZE, "You have won second prize in a run contest against some Coopas. Collect 10 coins");
-        communityChests.put(CommunityChests.REC_ROSALINA, "Rosalina sends you a gift from space. Receive 100 coins ");
+        communityChests.put(CommunityChest.ADV_GO, "Head to Peach's Castle (Collect 200 coins)");
+        communityChests.put(CommunityChest.REC_BANK_ERR, "The Toad Bank made an error in your favor. Collect 200 coins");
+        communityChests.put(CommunityChest.PAY_DOCTOR_FEE, "You are sick and go to Doctor Mario. Pay 50 coins");
+        communityChests.put(CommunityChest.REC_SOLD_STOCK, "You found a hidden chest with coins. You get 50 coins");
+        communityChests.put(CommunityChest.GET_JAIL_CARD, "Get Out of Jail Free");
+        communityChests.put(CommunityChest.GO_JAIL, "Go to Jail. Go directly to jail, do not pass Peach's Castle, do not collect $200)");
+        communityChests.put(CommunityChest.REC_DELFINO, "You guide tourists around Delfino Island. Receive 100 coins");
+        communityChests.put(CommunityChest.REC_BANK_OWES, "The toad Bank owes you some coins. Collect 20 coins");
+        communityChests.put(CommunityChest.REC_BIRTHDAY, "It is your birthday. Collect 10 coins from every player");
+        communityChests.put(CommunityChest.REC_KOOPALING, "You defeated a Koopaling. Collect 100 coins as a reward");
+        communityChests.put(CommunityChest.PAY_BOO, "A Boo scares you and steals some coins, you lose 100 coins");
+        communityChests.put(CommunityChest.PAY_STAR, "You lose a star and need to buy a new one for 50 coins");
+        communityChests.put(CommunityChest.REC_FRUIT, "Receive 25 coins from selling fruit");
+        communityChests.put(CommunityChest.PAY_REPAIRS, "You are assessed for street repair. $40 per house. $115 per castle");
+        communityChests.put(CommunityChest.REC_PRIZE, "You have won second prize in a run contest against some Coopas. Collect 10 coins");
+        communityChests.put(CommunityChest.REC_ROSALINA, "Rosalina sends you a gift from space. Receive 100 coins ");
 
         return communityChests;
     }
 
-    public static Map<Utilities, Integer> generateUtilityLocations() {
-        Map<Utilities, Integer> utilityLocations = new EnumMap<>(Utilities.class);
+    public static Map<Utility, Integer> generateUtilityLocations() {
+        Map<Utility, Integer> utilityLocations = new EnumMap<>(Utility.class);
 
-        utilityLocations.put(Utilities.ELECTRIC_KOOPA_FARM, 12);
-        utilityLocations.put(Utilities.GAS_PUMP, 28);
+        utilityLocations.put(Utility.ELECTRIC_KOOPA_FARM, 12);
+        utilityLocations.put(Utility.GAS_PUMP, 28);
 
         return utilityLocations;
     }
 
-    public static Map<PowerUps, Integer> generatePowerUpLocations() {
-        Map<PowerUps, Integer> powerUpLocations = new EnumMap<>(PowerUps.class);
+    public static Map<PowerUp, Integer> generatePowerUpLocations() {
+        Map<PowerUp, Integer> powerUpLocations = new EnumMap<>(PowerUp.class);
 
-        powerUpLocations.put(PowerUps.FIRE_FLOWER, 5);
-        powerUpLocations.put(PowerUps.FLUTT, 15);
-        powerUpLocations.put(PowerUps.MARIO_CART, 25);
-        powerUpLocations.put(PowerUps.CAPPY, 35);
+        powerUpLocations.put(PowerUp.FIRE_FLOWER, 5);
+        powerUpLocations.put(PowerUp.FLUTT, 15);
+        powerUpLocations.put(PowerUp.MARIO_CART, 25);
+        powerUpLocations.put(PowerUp.CAPPY, 35);
 
         return powerUpLocations;
     }
