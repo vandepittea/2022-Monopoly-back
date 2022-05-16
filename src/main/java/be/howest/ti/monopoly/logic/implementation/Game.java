@@ -5,6 +5,7 @@ import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.logic.implementation.turn.TurnType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
 
@@ -163,6 +164,11 @@ public class Game {
         return currentPlayer.getName();
     }
 
+    @JsonIgnore
+    public Player getCurrentplayerObject() {
+        return currentPlayer;
+    }
+
     public String getWinner() {
         return winner.getName();
     }
@@ -312,12 +318,24 @@ public class Game {
         decideNextAction(jail, turn);
     }
 
+    public void movePlayer(boolean passGo, Turn turn, Tile newTile) {
+        List<Tile> tiles = service.getTiles();
+        Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
+
+        if (passGo && (newTile.getPosition() < currentPlayerTile.getPosition())) {
+            currentPlayer.receiveMoney(200);
+        }
+
+        currentPlayer.moveTo(newTile);
+        decideNextAction(newTile, turn);
+    }
+
     private void movePlayer(Turn turn, Integer[] roll) {
         List<Tile> tiles = service.getTiles();
         Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
         int nextTileIdx = currentPlayerTile.getPosition() + roll[0] + roll[1];
         if (nextTileIdx >= tiles.size()) {
-            //TODO: receive money for passing GO
+            currentPlayer.receiveMoney(200);
             nextTileIdx -= tiles.size();
         }
         Tile newTile = service.getTile(nextTileIdx);
@@ -330,31 +348,41 @@ public class Game {
 
     private void decideNextAction(Tile newTile, Turn turn) {
         switch (newTile.getActualType()) {
-            case street:
-                if (!propertyOwnedByOtherPlayer(newTile)) {
-                    directSale = newTile.getName();
-                    canRoll = false;
-                    turn.addMove(newTile.getName(), "Can buy this property in a direct sale");
-                    break;
-                }
-                turn.addMove(newTile.getName(), "Can be asked to pay rent if the property isn't mortgaged");
-                changeCurrentPlayer(true);
+            case STREET:
+                executeStreetFunctionality(newTile, turn);
                 break;
-            case Go_to_Jail:
-                Tile jail = service.getTile("Jail");
-                currentPlayer.goToJail(jail);
-                turn.addMove(newTile.getName(), "");
-                turn.addMove("Jail", "");
-                changeCurrentPlayer(true);
+            case GO_TO_JAIL:
+                executeGoToJail(newTile, turn);
                 break;
-            case Jail:
-            case Free_Parking:
-            case Go:
+            case COMMUNITY_CHEST:
+            case CHANCE:
+                CardExecutingTile execTile = (CardExecutingTile) newTile;
+                execTile.execute(service, this, turn);
+                break;
             default:
                 turn.addMove(newTile.getName(), "");
                 changeCurrentPlayer(false);
                 break;
         }
+    }
+
+    private void executeGoToJail(Tile newTile, Turn turn) {
+        Tile jail = service.getTile("Jail");
+        currentPlayer.goToJail(jail);
+        turn.addMove(newTile.getName(), "");
+        turn.addMove("Jail", "");
+        changeCurrentPlayer(true);
+    }
+
+    private void executeStreetFunctionality(Tile newTile, Turn turn) {
+        if (!propertyOwnedByOtherPlayer(newTile)) {
+            directSale = newTile.getName();
+            canRoll = false;
+            turn.addMove(newTile.getName(), "Can buy this property in a direct sale");
+            return;
+        }
+        turn.addMove(newTile.getName(), "Can be asked to pay rent if the property isn't mortgaged");
+        changeCurrentPlayer(true);
     }
 
     private boolean propertyOwnedByOtherPlayer(Tile newTile) {
@@ -374,7 +402,7 @@ public class Game {
         return false;
     }
 
-    private void changeCurrentPlayer(boolean endTurn) {
+    public void changeCurrentPlayer(boolean endTurn) {
         if (!endTurn && Objects.equals(lastDiceRoll[0], lastDiceRoll[1])) {
             return;
         }

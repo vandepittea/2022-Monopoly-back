@@ -14,8 +14,8 @@ public interface IService {
     Game createGame(int numberOfPlayers, String prefix);
     List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix);
     Game getGame(String gameId);
-    String[] getChance();
-    String[] getCommunityChest();
+    List<String> getChance();
+    List<String> getCommunityChest();
     void joinGame(String gameId, String playerName);
     String buyProperty(String gameId, String playerName, String propertyName);
     int buyHouse(String gameId, String playerName, String propertyName);

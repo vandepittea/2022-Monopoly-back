@@ -52,12 +52,12 @@ public class TestService implements IService {
     }
 
     @Override
-    public String[] getChance() {
+    public List<String> getChance() {
         return delegate.getChance();
     }
 
     @Override
-    public String[] getCommunityChest() {
+    public List<String> getCommunityChest() {
         return delegate.getCommunityChest();
     }
 

@@ -7,7 +7,7 @@ public class Utility extends Property {
     private final String rent;
 
     public Utility(int position, String name, int cost, int mortgage, int groupSize, String color, String rent) {
-        super(position, name, cost, mortgage, groupSize, color, TileType.utility);
+        super(position, name, cost, mortgage, groupSize, color, TileType.UTILITY);
         this.rent = rent;
     }
     public String getRent() {
@@ -39,7 +39,7 @@ public class Utility extends Property {
         int amountOfUtilities = 0;
 
         for(Property pr: pl.getProperties()){
-            if(pr.getType().equals(TileType.utility)){
+            if(pr.getType().equals(TileType.UTILITY)){
                 amountOfUtilities++;
             }
         }

@@ -157,6 +157,17 @@ class GameTest {
     }
 
     @Test
+    void rollDicePassGo() {
+        Game game = service.createGame(2, "group17");
+        game.joinGame("Jonas");
+        game.joinGame("Thomas");
+
+        game.getCurrentplayerObject().moveTo(service.getTile(39));
+        game.rollDice("Jonas");
+        assertTrue(1500 < game.getPlayer("Jonas").getMoney());
+    }
+
+    @Test
     void rollDice() {
         Game game = service.createGame(2, "group17");
 

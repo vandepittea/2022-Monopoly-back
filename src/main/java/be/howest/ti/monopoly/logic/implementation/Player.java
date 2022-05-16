@@ -45,6 +45,11 @@ public class Player {
         return currentTile.getName();
     }
 
+    @JsonIgnore
+    public Tile getCurrentTileObject() {
+        return currentTile;
+    }
+
     public boolean isJailed() {
         return jailed;
     }
@@ -128,7 +133,7 @@ public class Player {
         }
     }
 
-    private void receiveMoney(int amount) {
+    public void receiveMoney(int amount) {
         money += amount;
     }
 
@@ -181,7 +186,7 @@ public class Player {
         return pr.getName().equals(pl.currentTile.getName());
     }
 
-    private boolean checkForNextRollDice(Game g, Property p) {
+    private boolean checkForNextRollDice(Game g, Property p){
         Move move = g.getTurns().get(g.getTurns().size() - 1).getMoves().get(0);
         String descriptionLastRoll = move.getDescription();
         String propertyTitle = move.getTitle();
@@ -276,9 +281,9 @@ public class Player {
         return g.receiveHotelCount(s);
     }
 
-    private boolean checkOwnershipWholeStreet(Street streetToBuildHouseOn, MonopolyService service) {
-        for (Tile t : service.getTiles()) {
-            if (t.getType() == TileType.street) {
+    private boolean checkOwnershipWholeStreet(Street streetToBuildHouseOn, MonopolyService service){
+        for(Tile t: service.getTiles()){
+            if(t.getType() == TileType.STREET){
                 Street streetOfGroup = (Street) t;
                 if (streetOfGroup.getStreetColor().equals(streetToBuildHouseOn.getStreetColor())) {
                     if (!checkForOwnership(streetOfGroup)) {
