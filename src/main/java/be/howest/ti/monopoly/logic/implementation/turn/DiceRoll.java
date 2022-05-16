@@ -1,13 +1,12 @@
 package be.howest.ti.monopoly.logic.implementation.turn;
 
 import java.security.SecureRandom;
-import java.util.Objects;
 
 public class DiceRoll {
-    private static SecureRandom random = new SecureRandom();
+    private static final SecureRandom random = new SecureRandom();
 
-    private int die1;
-    private int die2;
+    private final int die1;
+    private final int die2;
 
     public DiceRoll() {
         die1 = random.nextInt(6) + 1;
