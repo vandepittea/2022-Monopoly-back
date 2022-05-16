@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Turn {
-    private Player player;
-    private DiceRoll roll;
+    private final Player player;
+    private final DiceRoll roll;
+    private final List<Move> moves;
+
     private TurnType type;
-    private List<Move> moves;
 
     public Turn(Player player) {
         this.player = player;
