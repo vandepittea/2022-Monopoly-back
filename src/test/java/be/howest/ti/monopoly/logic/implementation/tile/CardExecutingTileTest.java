@@ -1,6 +1,8 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.*;
+import be.howest.ti.monopoly.logic.implementation.enums.ChanceCards;
+import be.howest.ti.monopoly.logic.implementation.enums.CommunityChests;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import org.junit.jupiter.api.Test;
 

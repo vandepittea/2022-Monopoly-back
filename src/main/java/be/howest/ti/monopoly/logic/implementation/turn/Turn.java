@@ -1,11 +1,10 @@
 package be.howest.ti.monopoly.logic.implementation.turn;
 
-import be.howest.ti.monopoly.logic.implementation.DiceRoll;
 import be.howest.ti.monopoly.logic.implementation.Player;
+import be.howest.ti.monopoly.logic.implementation.enums.TurnType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Turn {
     private Player player;

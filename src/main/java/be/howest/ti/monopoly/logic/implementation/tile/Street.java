@@ -3,10 +3,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
 import be.howest.ti.monopoly.logic.implementation.Player;
-import be.howest.ti.monopoly.web.views.PropertyView;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import be.howest.ti.monopoly.logic.implementation.Player;
+import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 
 public class Street extends Property {
     public static final int NUMBER_OF_HOUSES_IN_ONE_HOTEL = 4;

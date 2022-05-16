@@ -1,4 +1,4 @@
-package be.howest.ti.monopoly.logic.implementation;
+package be.howest.ti.monopoly.logic.implementation.turn;
 
 import java.security.SecureRandom;
 import java.util.Objects;

@@ -4,7 +4,7 @@ import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
-import be.howest.ti.monopoly.logic.implementation.turn.TurnType;
+import be.howest.ti.monopoly.logic.implementation.enums.TurnType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
