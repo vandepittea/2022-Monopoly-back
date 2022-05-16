@@ -91,6 +91,12 @@ public class Player {
     }
 
     public void becomeBankrupt() {
+        if (creditor != null) {
+            turnOverAssetsTo(creditor);
+        } else {
+            turnOverAssetsToBank();
+        }
+
         this.bankrupt = true;
     }
 

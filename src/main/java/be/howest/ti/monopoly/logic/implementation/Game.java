@@ -16,44 +16,55 @@ public class Game {
 
     private final int numberOfPlayers;
     private final String id;
+    private final Tile startingTile;
+    private final MonopolyService service;
+    private final List<Turn> turns;
+    private final List<Player> players;
 
     private boolean started;
-    private List<Player> players;
-    private String directSale;
-    private int availableHouses;
-    private int availableHotels;
-    private List<Turn> turns;
-    private DiceRoll lastDiceRoll;
     private boolean canRoll;
     private boolean ended;
+    private int availableHouses;
+    private int availableHotels;
+    private String directSale;
+    private DiceRoll lastDiceRoll;
     private Player currentPlayer;
     private Player winner;
-    private Tile startingTile;
-
-    private MonopolyService service;
 
     public Game(MonopolyService service, int numberOfPlayers, String prefix, Tile startingTile) {
-        this.numberOfPlayers = numberOfPlayers;
-        if (idCounter.containsKey(prefix)) {
-            this.id = prefix + "_" + idCounter.get(prefix);
-            idCounter.put(prefix, idCounter.get(prefix) + 1);
-        } else {
-            this.id = prefix + "_0";
-            idCounter.put(prefix, 1);
-        }
         this.started = false;
-        this.players = new ArrayList<>();
-        this.directSale = null;
-        this.availableHouses = 32;
-        this.availableHotels = 12;
-        this.turns = new ArrayList<>();
-        this.lastDiceRoll = new DiceRoll(0, 0);
         this.canRoll = true;
         this.ended = false;
+
+        this.availableHouses = 32;
+        this.availableHotels = 12;
+        this.numberOfPlayers = numberOfPlayers;
+
+        this.directSale = null;
+        this.lastDiceRoll = new DiceRoll(0, 0);
         this.currentPlayer = null;
         this.winner = null;
         this.startingTile = startingTile;
         this.service = service;
+
+        this.turns = new ArrayList<>();
+        this.players = new ArrayList<>();
+
+        this.id = generateId(prefix);
+    }
+
+    private String generateId(String prefix) {
+        final String idToGenerate;
+
+        if (idCounter.containsKey(prefix)) {
+            idToGenerate = prefix + "_" + idCounter.get(prefix);
+            idCounter.put(prefix, idCounter.get(prefix) + 1);
+        } else {
+            idToGenerate = prefix + "_0";
+            idCounter.put(prefix, 1);
+        }
+
+        return idToGenerate;
     }
 
     public int getNumberOfPlayers() {
@@ -129,32 +140,24 @@ public class Game {
     }
 
     public void setCurrentPlayer(String currentPlayerName) {
-        Player currentPlayerObject = null;
-
         for (Player player : players) {
             if (player.getName().equals(currentPlayerName)) {
-                currentPlayerObject = player;
-                break;
+                this.currentPlayer = player;
+                return;
             }
         }
-
-        this.currentPlayer = currentPlayerObject;
     }
 
     public void joinGame(String playerName) {
-        if (isExistedUser(playerName) || isStartedGame()) {
+        if (isExistingUser(playerName) || this.started) {
             throw new IllegalMonopolyActionException("You tried to do something which is against the " +
                     "rules of Monopoly. In this case, it is most likely that you tried to join a game which has " +
                     "already started, or you used a name that is already taken in this game.");
-        } else {
-            Player p = new Player(playerName, startingTile);
-            addPlayer(p);
-            changeStartedIfNeeded();
         }
-    }
 
-    private void addPlayer(Player p) {
+        Player p = new Player(playerName, startingTile);
         players.add(p);
+        changeStartedIfNeeded();
     }
 
     private void changeStartedIfNeeded() {
@@ -168,7 +171,7 @@ public class Game {
         return players.size() >= numberOfPlayers;
     }
 
-    private boolean isExistedUser(String playerName) {
+    private boolean isExistingUser(String playerName) {
         for (Player p : players) {
             if (p.getName().equals(playerName)) {
                 return true;
@@ -177,16 +180,13 @@ public class Game {
         return false;
     }
 
-    private boolean isStartedGame() {
-        return this.isStarted();
-    }
-
     public Player getPlayer(String playerName) {
         for (Player p : players) {
             if (p.getName().equals(playerName)) {
                 return p;
             }
         }
+
         throw new MonopolyResourceNotFoundException("The player you are looking for do not exist. " +
                 "Double check the name.");
     }
@@ -206,10 +206,11 @@ public class Game {
         if (currentPlayer.isJailed()) {
             checkRollInJail(turn);
         } else if (doesCurrentPlayerGetJailed()) {
-            JailCurrentPlayer(turn);
+            jailCurrentPlayer(turn);
         } else {
             movePlayer(turn, lastDiceRoll);
         }
+
         turns.add(turn);
     }
 
@@ -228,23 +229,18 @@ public class Game {
         if (!started) {
             throw new IllegalMonopolyActionException("The game has not started yet.");
         }
-
         if (ended) {
             throw new IllegalMonopolyActionException("The game has already ended.");
         }
-
         if (!currentPlayer.getName().equals(playerName)) {
             throw new IllegalMonopolyActionException("It is not your turn.");
         }
-
         if (currentPlayer.getDebt() > 0) {
             throw new IllegalMonopolyActionException("The player is in debt.");
         }
-
         if (directSale != null) {
             throw new IllegalMonopolyActionException("The current player has to decide on a property.");
         }
-
         if (currentPlayer.isBankrupt()) {
             throw new IllegalMonopolyActionException("You are bankrupt. Rolling the dice isn't allowed.");
         }
@@ -255,14 +251,16 @@ public class Game {
             Turn previousTurn = turns.get(turns.size() - 1);
             Turn beforePreviousTurn = turns.get(turns.size() - 2);
 
-            if ((currentPlayer.getName().equals(previousTurn.getPlayer())) && (currentPlayer.getName().equals(beforePreviousTurn.getPlayer()))) {
+            if ((currentPlayer.getName().equals(previousTurn.getPlayer())) &&
+                    (currentPlayer.getName().equals(beforePreviousTurn.getPlayer()))) {
                 return lastDiceRoll.isDoubleRoll();
             }
         }
+
         return false;
     }
 
-    private void JailCurrentPlayer(Turn turn) {
+    private void jailCurrentPlayer(Turn turn) {
         Tile jail = service.getTile("Jail");
         currentPlayer.goToJail(jail);
         turn.setType(TurnType.GO_TO_JAIL);
@@ -270,7 +268,6 @@ public class Game {
     }
 
     public void movePlayer(boolean passGo, Turn turn, Tile newTile) {
-        List<Tile> tiles = service.getTiles();
         Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
 
         if (passGo && (newTile.getPosition() < currentPlayerTile.getPosition())) {
@@ -285,15 +282,16 @@ public class Game {
         List<Tile> tiles = service.getTiles();
         Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
         int nextTileIdx = currentPlayerTile.getPosition() + roll.getDie1() + roll.getDie2();
+
         if (nextTileIdx >= tiles.size()) {
             currentPlayer.receiveMoney(200);
             nextTileIdx -= tiles.size();
         }
+
         Tile newTile = service.getTile(nextTileIdx);
         currentPlayer.moveTo(newTile);
 
         turn.setType(TurnType.DEFAULT);
-
         decideNextAction(newTile, turn);
     }
 
@@ -319,9 +317,11 @@ public class Game {
 
     private void executeGoToJail(Tile newTile, Turn turn) {
         Tile jail = service.getTile("Jail");
+
         currentPlayer.goToJail(jail);
         turn.addMove(newTile.getName(), "");
         turn.addMove("Jail", "");
+
         changeCurrentPlayer(true);
     }
 
@@ -332,19 +332,18 @@ public class Game {
             turn.addMove(newTile.getName(), "Can buy this property in a direct sale");
             return;
         }
+
         turn.addMove(newTile.getName(), "Can be asked to pay rent if the property isn't mortgaged");
         changeCurrentPlayer(true);
     }
 
     private boolean propertyOwnedByOtherPlayer(Tile newTile) {
         for (Player player : players) {
-            if (player.getName().equals(currentPlayer.getName())) {
-                continue;
-            }
-
-            for (PropertyView property : player.getProperties()) {
-                if (property.getPropertyObject().getName().equals(newTile.getName())) {
-                    return true;
+            if (!player.getName().equals(currentPlayer.getName())) {
+                for (PropertyView property : player.getProperties()) {
+                    if (property.getPropertyObject().getName().equals(newTile.getName())) {
+                        return true;
+                    }
                 }
             }
         }
@@ -359,22 +358,19 @@ public class Game {
         int playerIdx = players.indexOf(currentPlayer);
         do {
             playerIdx++;
+
             if (playerIdx >= players.size()) {
                 playerIdx = 0;
             }
+
             currentPlayer = players.get(playerIdx);
         } while (currentPlayer.isBankrupt());
     }
 
     public void declareBankruptcy(String playerName) {
-        Player p = getPlayer(playerName);
-        if (p.getCreditor() != null) {
-            p.turnOverAssetsTo(p.getCreditor());
-        } else {
-            p.turnOverAssetsToBank();
-        }
+        Player player = getPlayer(playerName);
 
-        p.becomeBankrupt();
+        player.becomeBankrupt();
         checkForWinner();
         changePlayerIfItsYourTurn(playerName);
     }
@@ -382,19 +378,21 @@ public class Game {
     private void checkForWinner() {
         int alivePlayers = 0;
         Player lastAlivePlayer = null;
-        for(Player player: players){
-            if(!player.isBankrupt()){
+
+        for (Player player : players) {
+            if (!player.isBankrupt()) {
                 alivePlayers++;
                 lastAlivePlayer = player;
             }
         }
-        if(alivePlayers == 1){
+
+        if (alivePlayers == 1) {
             ended = true;
             winner = lastAlivePlayer;
         }
     }
 
-    private void changePlayerIfItsYourTurn(String playerName){
+    private void changePlayerIfItsYourTurn(String playerName) {
         if (currentPlayer.getName().equals(playerName)) {
             changeCurrentPlayer(true);
         }
