@@ -150,7 +150,6 @@ public class CardExecutingTile extends Tile {
                         continue;
                     }
                     currentPlayer.payDebt(50, player);
-                    player.receiveMoney(50);
                 }
                 game.changeCurrentPlayer(false);
                 break;
@@ -213,7 +212,6 @@ public class CardExecutingTile extends Tile {
                         continue;
                     }
                     player.payDebt(10, currentPlayer);
-                    currentPlayer.receiveMoney(10);
                 }
 
                 game.changeCurrentPlayer(false);

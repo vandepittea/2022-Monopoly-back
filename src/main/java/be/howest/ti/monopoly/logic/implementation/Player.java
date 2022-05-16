@@ -1,6 +1,7 @@
 package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
+import be.howest.ti.monopoly.logic.implementation.enums.Taxsystem;
 import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Move;
@@ -14,30 +15,36 @@ import java.util.*;
 public class Player {
     public static final int MAX_HOUSE_COUNT = 4;
     public static final int MAX_HOTEL_COUNT = 1;
+
     private final String name;
 
-    private Tile currentTile;
     private boolean jailed;
-    private int money;
     private boolean bankrupt;
-    private int getOutOfJailCards;
-    private String taxSystem;
-
-    private Map<Property, PropertyView> properties;
     private int debt;
+    private int money;
+    private int getOutOfJailCards;
+
+    private Taxsystem taxSystem;
+
+    private Tile currentTile;
     private Player creditor;
+    private final Map<Property, PropertyView> properties;
 
     public Player(String name, Tile startingTile) {
+        this.jailed = false;
+        this.bankrupt = false;
+
+        this.debt = 0;
+        this.money = 1500;
+        this.getOutOfJailCards = 0;
+
+        this.taxSystem = Taxsystem.ESTIMATE;
+
         this.name = name;
         this.currentTile = startingTile;
-        this.jailed = false;
-        this.money = 1500;
-        this.bankrupt = false;
-        this.getOutOfJailCards = 0;
-        this.taxSystem = "ESTIMATE";
-        properties = new HashMap<>();
-        this.debt = 0;
         this.creditor = null;
+
+        properties = new HashMap<>();
     }
 
     public String getName() {
@@ -69,7 +76,7 @@ public class Player {
         return getOutOfJailCards;
     }
 
-    public String getTaxSystem() {
+    public Taxsystem getTaxSystem() {
         return taxSystem;
     }
 
@@ -113,14 +120,14 @@ public class Player {
         getOutOfJailCards++;
     }
 
-    public void buyProperty(Property pr) {
-        boolean successfulPayment = payMoney(pr.getCost());
+    public void buyProperty(Property property) {
+        boolean successfulPayment = payMoney(property.getCost());
 
-        if (successfulPayment) {
-            addProperty(pr);
-        } else {
+        if (!successfulPayment) {
             throw new IllegalMonopolyActionException("You don't have enough money to buy this property");
         }
+
+        addProperty(property);
     }
 
     private void addProperty(Property property) {
@@ -144,6 +151,8 @@ public class Player {
             throw new IllegalMonopolyActionException("You do not have enough money. You will have to sell properties " +
                     "so that you can pay off your debt. You have time until it is your turn again.");
         }
+
+        debtor.receiveMoney(amount);
     }
 
     public void receiveMoney(int amount) {
@@ -154,59 +163,58 @@ public class Player {
         currentTile = newTile;
     }
 
-    public void turnOverAssetsTo(Player p) {
+    public void turnOverAssetsTo(Player player) {
         for (Property property : properties.keySet()) {
-            p.addProperty(property);
+            player.addProperty(property);
         }
-        p.receiveMoney(money);
+        player.receiveMoney(money);
 
-        money = 0;
-        debt = 0;
-        properties.clear();
+        clearAssets();
     }
 
     public void turnOverAssetsToBank() {
         //TODO: start auction
 
+        clearAssets();
+    }
+
+    private void clearAssets() {
         money = 0;
         debt = 0;
         properties.clear();
     }
 
-    public void collectDebt(Property pr, Player pl, Game g) {
-        if (!checkForOwnership(pr)) {
+    public void collectDebt(Property property, Player player, Game game) {
+        if (!checkForOwnership(property)) {
             throw new IllegalMonopolyActionException("This property is not owned by you.");
         }
-        if (!checkIfDebtorIsOnYourProperty(pr, pl)) {
+        if (!checkIfDebtorIsOnYourProperty(property, player)) {
             throw new IllegalMonopolyActionException("The specified player is not on this property.");
         }
-        if (checkForNextRollDice(g, pr)) {
+        if (hasPlayerAlreadyRolled(game, property)) {
             throw new IllegalMonopolyActionException("You're too late. The next dice roll is already over.");
         }
 
-        int rent = calculateRent(pr, pl, g);
-        pl.payDebt(rent, this);
-        receiveMoney(rent);
+        int rent = property.calculateRent(this, game);
+        player.payDebt(rent, this);
     }
 
-    private int calculateRent(Property pr, Player pl, Game g) {
-        return pr.calculateRent(this, g);
+    private boolean checkForOwnership(Property property) {
+        return properties.containsKey(property);
     }
 
-    private boolean checkForOwnership(Property p) {
-        return properties.containsKey(p);
+    private boolean checkIfDebtorIsOnYourProperty(Property property, Player player) {
+        return property.getName().equals(player.currentTile.getName());
     }
 
-    private boolean checkIfDebtorIsOnYourProperty(Property pr, Player pl) {
-        return pr.getName().equals(pl.currentTile.getName());
-    }
-
-    private boolean checkForNextRollDice(Game g, Property p){
-        Move move = g.getTurns().get(g.getTurns().size() - 1).getMoves().get(0);
+    private boolean hasPlayerAlreadyRolled(Game game, Property property){
+        Move move = game.getTurns().get(game.getTurns().size() - 1).getMoves().get(0);
         String descriptionLastRoll = move.getDescription();
         String propertyTitle = move.getTitle();
+
         boolean checkDescription = !descriptionLastRoll.equals("should pay rent");
-        boolean checkTitle = !propertyTitle.equals(p.getName());
+        boolean checkTitle = !propertyTitle.equals(property.getName());
+
         return checkDescription && checkTitle;
     }
 
@@ -217,12 +225,12 @@ public class Player {
         if (!street.checkStreetHouseDifference(service, this, true)) {
             throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
                     "not be higher than one.");
+        }
+
+        if (properties.get(street).getHouseCount() < MAX_HOUSE_COUNT) {
+            return buyHouse(game, street);
         } else {
-            if (properties.get(street).getHouseCount() < MAX_HOUSE_COUNT) {
-                return buyHouse(game, street);
-            } else {
-                return buyHotel(game, street);
-            }
+            return buyHotel(game, street);
         }
     }
 
@@ -323,6 +331,7 @@ public class Player {
         if(!jailed){
             throw new IllegalMonopolyActionException("You're not in jail. You can't use this endpoint.");
         }
+
         getOutOfJailCards--;
         jailed = false;
     }
@@ -331,13 +340,13 @@ public class Player {
         if(!jailed){
             throw new IllegalMonopolyActionException("You're not in jail. You can't use this endpoint.");
         }
+
         boolean successfulPayment = payMoney(50);
         if (!successfulPayment){
             throw new IllegalMonopolyActionException("You don't have enough money to go out of jail.");
         }
-        else {
-            jailed = false;
-        }
+
+        jailed = false;
     }
 
     @Override
