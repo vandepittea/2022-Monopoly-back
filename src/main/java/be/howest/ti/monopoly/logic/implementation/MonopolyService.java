@@ -86,27 +86,27 @@ public class MonopolyService extends ServiceAdapter {
 
     @Override
     public void joinGame(String gameId, String playerName) {
-        Game g = getGame(gameId);
+        Game game = getGame(gameId);
 
-        g.joinGame(playerName);
+        game.joinGame(playerName);
     }
 
     @Override
     public String buyProperty(String gameId, String playerName, String propertyName) {
-        Game g = getGame(gameId);
-        Player pl = g.getPlayer(playerName);
-        Tile t = getTile(propertyName);
-        Property pr = (Property) t;
+        Game game = getGame(gameId);
+        Player player = game.getPlayer(playerName);
+        Tile tile = getTile(propertyName);
+        Property property = (Property) tile;
 
-        if (playerName.equals(g.getCurrentPlayer()) && t.getName().equals(g.getDirectSale())) {
-            pl.buyProperty(pr);
-            g.handlePropertySale();
-            return pr.getName();
-        } else {
+        if (!playerName.equals(game.getCurrentPlayer()) || !tile.getName().equals(game.getDirectSale())) {
             throw new IllegalMonopolyActionException("You tried to do something which is against the rules of " +
                     "Monopoly. In this case, it is most likely not your place to buy this property and/or you are " +
                     "trying to buy the wrong property.");
         }
+
+        player.buyProperty(property);
+        game.handlePropertySale();
+        return property.getName();
     }
 
     @Override
@@ -118,7 +118,6 @@ public class MonopolyService extends ServiceAdapter {
         if (!player.getName().equals(game.getCurrentPlayer())) {
             throw new IllegalMonopolyActionException("Only the current player can choose not to buy a property");
         }
-
         if (!property.getName().equals(game.getDirectSale())) {
             throw new IllegalMonopolyActionException("You can only choose not to buy the property you're standing on");
         }
@@ -134,6 +133,7 @@ public class MonopolyService extends ServiceAdapter {
                 return game;
             }
         }
+
         throw new MonopolyResourceNotFoundException("The game you are looking for does not exist. Double check the ID.");
     }
 
@@ -146,35 +146,35 @@ public class MonopolyService extends ServiceAdapter {
 
     @Override
     public Game declareBankruptcy(String gameId, String playerName) {
-        Game g = getGame(gameId);
-        g.declareBankruptcy(playerName);
-        return g;
+        Game game = getGame(gameId);
+        game.declareBankruptcy(playerName);
+        return game;
     }
 
     @Override
     public boolean collectDebt(String gameId, String playerName, String propertyName, String debtorName) {
-        Game g = getGame(gameId);
-        Player pl = g.getPlayer(playerName);
-        Player d = g.getPlayer(debtorName);
-        Property pr = (Property) getTile(propertyName);
-        pl.collectDebt(pr, d, g);
+        Game game = getGame(gameId);
+        Player player = game.getPlayer(playerName);
+        Player debtor = game.getPlayer(debtorName);
+        Property property = (Property) getTile(propertyName);
+        player.collectDebt(property, debtor, game);
         return true;
     }
 
     @Override
     public int buyHouse(String gameId, String playerName, String propertyName) {
-        Game g = getGame(gameId);
-        Player p = g.getPlayer(playerName);
-        Street s = (Street) getTile(propertyName);
-        return p.buyHouseOrHotel(this, g, s);
+        Game game = getGame(gameId);
+        Player player = game.getPlayer(playerName);
+        Street street = (Street) getTile(propertyName);
+        return player.buyHouseOrHotel(this, game, street);
     }
 
     @Override
     public int sellHouse(String gameId, String playerName, String propertyName) {
-        Game g = getGame(gameId);
-        Player p = g.getPlayer(playerName);
-        Street s = (Street) getTile(propertyName);
-        return p.sellHouseOrHotel(this, g, s);
+        Game game = getGame(gameId);
+        Player player = game.getPlayer(playerName);
+        Street street = (Street) getTile(propertyName);
+        return player.sellHouseOrHotel(this, game, street);
     }
 
     @Override
@@ -189,15 +189,15 @@ public class MonopolyService extends ServiceAdapter {
 
     @Override
     public void getOutOfJailFree(String gameId, String playerName){
-        Game g = getGame(gameId);
-        Player p = g.getPlayer(playerName);
-        p.getOutOfJailFree();
+        Game game = getGame(gameId);
+        Player player = game.getPlayer(playerName);
+        player.getOutOfJailFree();
     }
 
     @Override
     public void getOutOfJailFine(String gameId, String playerName) {
-        Game g = getGame(gameId);
-        Player p = g.getPlayer(playerName);
-        p.getOutOfJailFine();
+        Game game = getGame(gameId);
+        Player player = game.getPlayer(playerName);
+        player.getOutOfJailFine();
     }
 }
