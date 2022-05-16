@@ -4,6 +4,7 @@ import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.implementation.tile.Railroad;
 import be.howest.ti.monopoly.logic.implementation.tile.Street;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
+import be.howest.ti.monopoly.web.views.PropertyView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -70,7 +71,7 @@ class PlayerTest {
     @Test
     void collectDebtDebtorNotOnProperty(){
         MonopolyService service = new MonopolyService();
-        Game g = service.createGame(2, "group17");
+        Game game = service.createGame(2, "group17");
         Street s = new Street(1, "Peach's Garden", 60, 30, 2,
                 "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
         Street s2 = new Street(16, "Sirena Beach", 180, 90, 3, "ORANGE",
@@ -78,9 +79,9 @@ class PlayerTest {
         Player p = new Player("Bob", null);
         Player p2 = new Player("Jan", s2);
 
-        p.getProperties().add(s);
+        p.getProperties().add(new PropertyView(s));
 
-        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.collectDebt(s, p2, g));
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.collectDebt(s, p2, game));
     }
 
     @Test
@@ -92,7 +93,7 @@ class PlayerTest {
         Player p = new Player("Bob", null);
         Player p2 = new Player("Jan", s);
 
-        p.getProperties().add(s);
+        p.getProperties().add(new PropertyView(s));
 
         Turn turn = new Turn(p2);
         Turn turn2 = new Turn(p);
@@ -113,7 +114,7 @@ class PlayerTest {
         Player p = new Player("Bob", null);
         Player p2 = new Player("Jan", s);
 
-        p.getProperties().add(s);
+        p.getProperties().add(new PropertyView(s));
 
         Turn turn = new Turn(p2);
         turn.addMove(s.getName(), "should pay rent");
@@ -134,7 +135,7 @@ class PlayerTest {
         Player p = new Player("Bob", null);
         Player p2 = new Player("Jan", s);
 
-        p.getProperties().add(s);
+        p.getProperties().add(new PropertyView(s));
 
         Turn turn = new Turn(p2);
         turn.addMove(s.getName(), "should pay rent");
@@ -222,7 +223,7 @@ class PlayerTest {
         p.buyProperty(s2);
 
         assertEquals(1, p.buyHouseOrHotel(service, g, s));
-        assertEquals(1, g.receiveHouseCount(s));
+        assertEquals(1, p.getPropertyView(s).getHouseCount());
         assertEquals(1500 - 60 - 60 - 50, p.getMoney());
         assertEquals(32 - 1, g.getAvailableHouses());
     }
@@ -269,7 +270,7 @@ class PlayerTest {
         p.buyHouseOrHotel(service, g, s);
         p.buyHouseOrHotel(service, g, s2);
         assertEquals(1, p.buyHouseOrHotel(service, g, s));
-        assertEquals(1, g.receiveHotelCount(s));
+        assertEquals(1, p.getPropertyView(s).getHotelCount());
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> p.buyHouseOrHotel(service, g, s));
     }
@@ -294,8 +295,8 @@ class PlayerTest {
         p.buyHouseOrHotel(service, g, s2);
 
         assertEquals(1, p.buyHouseOrHotel(service, g, s));
-        assertEquals(0, g.receiveHouseCount(s));
-        assertEquals(1, g.receiveHotelCount(s));
+        assertEquals(0, p.getPropertyView(s).getHouseCount());
+        assertEquals(1, p.getPropertyView(s).getHotelCount());
         assertEquals(1500 - 60 - 60 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50, p.getMoney());
         assertEquals(12 - 1, g.getAvailableHotels());
     }
@@ -348,7 +349,7 @@ class PlayerTest {
         p.sellHouseOrHotel(service, g, s);
         p.buyHouseOrHotel(service, g, s);
 
-        assertEquals(g.receiveHouseCount(s), 1);
+        assertEquals(1, p.getPropertyView(s).getHouseCount());
     }
 
     @Test
@@ -447,8 +448,8 @@ class PlayerTest {
 
 
         assertEquals(0, p.sellHouseOrHotel(service, g, s));
-        assertEquals(4, g.receiveHouseCount(s));
-        assertEquals(0, g.receiveHotelCount(s));
+        assertEquals(4, p.getPropertyView(s).getHouseCount());
+        assertEquals(0, p.getPropertyView(s).getHotelCount());
         assertEquals(1500 - 60 - 60 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50 - 50 + 25, p.getMoney());
         assertEquals(11 + 1, g.getAvailableHotels());
 

@@ -3,6 +3,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
 import be.howest.ti.monopoly.logic.implementation.Player;
+import be.howest.ti.monopoly.web.views.PropertyView;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +19,7 @@ class UtilityTest {
 
         g.joinGame("Bob");
         g.joinGame("Jan");
-        p.getProperties().add(u);
+        p.getProperties().add(new PropertyView(u));
         g.rollDice("Bob");
 
         Integer[] roll = g.getLastDiceRoll();
@@ -39,8 +40,8 @@ class UtilityTest {
 
         g.joinGame("Bob");
         g.joinGame("Jan");
-        p.getProperties().add(u);
-        p.getProperties().add(u2);
+        p.getProperties().add(new PropertyView(u));
+        p.getProperties().add(new PropertyView(u2));
         g.rollDice("Bob");
 
         Integer[] roll = g.getLastDiceRoll();

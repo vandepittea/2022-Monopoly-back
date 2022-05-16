@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
+import be.howest.ti.monopoly.logic.implementation.Player;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class StreetTest {
     MonopolyService service = new MonopolyService();
     Game g = service.createGame(2, "group17");
+    Player p = new Player("Thomas", null);
 
     @Test
     void calculateRentNoHouses(){
@@ -23,9 +25,9 @@ class StreetTest {
         Street s = new Street(1, "Peach's Garden", 60, 30, 2,
                 "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
 
-        s.buyHouse(g);
-        s.buyHouse(g);
-        s.buyHouse(g);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s);
 
         assertEquals(90, s.calculateRent(null, g));
     }
@@ -35,11 +37,11 @@ class StreetTest {
         Street s = new Street(1, "Peach's Garden", 60, 30, 2,
                 "PURPLE", new Integer[]{10, 30, 90, 160, 250}, 50, "PURPLE", 2);
 
-        s.buyHouse(g);
-        s.buyHouse(g);
-        s.buyHouse(g);
-        s.buyHouse(g);
-        s.buyHotel(g);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s);
+        p.buyHouseOrHotel(service, g, s);
 
         assertEquals(250, s.calculateRent(null, g));
     }
