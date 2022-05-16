@@ -1,8 +1,8 @@
 package be.howest.ti.monopoly.logic.implementation.turn;
 
 public class Move {
-    private String title;
-    private String description;
+    private final String title;
+    private final String description;
 
     public Move(String title, String description) {
         this.title = title;
