@@ -8,7 +8,6 @@ import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.logic.implementation.enums.TurnType;
 import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
 
