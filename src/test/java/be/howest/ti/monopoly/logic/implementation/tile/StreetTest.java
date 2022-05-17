@@ -3,59 +3,54 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
 import be.howest.ti.monopoly.logic.implementation.Player;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class StreetTest {
     MonopolyService service = new MonopolyService();
-    Game g = service.createGame(2, "group17");
-    Player p = new Player("Thomas", null);
+    Game game = service.createGame(2, "group17");
+    Player player = new Player("Thomas", null);
+
+    Street street1 = (Street) service.getTile(1);
+    Street street2 = (Street) service.getTile(3);
 
     @Test
     void calculateRentNoHouses(){
-        Street s = (Street) service.getTile(1);
-        p.buyProperty(s);
+        player.buyProperty(street1);
 
-        assertEquals(2, s.calculateRent(p, g));
+        assertEquals(2, street1.calculateRent(player, game));
     }
 
     @Test
     void calculateRentThreeHouses(){
-        Street s = (Street) service.getTile(1);
-        Street s2 = (Street) service.getTile(3);
+        player.buyProperty(street1);
+        player.buyProperty(street2);
 
-        p.buyProperty(s);
-        p.buyProperty(s2);
+        player.buyHouseOrHotel(service, game, street1);
+        player.buyHouseOrHotel(service, game, street2);
+        player.buyHouseOrHotel(service, game, street1);
+        player.buyHouseOrHotel(service, game, street2);
+        player.buyHouseOrHotel(service, game, street1);
 
-        p.buyHouseOrHotel(service, g, s);
-        p.buyHouseOrHotel(service, g, s2);
-        p.buyHouseOrHotel(service, g, s);
-        p.buyHouseOrHotel(service, g, s2);
-        p.buyHouseOrHotel(service, g, s);
-
-        assertEquals(90, s.calculateRent(p, g));
+        assertEquals(90, street1.calculateRent(player, game));
     }
 
     @Test
     void calculateRentOneHotel(){
-        Street s = (Street) service.getTile(1);
-        Street s2 = (Street) service.getTile(3);
+        player.buyProperty(street1);
+        player.buyProperty(street2);
 
-        p.buyProperty(s);
-        p.buyProperty(s2);
+        player.buyHouseOrHotel(service, game, street1);
+        player.buyHouseOrHotel(service, game, street2);
+        player.buyHouseOrHotel(service, game, street1);
+        player.buyHouseOrHotel(service, game, street2);
+        player.buyHouseOrHotel(service, game, street1);
+        player.buyHouseOrHotel(service, game, street2);
+        player.buyHouseOrHotel(service, game, street1);
+        player.buyHouseOrHotel(service, game, street2);
+        player.buyHouseOrHotel(service, game, street1);
 
-        p.buyHouseOrHotel(service, g, s);
-        p.buyHouseOrHotel(service, g, s2);
-        p.buyHouseOrHotel(service, g, s);
-        p.buyHouseOrHotel(service, g, s2);
-        p.buyHouseOrHotel(service, g, s);
-        p.buyHouseOrHotel(service, g, s2);
-        p.buyHouseOrHotel(service, g, s);
-        p.buyHouseOrHotel(service, g, s2);
-        p.buyHouseOrHotel(service, g, s);
-
-        assertEquals(250, s.calculateRent(p, g));
+        assertEquals(250, street1.calculateRent(player, game));
     }
 }
