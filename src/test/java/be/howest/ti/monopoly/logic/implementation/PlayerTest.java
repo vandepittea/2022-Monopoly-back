@@ -395,11 +395,22 @@ class PlayerTest {
     }
 
     @Test
-    void payTaxes() {
+    void payTaxesEstimate() {
         assertEquals(1500, player1.getMoney());
         player1.payTaxes();
         assertEquals(1300, player1.getMoney());
+    }
 
-        //TODO: enlarge test after implementing switching of taxes
+    @Test
+    void payTaxesCompute() {
+        player2.useComputeTax();
+        player2.buyProperty(peachGarden);
+        player2.buyProperty(yoshiValley);
+        player2.buyHouseOrHotel(service, game, peachGarden);
+
+        int money = 1500 - 60 - 60 - 50;
+        assertEquals(money, player2.getMoney());
+        player2.payTaxes();
+        assertEquals(money - ((money + 60 + 60 + 50) / 10), player2.getMoney());
     }
 }
