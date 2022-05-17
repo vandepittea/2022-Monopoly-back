@@ -6,48 +6,51 @@ import be.howest.ti.monopoly.logic.implementation.Player;
 import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
 import be.howest.ti.monopoly.logic.implementation.turn.DiceRoll;
 import be.howest.ti.monopoly.web.views.PropertyView;
-import jdk.jshell.execution.Util;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class UtilityTest {
+    MonopolyService service;
+    Game game;
+    Player player;
+    Utility utility1;
+    Utility utility2;
+
+    @BeforeEach
+    void init() {
+        service = new MonopolyService();
+        game = service.createGame(2, "group17");
+        player = new Player("Bob", null);
+        utility1 = (Utility) service.getTile(12);
+        utility2 = (Utility) service.getTile(28);
+    }
+
     @Test
     void calculateRentOneUtility(){
-        MonopolyService s = new MonopolyService();
-        Game g = s.createGame(2, "group17");
-        Player p = new Player("Bob", null);
-        Utility u = new Utility(12, "Electric Koopa Farm", 150, 75, 2,
-                StreetColor.WHITE, "4 or 10 times the dice roll");
+        game.joinGame("Bob");
+        game.joinGame("Jan");
+        player.getProperties().add(new PropertyView(utility1));
+        game.rollDice("Bob");
 
-        g.joinGame("Bob");
-        g.joinGame("Jan");
-        p.getProperties().add(new PropertyView(u));
-        g.rollDice("Bob");
-
-        DiceRoll roll = g.getLastDiceRoll();
+        DiceRoll roll = game.getLastDiceRoll();
         int totalDiceRoll = roll.getValue();
 
-        assertEquals(totalDiceRoll * 4, u.calculateRent(p, g));
+        assertEquals(totalDiceRoll * 4, utility1.calculateRent(player, game));
     }
 
     @Test
     void calculateRentTwoUtilities(){
-        MonopolyService s = new MonopolyService();
-        Game g = s.createGame(2, "group17");
-        Player p = new Player("Bob", null);
-        Utility u = (Utility) s.getTile(12);
-        Utility u2 = (Utility) s.getTile(28);
+        game.joinGame("Bob");
+        game.joinGame("Jan");
+        player.buyProperty(utility1);
+        player.buyProperty(utility2);
+        game.rollDice("Bob");
 
-        g.joinGame("Bob");
-        g.joinGame("Jan");
-        p.buyProperty(u);
-        p.buyProperty(u2);
-        g.rollDice("Bob");
-
-        DiceRoll roll = g.getLastDiceRoll();
+        DiceRoll roll = game.getLastDiceRoll();
         int totalDiceRoll = roll.getValue();
 
-        assertEquals(totalDiceRoll * 10, u.calculateRent(p, g));
+        assertEquals(totalDiceRoll * 10, utility1.calculateRent(player, game));
     }
 }
