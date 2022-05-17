@@ -291,6 +291,8 @@ public class Game {
 
     private void decideNextAction(Tile newTile, Turn turn) {
         switch (newTile.getType()) {
+            case UTILITY:
+            case RAILROAD:
             case STREET:
                 executeStreetFunctionality(newTile, turn);
                 break;
@@ -301,6 +303,10 @@ public class Game {
             case CHANCE:
                 CardExecutingTile execTile = (CardExecutingTile) newTile;
                 execTile.execute(service, this, turn);
+                break;
+            case TAX_INCOME:
+                break;
+            case LUXURY_TAX:
                 break;
             default:
                 turn.addMove(newTile.getName(), "");
