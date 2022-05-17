@@ -6,12 +6,15 @@ import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Move;
 import be.howest.ti.monopoly.web.views.PropertyView;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.logic.implementation.tile.Street;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.*;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 public class Player {
     public static final int MAX_HOUSE_COUNT = 4;
     public static final int MAX_HOTEL_COUNT = 1;

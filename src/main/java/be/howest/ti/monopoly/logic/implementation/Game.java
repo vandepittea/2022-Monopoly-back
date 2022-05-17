@@ -7,6 +7,7 @@ import be.howest.ti.monopoly.logic.implementation.turn.DiceRoll;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.logic.implementation.enums.TurnType;
 import be.howest.ti.monopoly.web.views.PropertyView;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
@@ -119,15 +120,8 @@ public class Game {
         return ended;
     }
 
-    public String getCurrentPlayer() {
-        if (currentPlayer == null) {
-            return null;
-        }
-        return currentPlayer.getName();
-    }
-
-    @JsonIgnore
-    public Player getCurrentplayerObject() {
+    @JsonIdentityReference(alwaysAsId = true)
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
