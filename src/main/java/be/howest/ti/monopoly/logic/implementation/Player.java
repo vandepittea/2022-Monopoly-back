@@ -165,6 +165,35 @@ public class Player {
         currentTile = newTile;
     }
 
+    public void payTaxes() {
+        if (taxSystem == Taxsystem.ESTIMATE) {
+            payDebt(200, null);
+        } else {
+            int assetWorth = calculateAssetWorth();
+            payDebt(assetWorth, null);
+        }
+    }
+
+    private int calculateAssetWorth() {
+        int assetWorth = money;
+
+        for (Map.Entry<Property, PropertyView> propertyPair : properties.entrySet()) {
+            Property property = propertyPair.getKey();
+            PropertyView view = propertyPair.getValue();
+
+            assetWorth += property.getCost();
+
+            if (property.getType() == TileType.STREET) {
+                Street street = (Street) property;
+                assetWorth += view.getHouseCount() * street.getHousePrice();
+                assetWorth += view.getHotelCount() * street.getHousePrice();
+            }
+        }
+
+        assetWorth /= 10;
+        return assetWorth;
+    }
+
     public void turnOverAssetsTo(Player player) {
         for (Property property : properties.keySet()) {
             player.addProperty(property);

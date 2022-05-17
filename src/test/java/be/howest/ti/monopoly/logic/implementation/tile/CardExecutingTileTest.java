@@ -74,7 +74,7 @@ class CardExecutingTileTest {
                 case RETURN_3:
                     Tile returnedTile = service.getTile(4);
                     assertEquals(returnedTile.getName(), currentplayerObject.getCurrentTile().getName());
-                    assertEquals(1330, currentplayerObject.getMoney());
+                    assertEquals(1130, currentplayerObject.getMoney());
                     break;
                 case GO_JAIL:
                     assertEquals("Jail", currentplayerObject.getCurrentTile().getName());
