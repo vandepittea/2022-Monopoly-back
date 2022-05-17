@@ -28,7 +28,7 @@ public class Player {
     private int money;
     private int getOutOfJailCards;
 
-    private final Taxsystem taxSystem;
+    private Taxsystem taxSystem;
 
     private Tile currentTile;
     private Player creditor;
@@ -377,6 +377,14 @@ public class Player {
         }
 
         jailed = false;
+    }
+
+    public void useComputeTax() {
+        taxSystem = Taxsystem.COMPUTE;
+    }
+
+    public void useEstimateTax() {
+        taxSystem = Taxsystem.ESTIMATE;
     }
 
     @Override

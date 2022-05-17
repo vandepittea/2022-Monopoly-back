@@ -28,4 +28,7 @@ public interface IService {
     int sellHotel(String gameId, String playerName, String propertyName);
     void getOutOfJailFree(String gameId, String playerName);
     void getOutOfJailFine(String gameId, String playerName);
+    void useComputeTax(String gameId, String playerName);
+
+    void useEstimateTax(String gameId, String playerName);
 }
