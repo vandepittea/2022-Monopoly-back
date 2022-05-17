@@ -245,7 +245,7 @@ public class CardExecutingTile extends Tile {
 
         Set<PropertyView> properties = game.getCurrentplayerObject().getProperties();
         for (PropertyView propertyView : properties) {
-            if (propertyView.getPropertyObject().type == TileType.STREET){
+            if (propertyView.getProperty().type == TileType.STREET){
                 cost += propertyView.getHouseCount() * houseRepairCost;
                 cost += propertyView.getHotelCount() * hotelRepairCost;
             }

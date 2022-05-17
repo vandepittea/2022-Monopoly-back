@@ -44,7 +44,7 @@ public class Utility extends Property {
         int amountOfUtilities = 0;
 
         for(PropertyView propertyView: player.getProperties()){
-            if(propertyView.getPropertyObject().getType().equals(TileType.UTILITY)){
+            if(propertyView.getProperty().getType().equals(TileType.UTILITY)){
                 amountOfUtilities++;
             }
         }

@@ -341,7 +341,7 @@ public class Game {
         for (Player player : players) {
             if (!player.getName().equals(currentPlayer.getName())) {
                 for (PropertyView property : player.getProperties()) {
-                    if (property.getPropertyObject().getName().equals(newTile.getName())) {
+                    if (property.getProperty().getName().equals(newTile.getName())) {
                         return true;
                     }
                 }

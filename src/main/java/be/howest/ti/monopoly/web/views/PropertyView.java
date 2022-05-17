@@ -1,30 +1,28 @@
 package be.howest.ti.monopoly.web.views;
 
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
-import be.howest.ti.monopoly.logic.implementation.tile.Street;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 import java.util.Objects;
 
 public class PropertyView {
-    private Property property;
+    private final boolean mortgage;
+    private final Property property;
+
     private int houseCount;
     private int hotelCount;
-    private boolean mortgage;
 
     public PropertyView(Property property) {
-        this.property = property;
+        this.mortgage = false;
+
         this.houseCount = 0;
         this.hotelCount = 0;
-        this.mortgage = false;
+
+        this.property = property;
     }
 
-    public String getProperty() {
-        return property.getName();
-    }
-
-    @JsonIgnore
-    public Property getPropertyObject() {
+    @JsonIdentityReference(alwaysAsId = true)
+    public Property getProperty() {
         return property;
     }
 
