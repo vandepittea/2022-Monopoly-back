@@ -28,7 +28,7 @@ public class Player {
     private int money;
     private int getOutOfJailCards;
 
-    private Taxsystem taxSystem;
+    private final Taxsystem taxSystem;
 
     private Tile currentTile;
     private Player creditor;
@@ -316,10 +316,9 @@ public class Player {
         for(Tile t: service.getTiles()){
             if(t.getType() == TileType.STREET){
                 Street streetOfGroup = (Street) t;
-                if (streetOfGroup.getStreetColor().equals(streetToBuildHouseOn.getStreetColor())) {
-                    if (!checkForOwnership(streetOfGroup)) {
-                        return false;
-                    }
+                if (streetOfGroup.getStreetColor().equals(streetToBuildHouseOn.getStreetColor()) &&
+                        !checkForOwnership(streetOfGroup)) {
+                    return false;
                 }
             }
         }
