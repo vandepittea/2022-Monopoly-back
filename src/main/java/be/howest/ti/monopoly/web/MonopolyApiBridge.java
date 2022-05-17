@@ -168,9 +168,13 @@ public class MonopolyApiBridge {
 
     private void getGames(RoutingContext ctx) {
         Request request = Request.from(ctx);
-        Boolean isStarted = request.isGameStarted();
         Integer numberOfPlayers = request.getNumberOfPlayersOfPath();
         String prefix = request.getPrefixOfPath();
+
+        Boolean isStarted = null;
+        if (request.hasPathStartedParameter()) {
+            isStarted = request.getGameStartedPathParameter();
+        }
 
         Response.sendJsonResponse(ctx, 200, service.getGames(isStarted, numberOfPlayers, prefix));
     }

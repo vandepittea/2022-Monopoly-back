@@ -62,15 +62,19 @@ public class Request {
     }
 
     public int getTilePosition() {
-        return params.pathParameter("tileId").getInteger();
+        return getTileIdFromPath().getInteger();
     }
 
     public boolean hasTilePosition() {
-        return params.pathParameter("tileId").isNumber();
+        return getTileIdFromPath().isNumber();
     }
 
     public String getTileName() {
-        return params.pathParameter("tileId").getString();
+        return getTileIdFromPath().getString();
+    }
+
+    private RequestParameter getTileIdFromPath() {
+        return getIdFromPath("tileId");
     }
 
     public int getNumberOfPlayersOfBody() {
@@ -78,7 +82,7 @@ public class Request {
     }
 
     public Integer getNumberOfPlayersOfPath(){
-        RequestParameter parameter = params.pathParameter("numberOfPlayers");
+        RequestParameter parameter = getIdFromPath("numberOfPlayers");
         if (parameter == null) {
             return null;
         }
@@ -90,7 +94,7 @@ public class Request {
     }
 
     public String getPrefixOfPath(){
-        RequestParameter parameter = params.pathParameter("prefix");
+        RequestParameter parameter = getIdFromPath("prefix");
         if (parameter == null) {
             return null;
         }
@@ -103,26 +107,32 @@ public class Request {
     }
 
     public String getPlayerNameOfPath() {
-        return params.pathParameter("playerName").getString();
+        return getIdFromPath("playerName").getString();
     }
 
     public String getGameId() {
-        return params.pathParameter("gameId").getString();
+        return getIdFromPath("gameId").getString();
     }
 
-    public Boolean isGameStarted() {
-        RequestParameter parameter = params.pathParameter("started");
-        if (parameter == null) {
-            return null;
-        }
+    public boolean hasPathStartedParameter() {
+        RequestParameter parameter = getIdFromPath("started");
+        return parameter != null;
+    }
+
+    public Boolean getGameStartedPathParameter() {
+        RequestParameter parameter = getIdFromPath("started");
         return parameter.getBoolean();
     }
 
     public String getPropertyName() {
-        return params.pathParameter("propertyName").getString();
+        return getIdFromPath("propertyName").getString();
     }
 
     public String getDebtorName() {
-        return params.pathParameter("debtorName").getString();
+        return getIdFromPath("debtorName").getString();
+    }
+
+    private RequestParameter getIdFromPath(String id) {
+        return params.pathParameter(id);
     }
 }
