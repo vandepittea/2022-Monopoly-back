@@ -305,8 +305,9 @@ public class Game {
                 execTile.execute(service, this, turn);
                 break;
             case TAX_INCOME:
-                break;
             case LUXURY_TAX:
+                turn.addMove(newTile.getName(), "Pay taxes");
+                currentPlayer.payTaxes();
                 break;
             default:
                 turn.addMove(newTile.getName(), "");
