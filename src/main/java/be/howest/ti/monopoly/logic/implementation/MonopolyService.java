@@ -12,7 +12,7 @@ import java.util.*;
 public class MonopolyService extends ServiceAdapter {
     private final List<Tile> tiles;
 
-    private Set<Game> games;
+    private final Set<Game> games;
 
     public MonopolyService() {
         games = new HashSet<>();
@@ -65,12 +65,11 @@ public class MonopolyService extends ServiceAdapter {
         List<Game> gamesList = new ArrayList<>();
 
         games.forEach(game -> {
-            if ((started == null) || (started == game.isStarted())) {
-                if ((numberOfPlayers == null) || (numberOfPlayers == game.getNumberOfPlayers())) {
-                    String gamePrefix = game.getId().split("_")[0];
-                    if (gamePrefix.equals(prefix)) {
-                        gamesList.add(game);
-                    }
+            if (((started == null) || (started == game.isStarted())) &&
+                    ((numberOfPlayers == null) || (numberOfPlayers == game.getNumberOfPlayers()))) {
+                String gamePrefix = game.getId().split("_")[0];
+                if (gamePrefix.equals(prefix)) {
+                    gamesList.add(game);
                 }
             }
         });
