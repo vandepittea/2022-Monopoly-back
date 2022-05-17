@@ -61,13 +61,13 @@ public class Street extends Property {
         return true;
     }
 
-    private boolean checkStreetColor(StreetColor s, StreetColor StreetColor) {
-        return s.equals(StreetColor);
+    private boolean checkStreetColor(StreetColor streetColor1, StreetColor streetColor2) {
+        return streetColor1.equals(streetColor2);
     }
 
-    private boolean isBigDifference(Player player, int decideBuyOrSell, Street s) {
-        int housesStreet1 = player.getPropertyView(s).getHouseCount() +
-                (player.getPropertyView(s).getHotelCount() * NUMBER_OF_HOUSES_IN_ONE_HOTEL);
+    private boolean isBigDifference(Player player, int decideBuyOrSell, Street street) {
+        int housesStreet1 = player.getPropertyView(street).getHouseCount() +
+                (player.getPropertyView(street).getHotelCount() * NUMBER_OF_HOUSES_IN_ONE_HOTEL);
         int housesStreet2 = player.getPropertyView(this).getHouseCount() +
                 (player.getPropertyView(this).getHotelCount() * NUMBER_OF_HOUSES_IN_ONE_HOTEL);
         int difference = Math.abs(housesStreet1 - (housesStreet2 + decideBuyOrSell));
