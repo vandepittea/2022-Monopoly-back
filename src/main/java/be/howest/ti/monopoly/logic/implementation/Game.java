@@ -263,7 +263,7 @@ public class Game {
     }
 
     public void movePlayer(boolean passGo, Turn turn, Tile newTile) {
-        Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
+        Tile currentPlayerTile = currentPlayer.getCurrentTile();
 
         if (passGo && (newTile.getPosition() < currentPlayerTile.getPosition())) {
             currentPlayer.receiveMoney(200);
@@ -275,7 +275,7 @@ public class Game {
 
     private void movePlayer(Turn turn, DiceRoll roll) {
         List<Tile> tiles = service.getTiles();
-        Tile currentPlayerTile = service.getTile(Tile.decideNameAsPathParameter(currentPlayer.getCurrentTile()));
+        Tile currentPlayerTile = currentPlayer.getCurrentTile();
         int nextTileIdx = currentPlayerTile.getPosition() + roll.getDie1() + roll.getDie2();
 
         if (nextTileIdx >= tiles.size()) {

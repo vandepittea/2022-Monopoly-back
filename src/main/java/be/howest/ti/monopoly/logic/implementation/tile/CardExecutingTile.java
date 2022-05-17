@@ -256,7 +256,7 @@ public class CardExecutingTile extends Tile {
     }
 
     private void returnThreeTiles(MonopolyService service, Game game, Turn turn) {
-        int currentTileIdx = game.getCurrentPlayer().getCurrentTileObject().getPosition();
+        int currentTileIdx = game.getCurrentPlayer().getCurrentTile().getPosition();
         currentTileIdx -= 3;
 
         if (currentTileIdx < 0) {

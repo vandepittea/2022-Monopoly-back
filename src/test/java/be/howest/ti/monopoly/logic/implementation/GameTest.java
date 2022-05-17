@@ -175,9 +175,9 @@ class GameTest {
         game.joinGame("Jonas");
         game.joinGame("Thomas");
 
-        assertEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile());
+        assertEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile().getName());
         assertEquals(game, service.rollDice(game.getId(), "Jonas"));
-        assertNotEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile());
+        assertNotEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile().getName());
 
         DiceRoll lastDiceRoll = game.getLastDiceRoll();
         if ((game.getDirectSale() == null) && !lastDiceRoll.isDoubleRoll()) {

@@ -7,6 +7,7 @@ import be.howest.ti.monopoly.logic.implementation.tile.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Move;
 import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.logic.implementation.tile.Street;
@@ -54,12 +55,8 @@ public class Player {
         return name;
     }
 
-    public String getCurrentTile() {
-        return currentTile.getName();
-    }
-
-    @JsonIgnore
-    public Tile getCurrentTileObject() {
+    @JsonIdentityReference(alwaysAsId = true)
+    public Tile getCurrentTile() {
         return currentTile;
     }
 
