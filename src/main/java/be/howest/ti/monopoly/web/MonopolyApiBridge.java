@@ -221,7 +221,17 @@ public class MonopolyApiBridge {
     }
 
     private void useComputeTax(RoutingContext ctx) {
-        throw new NotYetImplementedException("useComputeTax");
+        Request request = Request.from(ctx);
+
+        String gameId = request.getGameId();
+        String playerName = request.getPlayerNameOfPath();
+
+        if (!request.isAuthorized(gameId, playerName)) {
+            throw new ForbiddenAccessException(PROTECTED_ENDPOINT_MESSAGE);
+        }
+
+        service.useComputeTax(gameId, playerName);
+        Response.sendJsonResponse(ctx, 200, new JsonObject().put(EMPTY, EMPTY));
     }
 
     private void rollDice(RoutingContext ctx) {

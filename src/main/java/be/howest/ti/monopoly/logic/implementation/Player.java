@@ -28,7 +28,7 @@ public class Player {
     private int money;
     private int getOutOfJailCards;
 
-    private final Taxsystem taxSystem;
+    private Taxsystem taxSystem;
 
     private Tile currentTile;
     private Player creditor;
@@ -361,5 +361,9 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    public void useComputeTax() {
+        taxSystem = Taxsystem.COMPUTE;
     }
 }

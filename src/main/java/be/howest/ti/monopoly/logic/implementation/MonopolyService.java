@@ -200,4 +200,11 @@ public class MonopolyService extends ServiceAdapter {
         Player player = game.getPlayer(playerName);
         player.getOutOfJailFine();
     }
+
+    @Override
+    public void useComputeTax(String gameId, String playerName) {
+        Game game = getGame(gameId);
+        Player player = game.getPlayer(playerName);
+        player.useComputeTax();
+    }
 }
