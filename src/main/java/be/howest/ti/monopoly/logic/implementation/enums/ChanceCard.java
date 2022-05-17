@@ -1,6 +1,6 @@
-package be.howest.ti.monopoly.logic.implementation;
+package be.howest.ti.monopoly.logic.implementation.enums;
 
-public enum ChanceCards {
+public enum ChanceCard {
     ADV_BOWSER_CASTLE,
     ADV_GO,
     ADV_SHERBET,

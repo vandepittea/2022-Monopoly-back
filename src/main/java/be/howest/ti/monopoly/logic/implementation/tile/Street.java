@@ -3,86 +3,103 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
 import be.howest.ti.monopoly.logic.implementation.Player;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
+import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 
-import be.howest.ti.monopoly.logic.implementation.Player;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Street extends Property {
-    private Integer[] rentOfHouses;
-    private final int housePrice;
-    private final String streetColor;
-    private final int rent;
+    public static final int NUMBER_OF_HOUSES_IN_ONE_HOTEL = 4;
 
-    public Street(int position, String name, int cost, int mortgage, int groupSize, String color,
-                  Integer[] rentOfHouses, int housePrice, String streetColor, int rent) {
+    private final int rent;
+    private final int housePrice;
+    private final StreetColor streetColor;
+    private final Integer[] rentOfHouses;
+
+    //Sonarlint error ignored as false positive: approved by Mr.Casier
+    public Street(int position, String name, int cost, int mortgage, int groupSize, StreetColor color,
+                  Integer[] rentOfHouses, int housePrice, int rent) {
         super(position, name, cost, mortgage, groupSize, color, TileType.STREET);
-        this.housePrice = housePrice;
-        this.streetColor = streetColor;
-        this.rentOfHouses = rentOfHouses;
+
         this.rent = rent;
+        this.housePrice = housePrice;
+
+        this.streetColor = color;
+        this.rentOfHouses = rentOfHouses;
     }
+
     public Integer[] getRentOfHouses() {
         return rentOfHouses;
     }
+
     public int getHousePrice() {
         return housePrice;
     }
-    public String getStreetColor() {
+
+    public StreetColor getStreetColor() {
         return streetColor;
     }
+
     public int getRent() {
         return rent;
     }
 
-    public void buyHouse(Game game){
-        game.buyHouse(this);
-    }
-
-    public void sellHouse(Game game){
-        game.sellHouse(this);
-    }
-
-    public void buyHotel(Game game) {
-        game.buyHotel(this);
-    }
-
-    public void sellHotel(Game game) {
-        game.sellHotel(this);
-    }
-
-    public boolean checkStreetHouseDifference(MonopolyService service, Game g, boolean buy){
+    public boolean checkStreetHouseDifference(MonopolyService service, Player player, boolean buy) {
         int decideBuyOrSell = 1;
-        if(!buy){
+        if (!buy) {
             decideBuyOrSell *= -1;
         }
 
-        for(Tile t: service.getTiles()){
-            if(t.getType() == TileType.STREET){
+        for (Tile t : service.getTiles()) {
+            if (t.getType() == TileType.STREET) {
                 Street s = (Street) t;
-                if(s.getStreetColor().equals(this.getStreetColor())){
-                    int housesStreet1 = g.receiveHouseCount(s) + (g.receiveHotelCount(s)*4);
-                    int housesStreet2 = g.receiveHouseCount(this) + (g.receiveHotelCount(this)*4);
-                    int difference = Math.abs(housesStreet1 - (housesStreet2 + decideBuyOrSell));
-                    if(difference > 1){
-                        return false;
-                    }
+                if (checkStreetColor(s.getStreetColor(), streetColor) && isBigDifference(player, decideBuyOrSell, s)) {
+                    return false;
                 }
             }
         }
         return true;
     }
 
-    @Override
-    public int calculateRent(Player p, Game g){
+    private boolean checkStreetColor(StreetColor streetColor1, StreetColor streetColor2) {
+        return streetColor1.equals(streetColor2);
+    }
 
-        if(g.receiveHouseCount(this) > 0){
-            return rentOfHouses[g.receiveHouseCount(this) - 1];
-        }
-        else if(g.receiveHotelCount(this) > 0){
+    private boolean isBigDifference(Player player, int decideBuyOrSell, Street street) {
+        int housesStreet1 = player.getPropertyView(street).getHouseCount() +
+                (player.getPropertyView(street).getHotelCount() * NUMBER_OF_HOUSES_IN_ONE_HOTEL);
+        int housesStreet2 = player.getPropertyView(this).getHouseCount() +
+                (player.getPropertyView(this).getHotelCount() * NUMBER_OF_HOUSES_IN_ONE_HOTEL);
+        int difference = Math.abs(housesStreet1 - (housesStreet2 + decideBuyOrSell));
+
+        return difference > 1;
+    }
+
+    @Override
+    public int calculateRent(Player player, Game game) {
+        if (player.getPropertyView(this).getHouseCount() > 0) {
+            return rentOfHouses[player.getPropertyView(this).getHouseCount() - 1];
+        } else if (player.getPropertyView(this).getHotelCount() > 0) {
             return rentOfHouses[rentOfHouses.length - 1];
-        }
-        else{
+        } else {
             return rent;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Street street = (Street) o;
+        return rent == street.rent && housePrice == street.housePrice && checkStreetColor(streetColor, street.streetColor) && Arrays.equals(rentOfHouses, street.rentOfHouses);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(super.hashCode(), rent, housePrice, streetColor);
+        result = 31 * result + Arrays.hashCode(rentOfHouses);
+        return result;
     }
 }

@@ -1,6 +1,8 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.*;
+import be.howest.ti.monopoly.logic.implementation.enums.ChanceCard;
+import be.howest.ti.monopoly.logic.implementation.enums.CommunityChest;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import org.junit.jupiter.api.Test;
 
@@ -12,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class CardExecutingTileTest {
     @Test
     void executeChanceCards() {
-        Set<ChanceCards> gottenChanceCards = new HashSet<>();
+        Set<ChanceCard> gottenChanceCards = new HashSet<>();
 
-        while (gottenChanceCards.size() != ChanceCards.values().length) {
+        while (gottenChanceCards.size() != ChanceCard.values().length) {
             MonopolyService service = new MonopolyService();
             Game game = service.createGame(2, "group17");
             game.joinGame("Jonas");
@@ -33,70 +35,70 @@ class CardExecutingTileTest {
             CardExecutingTile chanceTile = (CardExecutingTile) service.getTile(7);
             chanceTile.execute(service, game, turn);
 
-            Player currentplayerObject = game.getCurrentplayerObject();
-            ChanceCards type = CardExecutingTile.getChanceType(turn.getMoves().get(0).getDescription());
+            Player currentplayerObject = game.getCurrentPlayer();
+            ChanceCard type = CardExecutingTile.getChanceType(turn.getMoves().get(0).getDescription());
             gottenChanceCards.add(type);
             switch (type) {
                 case ADV_BOWSER_CASTLE:
-                    assertEquals("Bowser Castle", currentplayerObject.getCurrentTile());
+                    assertEquals("Bowser Castle", currentplayerObject.getCurrentTile().getName());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case ADV_GO:
-                    assertEquals("Peach Castle", currentplayerObject.getCurrentTile());
+                    assertEquals("Peach Castle", currentplayerObject.getCurrentTile().getName());
                     assertEquals(1530, currentplayerObject.getMoney());
                     break;
                 case ADV_SHERBET:
-                    assertEquals("Sherbet Land", currentplayerObject.getCurrentTile());
+                    assertEquals("Sherbet Land", currentplayerObject.getCurrentTile().getName());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case ADV_DELFINO:
-                    assertEquals("Delfino Airship", currentplayerObject.getCurrentTile());
+                    assertEquals("Delfino Airship", currentplayerObject.getCurrentTile().getName());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case ADV_POWERUP:
-                    assertEquals("F.L.U.D.D.", currentplayerObject.getCurrentTile());
+                    assertEquals("F.L.U.D.D.", currentplayerObject.getCurrentTile().getName());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case ADV_UT:
-                    assertEquals("Electric Koopa Farm", currentplayerObject.getCurrentTile());
+                    assertEquals("Electric Koopa Farm", currentplayerObject.getCurrentTile().getName());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case REC_BANK_50:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1380, currentplayerObject.getMoney());
                     break;
                 case GET_JAIL_CARD:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1, currentplayerObject.getGetOutOfJailCards());
                     break;
                 case RETURN_3:
                     Tile returnedTile = service.getTile(4);
-                    assertEquals(returnedTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(returnedTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case GO_JAIL:
-                    assertEquals("Jail", currentplayerObject.getCurrentTile());
+                    assertEquals("Jail", currentplayerObject.getCurrentTile().getName());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case PAY_REPAIRS:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1305, currentplayerObject.getMoney());
                     break;
                 case PAY_15:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1315, currentplayerObject.getMoney());
                     break;
                 case GO_FLOWER:
-                    assertEquals("Fire Flower", currentplayerObject.getCurrentTile());
+                    assertEquals("Fire Flower", currentplayerObject.getCurrentTile().getName());
                     assertEquals(1530, currentplayerObject.getMoney());
                     break;
                 case PAY_PLAYERS_50:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1280, currentplayerObject.getMoney());
                     assertEquals(1550, game.getPlayer("Thomas").getMoney());
                     break;
                 case REC_150:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1480, currentplayerObject.getMoney());
                     break;
             }
@@ -105,9 +107,9 @@ class CardExecutingTileTest {
 
     @Test
     void executeCommunityCards() {
-        Set<CommunityChests> gottenCommmunityChests = new HashSet<>();
+        Set<CommunityChest> gottenCommmunityChests = new HashSet<>();
 
-        while (gottenCommmunityChests.size() != CommunityChests.values().length) {
+        while (gottenCommmunityChests.size() != CommunityChest.values().length) {
             MonopolyService service = new MonopolyService();
             Game game = service.createGame(2, "group17");
             game.joinGame("Jonas");
@@ -126,64 +128,64 @@ class CardExecutingTileTest {
             CardExecutingTile communityTile = (CardExecutingTile) service.getTile(17);
             communityTile.execute(service, game, turn);
 
-            Player currentplayerObject = game.getCurrentplayerObject();
-            CommunityChests type = CardExecutingTile.getCommunityType(turn.getMoves().get(0).getDescription());
+            Player currentplayerObject = game.getCurrentPlayer();
+            CommunityChest type = CardExecutingTile.getCommunityType(turn.getMoves().get(0).getDescription());
             gottenCommmunityChests.add(type);
             switch (type) {
                 case ADV_GO:
-                    assertEquals("Peach Castle", currentplayerObject.getCurrentTile());
+                    assertEquals("Peach Castle", currentplayerObject.getCurrentTile().getName());
                     assertEquals(1530, currentplayerObject.getMoney());
                     break;
                 case REC_BANK_ERR:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1530, currentplayerObject.getMoney());
                     break;
                 case PAY_DOCTOR_FEE:
                 case PAY_STAR:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1280, currentplayerObject.getMoney());
                     break;
                 case REC_SOLD_STOCK:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1380, currentplayerObject.getMoney());
                     break;
                 case GET_JAIL_CARD:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1, currentplayerObject.getGetOutOfJailCards());
                     break;
                 case GO_JAIL:
-                    assertEquals("Jail", currentplayerObject.getCurrentTile());
+                    assertEquals("Jail", currentplayerObject.getCurrentTile().getName());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case REC_DELFINO:
                 case REC_KOOPALING:
                 case REC_ROSALINA:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1430, currentplayerObject.getMoney());
                     break;
                 case REC_BANK_OWES:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1350, currentplayerObject.getMoney());
                     break;
                 case REC_BIRTHDAY:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1340, currentplayerObject.getMoney());
                     assertEquals(1490, game.getPlayer("Thomas").getMoney());
                     break;
                 case PAY_BOO:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1230, currentplayerObject.getMoney());
                     break;
                 case REC_FRUIT:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1355, currentplayerObject.getMoney());
                     break;
                 case PAY_REPAIRS:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1290, currentplayerObject.getMoney());
                     break;
                 case REC_PRIZE:
-                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile());
+                    assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
                     assertEquals(1340, currentplayerObject.getMoney());
                     break;
             }

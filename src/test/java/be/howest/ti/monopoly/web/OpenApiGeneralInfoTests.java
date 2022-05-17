@@ -3,7 +3,7 @@ package be.howest.ti.monopoly.web;
 import be.howest.ti.monopoly.logic.ServiceAdapter;
 import be.howest.ti.monopoly.logic.implementation.tile.SimpleTile;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
-import be.howest.ti.monopoly.logic.implementation.tile.TileType;
+import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
 

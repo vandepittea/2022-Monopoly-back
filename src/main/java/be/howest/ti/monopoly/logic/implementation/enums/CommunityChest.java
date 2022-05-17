@@ -1,6 +1,6 @@
-package be.howest.ti.monopoly.logic.implementation;
+package be.howest.ti.monopoly.logic.implementation.enums;
 
-public enum CommunityChests {
+public enum CommunityChest {
     ADV_GO,
     REC_BANK_ERR,
     PAY_DOCTOR_FEE,

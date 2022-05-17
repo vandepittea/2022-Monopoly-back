@@ -1,40 +1,26 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.*;
+import be.howest.ti.monopoly.logic.implementation.enums.*;
+import be.howest.ti.monopoly.logic.implementation.enums.Utility;
+import be.howest.ti.monopoly.logic.implementation.generator.Generator;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
+import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.security.SecureRandom;
 import java.util.*;
 
 public class CardExecutingTile extends Tile {
-    private static final Map<ChanceCards, String> chances = new EnumMap<>(ChanceCards.class);
-    private static final Map<CommunityChests, String> communityChests = new EnumMap<>(CommunityChests.class);
-    private static final List<Integer> powerupLocations = new ArrayList<>();
-    private static final List<Integer> utilityLocations = new ArrayList<>();
     private static final SecureRandom random = new SecureRandom();
+    private static final Map<ChanceCard, String> chances = Generator.generateChances();
+    private static final Map<CommunityChest, String> communityChests = Generator.generateCommunityChests();
+    private static final Map<PowerUp, Integer> powerUpLocations = Generator.generatePowerUpLocations();
+    private static final Map<Utility, Integer> utilityLocations = Generator.generateUtilityLocations();
+    private static final Map<TilesToAdvance, Integer> tilesToAdvance = Generator.generateTilesToAdvance();
 
     public CardExecutingTile(int position, String name, TileType type) {
         super(position, name, type);
-
-        if (chances.size() == 0) {
-            generateChances();
-            generateCommunityChests();
-            generatePowerupLocations();
-            generateUtilityLocations();
-        }
-    }
-
-    private void generateUtilityLocations() {
-        utilityLocations.add(12);
-        utilityLocations.add(28);
-    }
-
-    private void generatePowerupLocations() {
-        powerupLocations.add(5);
-        powerupLocations.add(15);
-        powerupLocations.add(25);
-        powerupLocations.add(35);
     }
 
     @JsonIgnore
@@ -48,8 +34,8 @@ public class CardExecutingTile extends Tile {
     }
 
     @JsonIgnore
-    public static ChanceCards getChanceType(String message) {
-        for (Map.Entry<ChanceCards, String> entry : chances.entrySet()) {
+    public static ChanceCard getChanceType(String message) {
+        for (Map.Entry<ChanceCard, String> entry : chances.entrySet()) {
             if (entry.getValue().equals(message)) {
                 return entry.getKey();
             }
@@ -58,50 +44,13 @@ public class CardExecutingTile extends Tile {
     }
 
     @JsonIgnore
-    public static CommunityChests getCommunityType(String message) {
-        for (Map.Entry<CommunityChests, String> entry : communityChests.entrySet()) {
+    public static CommunityChest getCommunityType(String message) {
+        for (Map.Entry<CommunityChest, String> entry : communityChests.entrySet()) {
             if (entry.getValue().equals(message)) {
                 return entry.getKey();
             }
         }
         return null;
-    }
-
-    private static void generateChances() {
-        chances.put(ChanceCards.ADV_BOWSER_CASTLE, "You got launched by a cannon right to Bowsers Castle");
-        chances.put(ChanceCards.ADV_GO, "Head to Peach's Castle (Collect 200 coins)");
-        chances.put(ChanceCards.ADV_SHERBET, "You are sent to Sherbet Land. If you pass Peach's Castle, collect 200 coins");
-        chances.put(ChanceCards.ADV_DELFINO, "Take a plane to Delfino Airstrip. If you pass Peach's Castle, collect 200 coins");
-        chances.put(ChanceCards.ADV_POWERUP, "Advance to the nearest Powerup. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled");
-        chances.put(ChanceCards.ADV_UT, "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.");
-        chances.put(ChanceCards.REC_BANK_50, "The Toad Bank pays you dividend of 50 coins");
-        chances.put(ChanceCards.GET_JAIL_CARD, "Get Out of Jail Free");
-        chances.put(ChanceCards.RETURN_3, "Go Back 3 Spaces");
-        chances.put(ChanceCards.GO_JAIL, "Go to Jail. Go directly to Jail, do not pass Go, do not collect 200 coins");
-        chances.put(ChanceCards.PAY_REPAIRS, "Make general repairs on all your property. For each house pay 25 coins. For each castle pay 100 coins");
-        chances.put(ChanceCards.PAY_15, "Speeding fine 15 coins");
-        chances.put(ChanceCards.GO_FLOWER, "Take a trip to the FireFlower. If you pass Peach's Castle, collect 200 coins");
-        chances.put(ChanceCards.PAY_PLAYERS_50, "You lost a bet that you would defeat Bowser. Pay each player 50 coins");
-        chances.put(ChanceCards.REC_150, "You won an important race! Collect 150 coins");
-    }
-
-    private static void generateCommunityChests() {
-        communityChests.put(CommunityChests.ADV_GO, "Head to Peach's Castle (Collect 200 coins)");
-        communityChests.put(CommunityChests.REC_BANK_ERR, "The Toad Bank made an error in your favor. Collect 200 coins");
-        communityChests.put(CommunityChests.PAY_DOCTOR_FEE, "You are sick and go to Doctor Mario. Pay 50 coins");
-        communityChests.put(CommunityChests.REC_SOLD_STOCK, "You found a hidden chest with coins. You get 50 coins");
-        communityChests.put(CommunityChests.GET_JAIL_CARD, "Get Out of Jail Free");
-        communityChests.put(CommunityChests.GO_JAIL, "Go to Jail. Go directly to jail, do not pass Peach's Castle, do not collect $200)");
-        communityChests.put(CommunityChests.REC_DELFINO, "You guide tourists around Delfino Island. Receive 100 coins");
-        communityChests.put(CommunityChests.REC_BANK_OWES, "The toad Bank owes you some coins. Collect 20 coins");
-        communityChests.put(CommunityChests.REC_BIRTHDAY, "It is your birthday. Collect 10 coins from every player");
-        communityChests.put(CommunityChests.REC_KOOPALING, "You defeated a Koopaling. Collect 100 coins as a reward");
-        communityChests.put(CommunityChests.PAY_BOO, "A Boo scares you and steals some coins, you lose 100 coins");
-        communityChests.put(CommunityChests.PAY_STAR, "You lose a star and need to buy a new one for 50 coins");
-        communityChests.put(CommunityChests.REC_FRUIT, "Receive 25 coins from selling fruit");
-        communityChests.put(CommunityChests.PAY_REPAIRS, "You are assessed for street repair. $40 per house. $115 per castle");
-        communityChests.put(CommunityChests.REC_PRIZE, "You have won second prize in a run contest against some Coopas. Collect 10 coins");
-        communityChests.put(CommunityChests.REC_ROSALINA, "Rosalina sends you a gift from space. Receive 100 coins ");
     }
 
     public void execute(MonopolyService service, Game game, Turn turn) {
@@ -119,189 +68,201 @@ public class CardExecutingTile extends Tile {
 
     private void executeRandomChance(MonopolyService service, Game game, Turn turn) {
         int randomChance = random.nextInt(chances.size());
-
-        ChanceCards type = ChanceCards.values()[randomChance];
+        ChanceCard type = ChanceCard.values()[randomChance];
         turn.addMove(getName(), chances.get(type));
+
         switch (type) {
             case ADV_BOWSER_CASTLE:
-                goToTile(service, 39, turn, type, game, false);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.BOWSER_CASTLE), turn, game, false);
                 break;
             case ADV_GO:
-                goToTile(service, 0, turn, type, game, true);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.GO), turn, game, true);
                 break;
             case ADV_SHERBET:
-                goToTile(service, 24, turn, type, game, true);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.SHERBET), turn, game, true);
                 break;
             case ADV_DELFINO:
-                goToTile(service, 11, turn, type, game, true);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.DELFINO), turn, game, true);
                 break;
             case ADV_POWERUP:
-                boolean moved = false;
-                for (Integer powerupPosition : powerupLocations) {
-                    if (getPosition() < powerupPosition) {
-                        goToTile(service, powerupPosition, turn, type, game, false);
-                        moved = true;
-                        break;
-                    }
-                }
-                if (!moved) {
-                    goToTile(service, powerupLocations.get(0), turn, type, game, false);
-                }
+                advanceToNextPowerUp(service, game, turn);
                 break;
             case ADV_UT:
-                for (Integer utilityPosition : utilityLocations) {
-                    if (getPosition() < utilityPosition) {
-                        goToTile(service, utilityPosition, turn, type, game, false);
-                    }
-                }
-                goToTile(service, utilityLocations.get(0), turn, type, game, false);
+                advanceToNextUtility(service, game, turn);
                 break;
             case REC_BANK_50:
-                game.getCurrentplayerObject().receiveMoney(50);
+                game.getCurrentPlayer().receiveMoney(50);
                 game.changeCurrentPlayer(false);
                 break;
             case GET_JAIL_CARD:
-                game.getCurrentplayerObject().receiveGetOutOfJailCard();
+                game.getCurrentPlayer().receiveGetOutOfJailCard();
                 game.changeCurrentPlayer(false);
                 break;
             case RETURN_3:
-                int currentTileIdx = game.getCurrentplayerObject().getCurrentTileObject().getPosition();
-                currentTileIdx -= 3;
-                if (currentTileIdx < 0) {
-                    currentTileIdx = service.getTiles().size() - currentTileIdx;
-                }
-                goToTile(service, currentTileIdx, turn, type, game, false);
+                returnThreeTiles(service, game, turn);
                 break;
             case GO_JAIL:
-                int jailTileIdx = service.getTile("Jail").getPosition();
-                goToTile(service, jailTileIdx, turn, type, game, false);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.JAIL), turn, game, false);
                 break;
             case PAY_REPAIRS:
-                int cost = 0;
-                Set<Property> properties = game.getCurrentplayerObject().getProperties();
-                for (Property property : properties) {
-                    if (property.type == TileType.STREET){
-                        Street street = (Street) property;
-                        cost += game.receiveHouseCount(street) * 25;
-                        cost += game.receiveHotelCount(street) * 100;
-                    }
-                }
-                game.getCurrentplayerObject().payDebt(cost, null);
-                game.changeCurrentPlayer(false);
+                payRepairs(game, 25, 100);
                 break;
             case PAY_15:
-                game.getCurrentplayerObject().payDebt(15, null);
+                game.getCurrentPlayer().payDebt(15, null);
                 game.changeCurrentPlayer(false);
                 break;
             case GO_FLOWER:
-                goToTile(service, 5, turn, type, game, true);
+                goToTile(service, powerUpLocations.get(PowerUp.FIRE_FLOWER), turn, game, true);
                 break;
             case PAY_PLAYERS_50:
-                Player currentPlayer = game.getCurrentplayerObject();
-                for (Player player : game.getPlayers()) {
-                    if (player.equals(currentPlayer)) {
-                        continue;
-                    }
-                    currentPlayer.payDebt(50, player);
-                    player.receiveMoney(50);
-                }
-                game.changeCurrentPlayer(false);
+                payAllPlayers(game, 50);
                 break;
             case REC_150:
-                game.getCurrentplayerObject().receiveMoney(150);
+                game.getCurrentPlayer().receiveMoney(150);
                 game.changeCurrentPlayer(false);
                 break;
+            default:
+                break;
         }
-    }
-
-    private void goToTile(MonopolyService service, int tileToAdvance, Turn turn, ChanceCards chanceType, Game game, boolean passGo) {
-        Tile newTile = service.getTile(tileToAdvance);
-        turn.addMove(this.getName(), chances.get(chanceType));
-        game.movePlayer(passGo, turn, newTile);
     }
 
     private void executeRandomCommunityChest(MonopolyService service, Game game, Turn turn) {
         int randomCommunityChest = random.nextInt(communityChests.size());
-
-        CommunityChests type = CommunityChests.values()[randomCommunityChest];
+        CommunityChest type = CommunityChest.values()[randomCommunityChest];
         turn.addMove(getName(), communityChests.get(type));
+
         switch (type) {
             case ADV_GO:
-                goToTile(service, 0, turn, type, game, true);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.GO), turn, game, true);
                 break;
             case REC_BANK_ERR:
-                game.getCurrentplayerObject().receiveMoney(200);
+                game.getCurrentPlayer().receiveMoney(200);
                 game.changeCurrentPlayer(false);
                 break;
             case PAY_DOCTOR_FEE:
             case PAY_STAR:
-                game.getCurrentplayerObject().payDebt(50, null);
+                game.getCurrentPlayer().payDebt(50, null);
                 game.changeCurrentPlayer(false);
                 break;
             case REC_SOLD_STOCK:
-                game.getCurrentplayerObject().receiveMoney(50);
+                game.getCurrentPlayer().receiveMoney(50);
                 game.changeCurrentPlayer(false);
                 break;
             case GET_JAIL_CARD:
-                game.getCurrentplayerObject().receiveGetOutOfJailCard();
+                game.getCurrentPlayer().receiveGetOutOfJailCard();
                 game.changeCurrentPlayer(false);
                 break;
             case GO_JAIL:
-                int jailTileIdx = service.getTile("Jail").getPosition();
-                goToTile(service, jailTileIdx, turn, type, game, false);
+                goToTile(service, tilesToAdvance.get(TilesToAdvance.JAIL), turn, game, false);
                 break;
             case REC_DELFINO:
             case REC_KOOPALING:
             case REC_ROSALINA:
-                game.getCurrentplayerObject().receiveMoney(100);
+                game.getCurrentPlayer().receiveMoney(100);
                 game.changeCurrentPlayer(false);
                 break;
             case REC_BANK_OWES:
-                game.getCurrentplayerObject().receiveMoney(20);
+                game.getCurrentPlayer().receiveMoney(20);
                 game.changeCurrentPlayer(false);
                 break;
             case REC_BIRTHDAY:
-                Player currentPlayer = game.getCurrentplayerObject();
-                for (Player player : game.getPlayers()) {
-                    if (player.equals(currentPlayer)) {
-                        continue;
-                    }
-                    player.payDebt(10, currentPlayer);
-                    currentPlayer.receiveMoney(10);
-                }
-
-                game.changeCurrentPlayer(false);
+                receiveFromAllPlayers(game, 10);
                 break;
             case PAY_BOO:
-                game.getCurrentplayerObject().payDebt(100, null);
+                game.getCurrentPlayer().payDebt(100, null);
                 game.changeCurrentPlayer(false);
                 break;
             case REC_FRUIT:
-                game.getCurrentplayerObject().receiveMoney(25);
+                game.getCurrentPlayer().receiveMoney(25);
                 game.changeCurrentPlayer(false);
                 break;
             case PAY_REPAIRS:
-                int cost = 0;
-                Set<Property> properties = game.getCurrentplayerObject().getProperties();
-                for (Property property : properties) {
-                    if (property.type == TileType.STREET){
-                        Street street = (Street) property;
-                        cost += game.receiveHouseCount(street) * 40;
-                        cost += game.receiveHotelCount(street) * 115;
-                    }
-                }
-                game.getCurrentplayerObject().payDebt(cost, null);
-                game.changeCurrentPlayer(false);
+                payRepairs(game, 40, 115);
                 break;
             case REC_PRIZE:
-                game.getCurrentplayerObject().receiveMoney(10);
+                game.getCurrentPlayer().receiveMoney(10);
                 game.changeCurrentPlayer(false);
+                break;
+            default:
                 break;
         }
     }
-    private void goToTile(MonopolyService service, int tileToAdvance, Turn turn, CommunityChests chanceType, Game game, boolean passGo) {
+
+    private void goToTile(MonopolyService service, int tileToAdvance, Turn turn, Game game, boolean passGo) {
         Tile newTile = service.getTile(tileToAdvance);
-        turn.addMove(this.getName(), communityChests.get(chanceType));
         game.movePlayer(passGo, turn, newTile);
+    }
+
+    private void receiveFromAllPlayers(Game game, int amount) {
+        Player currentPlayer = game.getCurrentPlayer();
+
+        for (Player player : game.getPlayers()) {
+            if (player.equals(currentPlayer)) {
+                continue;
+            }
+            player.payDebt(amount, currentPlayer);
+        }
+
+        game.changeCurrentPlayer(false);
+    }
+
+    private void advanceToNextUtility(MonopolyService service, Game game, Turn turn) {
+        for (Integer utilityPosition : utilityLocations.values()) {
+            if (getPosition() < utilityPosition) {
+                goToTile(service, utilityPosition, turn, game, false);
+                return;
+            }
+        }
+
+        goToTile(service, utilityLocations.get(Utility.ELECTRIC_KOOPA_FARM), turn, game, false);
+    }
+
+    private void advanceToNextPowerUp(MonopolyService service, Game game, Turn turn) {
+        for (Integer powerUpPosition : powerUpLocations.values()) {
+            if (getPosition() < powerUpPosition) {
+                goToTile(service, powerUpPosition, turn, game, false);
+                return;
+            }
+        }
+
+        goToTile(service, powerUpLocations.get(PowerUp.FIRE_FLOWER), turn, game, false);
+    }
+
+    private void payAllPlayers(Game game, int amount) {
+        Player currentPlayer = game.getCurrentPlayer();
+
+        for (Player player : game.getPlayers()) {
+            if (!player.equals(currentPlayer)) {
+                currentPlayer.payDebt(amount, player);
+            }
+        }
+
+        game.changeCurrentPlayer(false);
+    }
+
+    private void payRepairs(Game game, int houseRepairCost, int hotelRepairCost) {
+        int cost = 0;
+
+        Set<PropertyView> properties = game.getCurrentPlayer().getProperties();
+        for (PropertyView propertyView : properties) {
+            if (propertyView.getProperty().type == TileType.STREET){
+                cost += propertyView.getHouseCount() * houseRepairCost;
+                cost += propertyView.getHotelCount() * hotelRepairCost;
+            }
+        }
+
+        game.getCurrentPlayer().payDebt(cost, null);
+        game.changeCurrentPlayer(false);
+    }
+
+    private void returnThreeTiles(MonopolyService service, Game game, Turn turn) {
+        int currentTileIdx = game.getCurrentPlayer().getCurrentTile().getPosition();
+        currentTileIdx -= 3;
+
+        if (currentTileIdx < 0) {
+            currentTileIdx = service.getTiles().size() - currentTileIdx;
+        }
+
+        goToTile(service, currentTileIdx, turn, game, false);
     }
 }

@@ -1,5 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
+import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

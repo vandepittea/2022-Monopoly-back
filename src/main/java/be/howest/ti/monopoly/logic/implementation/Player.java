@@ -1,52 +1,62 @@
 package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
+import be.howest.ti.monopoly.logic.implementation.enums.Taxsystem;
+import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Move;
+import be.howest.ti.monopoly.web.views.PropertyView;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import be.howest.ti.monopoly.logic.implementation.tile.Street;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 public class Player {
+    public static final int MAX_HOUSE_COUNT = 4;
+    public static final int MAX_HOTEL_COUNT = 1;
+
     private final String name;
 
-    private Tile currentTile;
     private boolean jailed;
-    private int money;
     private boolean bankrupt;
-    private int getOutOfJailCards;
-    private String taxSystem;
-    private Set<Property> properties;
     private int debt;
+    private int money;
+    private int getOutOfJailCards;
+
+    private final Taxsystem taxSystem;
+
+    private Tile currentTile;
     private Player creditor;
+    private final Map<Property, PropertyView> properties;
 
     public Player(String name, Tile startingTile) {
+        this.jailed = false;
+        this.bankrupt = false;
+
+        this.debt = 0;
+        this.money = 1500;
+        this.getOutOfJailCards = 0;
+
+        this.taxSystem = Taxsystem.ESTIMATE;
+
         this.name = name;
         this.currentTile = startingTile;
-        this.jailed = false;
-        this.money = 1500;
-        this.bankrupt = false;
-        this.getOutOfJailCards = 0;
-        this.taxSystem = "ESTIMATE";
-        properties = new HashSet<>();
-        this.debt = 0;
         this.creditor = null;
+
+        properties = new HashMap<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public String getCurrentTile() {
-        return currentTile.getName();
-    }
-
-    @JsonIgnore
-    public Tile getCurrentTileObject() {
+    @JsonIdentityReference(alwaysAsId = true)
+    public Tile getCurrentTile() {
         return currentTile;
     }
 
@@ -66,12 +76,16 @@ public class Player {
         return getOutOfJailCards;
     }
 
-    public String getTaxSystem() {
+    public Taxsystem getTaxSystem() {
         return taxSystem;
     }
 
-    public Set<Property> getProperties() {
-        return properties;
+    public Set<PropertyView> getProperties() {
+        return new HashSet<>(properties.values());
+    }
+
+    public PropertyView getPropertyView(Property property) {
+        return properties.get(property);
     }
 
     public int getDebt() {
@@ -84,6 +98,12 @@ public class Player {
     }
 
     public void becomeBankrupt() {
+        if (creditor != null) {
+            turnOverAssetsTo(creditor);
+        } else {
+            turnOverAssetsToBank();
+        }
+
         this.bankrupt = true;
     }
 
@@ -100,18 +120,18 @@ public class Player {
         getOutOfJailCards++;
     }
 
-    public void buyProperty(Property pr) {
-        boolean successfulPayment = payMoney(pr.getCost());
+    public void buyProperty(Property property) {
+        boolean successfulPayment = payMoney(property.getCost());
 
-        if (successfulPayment) {
-            addProperty(pr);
-        } else {
+        if (!successfulPayment) {
             throw new IllegalMonopolyActionException("You don't have enough money to buy this property");
         }
+
+        addProperty(property);
     }
 
-    private void addProperty(Property p) {
-        properties.add(p);
+    private void addProperty(Property property) {
+        properties.put(property, new PropertyView(property));
     }
 
     private boolean payMoney(int amount) {
@@ -131,6 +151,10 @@ public class Player {
             throw new IllegalMonopolyActionException("You do not have enough money. You will have to sell properties " +
                     "so that you can pay off your debt. You have time until it is your turn again.");
         }
+
+        if (debtor != null) {
+            debtor.receiveMoney(amount);
+        }
     }
 
     public void receiveMoney(int amount) {
@@ -141,154 +165,160 @@ public class Player {
         currentTile = newTile;
     }
 
-    public void turnOverAssetsTo(Player p) {
-        for (Property pr : properties) {
-            p.addProperty(pr);
+    public void turnOverAssetsTo(Player player) {
+        for (Property property : properties.keySet()) {
+            player.addProperty(property);
         }
-        p.receiveMoney(money);
+        player.receiveMoney(money);
 
-        money = 0;
-        debt = 0;
-        properties.clear();
+        clearAssets();
     }
 
     public void turnOverAssetsToBank() {
         //TODO: start auction
 
+        clearAssets();
+    }
+
+    private void clearAssets() {
         money = 0;
         debt = 0;
         properties.clear();
     }
 
-    public void collectDebt(Property pr, Player pl, Game g) {
-        if (!checkForOwnership(pr)) {
+    public void collectDebt(Property property, Player player, Game game) {
+        if (!checkForOwnership(property)) {
             throw new IllegalMonopolyActionException("This property is not owned by you.");
-        } else if (!checkIfDebtorIsOnYourProperty(pr, pl)) {
-            throw new IllegalMonopolyActionException("The specified player is not on this property.");
-        } else if (checkForNextRollDice(g, pr)) {
-            throw new IllegalMonopolyActionException("You're too late. The next dice roll is already over.");
-        } else {
-            int rent = calculateRent(pr, pl, g);
-            pl.payDebt(rent, this);
-            receiveMoney(rent);
         }
+        if (!checkIfDebtorIsOnYourProperty(property, player)) {
+            throw new IllegalMonopolyActionException("The specified player is not on this property.");
+        }
+        if (hasPlayerAlreadyRolled(game, property)) {
+            throw new IllegalMonopolyActionException("You're too late. The next dice roll is already over.");
+        }
+
+        int rent = property.calculateRent(this, game);
+        player.payDebt(rent, this);
     }
 
-    private int calculateRent(Property pr, Player pl, Game g) {
-        return pr.calculateRent(pl, g);
+    private boolean checkForOwnership(Property property) {
+        return properties.containsKey(property);
     }
 
-    private boolean checkForOwnership(Property p) {
-        return properties.contains(p);
+    private boolean checkIfDebtorIsOnYourProperty(Property property, Player player) {
+        return property.getName().equals(player.currentTile.getName());
     }
 
-    private boolean checkIfDebtorIsOnYourProperty(Property pr, Player pl) {
-        return pr.getName().equals(pl.currentTile.getName());
-    }
-
-    private boolean checkForNextRollDice(Game g, Property p){
-        Move move = g.getTurns().get(g.getTurns().size() - 1).getMoves().get(0);
+    private boolean hasPlayerAlreadyRolled(Game game, Property property){
+        Move move = game.getTurns().get(game.getTurns().size() - 1).getMoves().get(0);
         String descriptionLastRoll = move.getDescription();
         String propertyTitle = move.getTitle();
+
         boolean checkDescription = !descriptionLastRoll.equals("should pay rent");
-        boolean checkTitle = !propertyTitle.equals(p.getName());
+        boolean checkTitle = !propertyTitle.equals(property.getName());
+
         return checkDescription && checkTitle;
     }
 
-    public int buyHouseOrHotel(MonopolyService service, Game g, Street s) {
-        if (!checkOwnershipWholeStreet(s, service)) {
+    public int buyHouseOrHotel(MonopolyService service, Game game, Street street) {
+        if (!checkOwnershipWholeStreet(street, service)) {
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
-        if (!s.checkStreetHouseDifference(service, g, true)) {
-            throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
-                    "not be higher than one.");
-        } else {
-            if (g.receiveHouseCount(s) < 4) {
-                return buyHouse(g, s);
-            } else {
-                return buyHotel(g, s);
-            }
-        }
-    }
-
-    public int sellHouseOrHotel(MonopolyService service, Game g, Street s) {
-        if (!s.checkStreetHouseDifference(service, g, false)) {
+        if (!street.checkStreetHouseDifference(service, this, true)) {
             throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
                     "not be higher than one.");
         }
-        if (g.receiveHotelCount(s) != 1) {
-            return sellHouse(g, s);
-        } else {
-            return sellHotel(g, s);
-        }
 
+        if (properties.get(street).getHouseCount() < MAX_HOUSE_COUNT) {
+            return buyHouse(game, street);
+        } else {
+            return buyHotel(game, street);
+        }
     }
 
-    private int buyHouse(Game g, Street s) {
-        if (g.getAvailableHouses() < 1) {
+    public int sellHouseOrHotel(MonopolyService service, Game game, Street street) {
+        if (!street.checkStreetHouseDifference(service, this, false)) {
+            throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
+                    "not be higher than one.");
+        }
+
+        if (properties.get(street).getHotelCount() != MAX_HOTEL_COUNT) {
+            return sellHouse(game, street);
+        } else {
+            return sellHotel(game, street);
+        }
+    }
+
+    private int buyHouse(Game game, Street street) {
+        if (game.getAvailableHouses() < 1) {
             throw new IllegalMonopolyActionException("The limit for the maximum number of houses has been reached. " +
                     "No more houses can be built.");
         }
-
-        if (g.receiveHotelCount(s) == 1) {
+        if (properties.get(street).getHotelCount() == MAX_HOTEL_COUNT) {
             throw new IllegalMonopolyActionException("You can only have 1 hotel on a street!");
         }
 
-        boolean successfulPayment = payMoney(s.getHousePrice());
-
-        if (successfulPayment) {
-            s.buyHouse(g);
-        } else {
+        boolean successfulPayment = payMoney(street.getHousePrice());
+        if (!successfulPayment) {
             throw new IllegalMonopolyActionException("You don't have enough money to buy a house for this property.");
         }
 
-        return g.receiveHouseCount(s);
+        properties.get(street).buyHouse();
+        game.setAvailableHouses(game.getAvailableHouses() - 1);
+
+        return properties.get(street).getHouseCount();
     }
 
-    private int sellHouse(Game g, Street s) {
-        if (g.receiveHouseCount(s) < 1) {
+    private int sellHouse(Game game, Street street) {
+        if (properties.get(street).getHouseCount() < 1) {
             throw new IllegalMonopolyActionException("There are no houses on this property.");
         }
-        s.sellHouse(g);
-        receiveMoney(s.getHousePrice() / 2);
-        return g.receiveHouseCount(s);
+
+        properties.get(street).sellHouse();
+        game.setAvailableHouses(game.getAvailableHouses() + 1);
+        receiveMoney(street.getHousePrice() / 2);
+
+        return properties.get(street).getHouseCount();
     }
 
-    private int buyHotel(Game g, Street s) {
-        if (g.getAvailableHotels() < 1) {
+    private int buyHotel(Game game, Street street) {
+        if (game.getAvailableHotels() < 1) {
             throw new IllegalMonopolyActionException("The limit for the maximum number of hotels has been reached. " +
                     "No more hotels can be built.");
         }
 
-        boolean successfulPayment = payMoney(s.getHousePrice());
-
-        if (successfulPayment) {
-            s.buyHotel(g);
-        } else {
+        boolean successfulPayment = payMoney(street.getHousePrice());
+        if (!successfulPayment) {
             throw new IllegalMonopolyActionException("You don't have enough money to buy a hotel for this property.");
         }
 
-        return g.receiveHotelCount(s);
+        properties.get(street).buyHotel();
+        game.setAvailableHouses(game.getAvailableHouses() + Street.NUMBER_OF_HOUSES_IN_ONE_HOTEL);
+        game.setAvailableHotels(game.getAvailableHotels() - 1);
+
+        return properties.get(street).getHotelCount();
     }
 
-    private int sellHotel(Game g, Street s) {
-        if (g.getAvailableHouses() < 5) {
+    private int sellHotel(Game game, Street street) {
+        if (game.getAvailableHouses() < Street.NUMBER_OF_HOUSES_IN_ONE_HOTEL) {
             throw new IllegalMonopolyActionException("You can't sell your hotel since there are no houses left in the bank.");
         }
 
-        s.sellHotel(g);
-        receiveMoney(s.getHousePrice() / 2);
-        return g.receiveHotelCount(s);
+        properties.get(street).sellHotel();
+        game.setAvailableHouses(game.getAvailableHouses() - Street.NUMBER_OF_HOUSES_IN_ONE_HOTEL);
+        game.setAvailableHotels(game.getAvailableHotels() + 1);
+        receiveMoney(street.getHousePrice() / 2);
+
+        return properties.get(street).getHotelCount();
     }
 
     private boolean checkOwnershipWholeStreet(Street streetToBuildHouseOn, MonopolyService service){
         for(Tile t: service.getTiles()){
             if(t.getType() == TileType.STREET){
                 Street streetOfGroup = (Street) t;
-                if (streetOfGroup.getStreetColor().equals(streetToBuildHouseOn.getStreetColor())) {
-                    if (!checkForOwnership(streetOfGroup)) {
-                        return false;
-                    }
+                if (streetOfGroup.getStreetColor().equals(streetToBuildHouseOn.getStreetColor()) &&
+                        !checkForOwnership(streetOfGroup)) {
+                    return false;
                 }
             }
         }
@@ -302,6 +332,7 @@ public class Player {
         if(!jailed){
             throw new IllegalMonopolyActionException("You're not in jail. You can't use this endpoint.");
         }
+
         getOutOfJailCards--;
         jailed = false;
     }
@@ -310,13 +341,13 @@ public class Player {
         if(!jailed){
             throw new IllegalMonopolyActionException("You're not in jail. You can't use this endpoint.");
         }
+
         boolean successfulPayment = payMoney(50);
         if (!successfulPayment){
             throw new IllegalMonopolyActionException("You don't have enough money to go out of jail.");
         }
-        else {
-            jailed = false;
-        }
+
+        jailed = false;
     }
 
     @Override

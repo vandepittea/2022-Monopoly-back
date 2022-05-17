@@ -1,20 +1,23 @@
 package be.howest.ti.monopoly.logic.implementation.tile;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import be.howest.ti.monopoly.logic.implementation.enums.TileType;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.Objects;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 public abstract class Tile {
     protected final TileType type;
-    private final String name;
     private final int position;
+    private final String name;
     private final String nameAsPathParameter;
 
     public Tile(int position, String name, TileType type) {
+        this.type = type;
         this.position = position;
         this.name = name;
         this.nameAsPathParameter = Tile.decideNameAsPathParameter(name);
-        this.type = type;
     }
 
     public String getName() {
@@ -27,11 +30,6 @@ public abstract class Tile {
         return nameAsPathParameter;
     }
     public TileType getType() {
-        return type;
-    }
-
-    @JsonIgnore
-    public TileType getActualType() {
         return type;
     }
 

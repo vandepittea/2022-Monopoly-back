@@ -1,41 +1,60 @@
 package be.howest.ti.monopoly.web.views;
 
 import be.howest.ti.monopoly.logic.implementation.tile.Property;
-import be.howest.ti.monopoly.logic.implementation.tile.Street;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 import java.util.Objects;
 
 public class PropertyView {
+    private final boolean mortgage;
     private final Property property;
 
-    public PropertyView(Property property){
+    private int houseCount;
+    private int hotelCount;
+
+    public PropertyView(Property property) {
+        this.mortgage = false;
+
+        this.houseCount = 0;
+        this.hotelCount = 0;
+
         this.property = property;
     }
 
-    public String getProperty(){
-        return property.getName();
+    @JsonIdentityReference(alwaysAsId = true)
+    public Property getProperty() {
+        return property;
     }
+
+    public int getHouseCount() {
+        return houseCount;
+    }
+
+    public int getHotelCount() {
+        return hotelCount;
+    }
+
     public boolean isMortgage() {
-        return property.isMortgaged();
+        return mortgage;
     }
-    /*public int getHouseCount() {
-        if(property.getType().equals("street")){
-            Street street = (Street) property;
-            return street.getHouseCount();
-        }
-        else{
-            return 0;
-        }
-    }*/
-    /*public int getHotelCount() {
-        if(property.getType().equals("street")){
-            Street street = (Street) property;
-            return street.getHotelCount();
-        }
-        else{
-            return 0;
-        }
-    }*/
+
+    public void buyHouse() {
+        houseCount++;
+    }
+
+    public void sellHouse() {
+        houseCount--;
+    }
+
+    public void buyHotel() {
+        houseCount = 0;
+        hotelCount = 1;
+    }
+
+    public void sellHotel() {
+        hotelCount = 0;
+        houseCount = 4;
+    }
 
     @Override
     public boolean equals(Object o) {
