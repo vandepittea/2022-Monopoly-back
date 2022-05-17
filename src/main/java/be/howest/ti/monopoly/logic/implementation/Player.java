@@ -383,6 +383,10 @@ public class Player {
         taxSystem = Taxsystem.COMPUTE;
     }
 
+    public void useEstimateTax() {
+        taxSystem = Taxsystem.ESTIMATE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

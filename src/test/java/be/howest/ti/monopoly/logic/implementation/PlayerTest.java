@@ -396,6 +396,8 @@ class PlayerTest {
 
     @Test
     void payTaxesEstimate() {
+        player1.useComputeTax();
+        player1.useEstimateTax();
         assertEquals(1500, player1.getMoney());
         player1.payTaxes();
         assertEquals(1300, player1.getMoney());

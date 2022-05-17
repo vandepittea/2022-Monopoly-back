@@ -9,11 +9,16 @@ class OpenApiTaxManagementTests extends OpenApiTestsBase {
 
     @Test
     void useEstimateTax(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public void useEstimateTax(String gameId, String playerName) {
+            }
+        });
         post(
                 testContext,
-                "/games/game-id/players/Alice/tax/estimate",
-                "some-token",
-                response -> assertNotYetImplemented(response, "useEstimateTax")
+                "/games/001/players/Alice/tax/estimate",
+                "001-Alice",
+                response -> assertOkResponse(response)
         );
     }
 

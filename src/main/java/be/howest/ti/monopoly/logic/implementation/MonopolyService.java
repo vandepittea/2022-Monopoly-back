@@ -207,4 +207,11 @@ public class MonopolyService extends ServiceAdapter {
         Player player = game.getPlayer(playerName);
         player.useComputeTax();
     }
+
+    @Override
+    public void useEstimateTax(String gameId, String playerName) {
+        Game game = getGame(gameId);
+        Player player = game.getPlayer(playerName);
+        player.useEstimateTax();
+    }
 }

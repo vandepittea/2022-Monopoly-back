@@ -124,4 +124,9 @@ public class TestService implements IService {
     public void useComputeTax(String gameId, String playerName) {
         delegate.useComputeTax(gameId, playerName);
     }
+
+    @Override
+    public void useEstimateTax(String gameId, String playerName) {
+        delegate.useEstimateTax(gameId, playerName);
+    }
 }
