@@ -35,7 +35,7 @@ class CardExecutingTileTest {
             CardExecutingTile chanceTile = (CardExecutingTile) service.getTile(7);
             chanceTile.execute(service, game, turn);
 
-            Player currentplayerObject = game.getCurrentplayerObject();
+            Player currentplayerObject = game.getCurrentPlayer();
             ChanceCard type = CardExecutingTile.getChanceType(turn.getMoves().get(0).getDescription());
             gottenChanceCards.add(type);
             switch (type) {
@@ -128,7 +128,7 @@ class CardExecutingTileTest {
             CardExecutingTile communityTile = (CardExecutingTile) service.getTile(17);
             communityTile.execute(service, game, turn);
 
-            Player currentplayerObject = game.getCurrentplayerObject();
+            Player currentplayerObject = game.getCurrentPlayer();
             CommunityChest type = CardExecutingTile.getCommunityType(turn.getMoves().get(0).getDescription());
             gottenCommmunityChests.add(type);
             switch (type) {

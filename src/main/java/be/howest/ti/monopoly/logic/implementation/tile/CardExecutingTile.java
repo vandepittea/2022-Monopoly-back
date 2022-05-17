@@ -91,11 +91,11 @@ public class CardExecutingTile extends Tile {
                 advanceToNextUtility(service, game, turn);
                 break;
             case REC_BANK_50:
-                game.getCurrentplayerObject().receiveMoney(50);
+                game.getCurrentPlayer().receiveMoney(50);
                 game.changeCurrentPlayer(false);
                 break;
             case GET_JAIL_CARD:
-                game.getCurrentplayerObject().receiveGetOutOfJailCard();
+                game.getCurrentPlayer().receiveGetOutOfJailCard();
                 game.changeCurrentPlayer(false);
                 break;
             case RETURN_3:
@@ -108,7 +108,7 @@ public class CardExecutingTile extends Tile {
                 payRepairs(game, 25, 100);
                 break;
             case PAY_15:
-                game.getCurrentplayerObject().payDebt(15, null);
+                game.getCurrentPlayer().payDebt(15, null);
                 game.changeCurrentPlayer(false);
                 break;
             case GO_FLOWER:
@@ -118,7 +118,7 @@ public class CardExecutingTile extends Tile {
                 payAllPlayers(game, 50);
                 break;
             case REC_150:
-                game.getCurrentplayerObject().receiveMoney(150);
+                game.getCurrentPlayer().receiveMoney(150);
                 game.changeCurrentPlayer(false);
                 break;
             default:
@@ -136,20 +136,20 @@ public class CardExecutingTile extends Tile {
                 goToTile(service, tilesToAdvance.get(TilesToAdvance.GO), turn, game, true);
                 break;
             case REC_BANK_ERR:
-                game.getCurrentplayerObject().receiveMoney(200);
+                game.getCurrentPlayer().receiveMoney(200);
                 game.changeCurrentPlayer(false);
                 break;
             case PAY_DOCTOR_FEE:
             case PAY_STAR:
-                game.getCurrentplayerObject().payDebt(50, null);
+                game.getCurrentPlayer().payDebt(50, null);
                 game.changeCurrentPlayer(false);
                 break;
             case REC_SOLD_STOCK:
-                game.getCurrentplayerObject().receiveMoney(50);
+                game.getCurrentPlayer().receiveMoney(50);
                 game.changeCurrentPlayer(false);
                 break;
             case GET_JAIL_CARD:
-                game.getCurrentplayerObject().receiveGetOutOfJailCard();
+                game.getCurrentPlayer().receiveGetOutOfJailCard();
                 game.changeCurrentPlayer(false);
                 break;
             case GO_JAIL:
@@ -158,29 +158,29 @@ public class CardExecutingTile extends Tile {
             case REC_DELFINO:
             case REC_KOOPALING:
             case REC_ROSALINA:
-                game.getCurrentplayerObject().receiveMoney(100);
+                game.getCurrentPlayer().receiveMoney(100);
                 game.changeCurrentPlayer(false);
                 break;
             case REC_BANK_OWES:
-                game.getCurrentplayerObject().receiveMoney(20);
+                game.getCurrentPlayer().receiveMoney(20);
                 game.changeCurrentPlayer(false);
                 break;
             case REC_BIRTHDAY:
                 receiveFromAllPlayers(game, 10);
                 break;
             case PAY_BOO:
-                game.getCurrentplayerObject().payDebt(100, null);
+                game.getCurrentPlayer().payDebt(100, null);
                 game.changeCurrentPlayer(false);
                 break;
             case REC_FRUIT:
-                game.getCurrentplayerObject().receiveMoney(25);
+                game.getCurrentPlayer().receiveMoney(25);
                 game.changeCurrentPlayer(false);
                 break;
             case PAY_REPAIRS:
                 payRepairs(game, 40, 115);
                 break;
             case REC_PRIZE:
-                game.getCurrentplayerObject().receiveMoney(10);
+                game.getCurrentPlayer().receiveMoney(10);
                 game.changeCurrentPlayer(false);
                 break;
             default:
@@ -194,7 +194,7 @@ public class CardExecutingTile extends Tile {
     }
 
     private void receiveFromAllPlayers(Game game, int amount) {
-        Player currentPlayer = game.getCurrentplayerObject();
+        Player currentPlayer = game.getCurrentPlayer();
 
         for (Player player : game.getPlayers()) {
             if (player.equals(currentPlayer)) {
@@ -229,7 +229,7 @@ public class CardExecutingTile extends Tile {
     }
 
     private void payAllPlayers(Game game, int amount) {
-        Player currentPlayer = game.getCurrentplayerObject();
+        Player currentPlayer = game.getCurrentPlayer();
 
         for (Player player : game.getPlayers()) {
             if (!player.equals(currentPlayer)) {
@@ -243,7 +243,7 @@ public class CardExecutingTile extends Tile {
     private void payRepairs(Game game, int houseRepairCost, int hotelRepairCost) {
         int cost = 0;
 
-        Set<PropertyView> properties = game.getCurrentplayerObject().getProperties();
+        Set<PropertyView> properties = game.getCurrentPlayer().getProperties();
         for (PropertyView propertyView : properties) {
             if (propertyView.getProperty().type == TileType.STREET){
                 cost += propertyView.getHouseCount() * houseRepairCost;
@@ -251,12 +251,12 @@ public class CardExecutingTile extends Tile {
             }
         }
 
-        game.getCurrentplayerObject().payDebt(cost, null);
+        game.getCurrentPlayer().payDebt(cost, null);
         game.changeCurrentPlayer(false);
     }
 
     private void returnThreeTiles(MonopolyService service, Game game, Turn turn) {
-        int currentTileIdx = game.getCurrentplayerObject().getCurrentTileObject().getPosition();
+        int currentTileIdx = game.getCurrentPlayer().getCurrentTileObject().getPosition();
         currentTileIdx -= 3;
 
         if (currentTileIdx < 0) {

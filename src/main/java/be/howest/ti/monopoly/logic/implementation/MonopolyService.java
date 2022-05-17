@@ -99,7 +99,7 @@ public class MonopolyService extends ServiceAdapter {
         Tile tile = getTile(propertyName);
         Property property = (Property) tile;
 
-        if (!playerName.equals(game.getCurrentPlayer()) || !tile.getName().equals(game.getDirectSale())) {
+        if (!player.equals(game.getCurrentPlayer()) || !tile.getName().equals(game.getDirectSale())) {
             throw new IllegalMonopolyActionException("You tried to do something which is against the rules of " +
                     "Monopoly. In this case, it is most likely not your place to buy this property and/or you are " +
                     "trying to buy the wrong property.");
@@ -116,7 +116,7 @@ public class MonopolyService extends ServiceAdapter {
         Player player = game.getPlayer(playerName);
         Property property = (Property) getTile(propertyName);
 
-        if (!player.getName().equals(game.getCurrentPlayer())) {
+        if (!player.equals(game.getCurrentPlayer())) {
             throw new IllegalMonopolyActionException("Only the current player can choose not to buy a property");
         }
         if (!property.getName().equals(game.getDirectSale())) {
