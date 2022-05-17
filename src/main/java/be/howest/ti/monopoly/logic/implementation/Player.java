@@ -350,6 +350,10 @@ public class Player {
         jailed = false;
     }
 
+    public void useComputeTax() {
+        taxSystem = Taxsystem.COMPUTE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -361,9 +365,5 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(name);
-    }
-
-    public void useComputeTax() {
-        taxSystem = Taxsystem.COMPUTE;
     }
 }
