@@ -3,6 +3,7 @@ package be.howest.ti.monopoly.logic.implementation;
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
+import be.howest.ti.monopoly.logic.implementation.turn.DiceRoll;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.logic.implementation.enums.TurnType;
 import org.junit.jupiter.api.Assertions;
@@ -178,16 +179,16 @@ class GameTest {
         assertEquals(game, service.rollDice(game.getId(), "Jonas"));
         assertNotEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile());
 
-        Integer[] lastDiceRoll = game.getLastDiceRoll();
-        if ((game.getDirectSale() == null) && (!lastDiceRoll[0].equals(lastDiceRoll[1]))) {
+        DiceRoll lastDiceRoll = game.getLastDiceRoll();
+        if ((game.getDirectSale() == null) && !lastDiceRoll.isDoubleRoll()) {
             assertEquals("Thomas", game.getCurrentPlayer().getName());
         } else {
             assertEquals("Jonas", game.getCurrentPlayer().getName());
         }
 
         assertEquals(1, game.getTurns().size());
-        assertEquals(game.getLastDiceRoll()[0], game.getTurns().get(game.getTurns().size() - 1).getRoll().getRoll()[0]);
-        assertEquals(game.getLastDiceRoll()[1], game.getTurns().get(game.getTurns().size() - 1).getRoll().getRoll()[1]);
+        assertEquals(game.getLastDiceRoll().getDie1(), game.getTurns().get(game.getTurns().size() - 1).getRoll().getRoll()[0]);
+        assertEquals(game.getLastDiceRoll().getDie2(), game.getTurns().get(game.getTurns().size() - 1).getRoll().getRoll()[1]);
     }
 
     @Test

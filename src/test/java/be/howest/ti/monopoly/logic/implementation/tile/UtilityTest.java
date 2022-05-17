@@ -4,6 +4,7 @@ import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
 import be.howest.ti.monopoly.logic.implementation.Player;
 import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
+import be.howest.ti.monopoly.logic.implementation.turn.DiceRoll;
 import be.howest.ti.monopoly.web.views.PropertyView;
 import jdk.jshell.execution.Util;
 import org.junit.jupiter.api.Test;
@@ -24,8 +25,8 @@ class UtilityTest {
         p.getProperties().add(new PropertyView(u));
         g.rollDice("Bob");
 
-        Integer[] roll = g.getLastDiceRoll();
-        int totalDiceRoll = roll[0] + roll[1];
+        DiceRoll roll = g.getLastDiceRoll();
+        int totalDiceRoll = roll.getValue();
 
         assertEquals(totalDiceRoll * 4, u.calculateRent(p, g));
     }
@@ -44,8 +45,8 @@ class UtilityTest {
         p.buyProperty(u2);
         g.rollDice("Bob");
 
-        Integer[] roll = g.getLastDiceRoll();
-        int totalDiceRoll = roll[0] + roll[1];
+        DiceRoll roll = g.getLastDiceRoll();
+        int totalDiceRoll = roll.getValue();
 
         assertEquals(totalDiceRoll * 10, u.calculateRent(p, g));
     }

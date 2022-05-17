@@ -4,6 +4,7 @@ import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.Player;
 import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
 import be.howest.ti.monopoly.logic.implementation.enums.TileType;
+import be.howest.ti.monopoly.logic.implementation.turn.DiceRoll;
 import be.howest.ti.monopoly.web.views.PropertyView;
 
 import java.util.Objects;
@@ -27,8 +28,8 @@ public class Utility extends Property {
     }
 
     private int calculateDiceRoll(Game g){
-        Integer[] roll = g.getLastDiceRoll();
-        return roll[0] + roll[1];
+        DiceRoll roll = g.getLastDiceRoll();
+        return roll.getValue();
     }
 
     private int decideFourOrTenTimesDiceRoll(Player p){

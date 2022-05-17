@@ -108,8 +108,9 @@ public class Game {
         return turns;
     }
 
-    public Integer[] getLastDiceRoll() {
-        return lastDiceRoll.getRoll();
+    @JsonIdentityReference(alwaysAsId = true)
+    public DiceRoll getLastDiceRoll() {
+        return lastDiceRoll;
     }
 
     public boolean isCanRoll() {
