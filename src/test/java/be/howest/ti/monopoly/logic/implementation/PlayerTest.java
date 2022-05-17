@@ -386,11 +386,20 @@ class PlayerTest {
     }
 
     @Test
-    void GetOutOfJailFineSuccessful(){
+    void getOutOfJailFineSuccessful(){
         player1.goToJail(null);
         player1.getOutOfJailFine();
 
         assertFalse(player1.isJailed());
         assertEquals(1500-50, player1.getMoney());
+    }
+
+    @Test
+    void payTaxes() {
+        assertEquals(1500, player1.getMoney());
+        player1.payTaxes();
+        assertEquals(1300, player1.getMoney());
+
+        //TODO: enlarge test after implementing switching of taxes
     }
 }
