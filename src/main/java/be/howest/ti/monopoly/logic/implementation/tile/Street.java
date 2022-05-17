@@ -17,6 +17,7 @@ public class Street extends Property {
     private final StreetColor streetColor;
     private final Integer[] rentOfHouses;
 
+    //Sonarlint error ignored as false positive: approved by Mr.Casier
     public Street(int position, String name, int cost, int mortgage, int groupSize, StreetColor color,
                   Integer[] rentOfHouses, int housePrice, int rent) {
         super(position, name, cost, mortgage, groupSize, color, TileType.STREET);
