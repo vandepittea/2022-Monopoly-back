@@ -31,11 +31,6 @@ public abstract class Tile {
         return type;
     }
 
-    @JsonIgnore
-    public TileType getActualType() {
-        return type;
-    }
-
     public static String decideNameAsPathParameter(String tileName){
         return tileName.replace(" ", "_");
     }

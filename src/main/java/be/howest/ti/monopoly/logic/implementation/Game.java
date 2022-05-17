@@ -290,7 +290,7 @@ public class Game {
     }
 
     private void decideNextAction(Tile newTile, Turn turn) {
-        switch (newTile.getActualType()) {
+        switch (newTile.getType()) {
             case STREET:
                 executeStreetFunctionality(newTile, turn);
                 break;
