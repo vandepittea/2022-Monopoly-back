@@ -29,7 +29,7 @@ public class ServiceAdapter implements IService {
     }
 
     @Override
-    public Game createGame(int numberOfPlayers, String prefix) {
+    public Game createGame(int numberOfPlayers, String prefix, String gameName) {
         throw new UnsupportedOperationException();
     }
 

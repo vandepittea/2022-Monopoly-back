@@ -11,7 +11,7 @@ public interface IService {
     List<Tile> getTiles();
     Tile getTile(int position);
     Tile getTile(String name);
-    Game createGame(int numberOfPlayers, String prefix);
+    Game createGame(int numberOfPlayers, String prefix, String gameName);
     List<Game> getGames(Boolean started, Integer numberOfPlayers, String prefix);
     Game getGame(String gameId);
     List<String> getChance();

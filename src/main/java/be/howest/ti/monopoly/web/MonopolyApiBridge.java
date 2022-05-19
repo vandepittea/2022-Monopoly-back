@@ -162,8 +162,9 @@ public class MonopolyApiBridge {
 
         int numberOfPlayers = request.getNumberOfPlayersOfBody();
         String prefix = request.getPrefixOfBody();
+        String gameName = request.getGameNameOfBody();
 
-        Response.sendJsonResponse(ctx, 200, service.createGame(numberOfPlayers, prefix));
+        Response.sendJsonResponse(ctx, 200, service.createGame(numberOfPlayers, prefix, gameName));
     }
 
     private void getGames(RoutingContext ctx) {
