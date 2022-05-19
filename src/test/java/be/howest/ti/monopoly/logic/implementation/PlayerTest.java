@@ -30,7 +30,7 @@ class PlayerTest {
     @BeforeEach
     void init() {
         service = new MonopolyService();
-        game = service.createGame(2, "group17");
+        game = service.createGame(2, "group17", "gameName");
 
         player1 = new Player("Bob", null);
         player2 = new Player("Jan", null);
