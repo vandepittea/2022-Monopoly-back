@@ -2,7 +2,6 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.*;
 import be.howest.ti.monopoly.logic.implementation.enums.*;
-import be.howest.ti.monopoly.logic.implementation.enums.Utility;
 import be.howest.ti.monopoly.logic.implementation.generator.Generator;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.web.views.PropertyView;
@@ -16,7 +15,7 @@ public class CardExecutingTile extends Tile {
     private static final Map<ChanceCard, String> chances = Generator.generateChances();
     private static final Map<CommunityChest, String> communityChests = Generator.generateCommunityChests();
     private static final Map<PowerUp, Integer> powerUpLocations = Generator.generatePowerUpLocations();
-    private static final Map<Utility, Integer> utilityLocations = Generator.generateUtilityLocations();
+    private static final Map<UtilityEnum, Integer> utilityLocations = Generator.generateUtilityLocations();
     private static final Map<TilesToAdvance, Integer> tilesToAdvance = Generator.generateTilesToAdvance();
 
     public CardExecutingTile(int position, String name, TileType type) {
@@ -214,7 +213,7 @@ public class CardExecutingTile extends Tile {
             }
         }
 
-        goToTile(service, utilityLocations.get(Utility.ELECTRIC_KOOPA_FARM), turn, game, false);
+        goToTile(service, utilityLocations.get(UtilityEnum.ELECTRIC_KOOPA_FARM), turn, game, false);
     }
 
     private void advanceToNextPowerUp(MonopolyService service, Game game, Turn turn) {
