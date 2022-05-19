@@ -114,6 +114,11 @@ public class ServiceAdapter implements IService {
     }
 
     @Override
+    public void assignPawn(String gameId, String playerName, String pawn) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public int buyHouse(String gameId, String playerName, String propertyName) {
         throw new UnsupportedOperationException();
     }

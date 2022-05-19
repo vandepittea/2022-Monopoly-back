@@ -106,6 +106,10 @@ public class Request {
         return params.body().getJsonObject().getString("playerName");
     }
 
+    public String getPawnOfBody() {
+        return params.body().getJsonObject().getString("pawn");
+    }
+
     public String getPlayerNameOfPath() {
         return getIdFromPath("playerName").getString();
     }

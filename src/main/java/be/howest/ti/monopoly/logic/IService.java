@@ -31,4 +31,6 @@ public interface IService {
     void useComputeTax(String gameId, String playerName);
 
     void useEstimateTax(String gameId, String playerName);
+
+    void assignPawn(String gameId, String playerName, String pawn);
 }

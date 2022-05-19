@@ -129,4 +129,9 @@ public class TestService implements IService {
     public void useEstimateTax(String gameId, String playerName) {
         delegate.useEstimateTax(gameId, playerName);
     }
+
+    @Override
+    public void assignPawn(String gameId, String playerName, String pawn) {
+        delegate.assignPawn(gameId, playerName, pawn);
+    }
 }
