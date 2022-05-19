@@ -37,8 +37,8 @@ public class TestService implements IService {
     }
 
     @Override
-    public Game createGame(int numberOfPlayers, String prefix) {
-        return delegate.createGame(numberOfPlayers, prefix);
+    public Game createGame(int numberOfPlayers, String prefix, String gameName) {
+        return delegate.createGame(numberOfPlayers, prefix, gameName);
     }
 
     @Override
@@ -128,5 +128,10 @@ public class TestService implements IService {
     @Override
     public void useEstimateTax(String gameId, String playerName) {
         delegate.useEstimateTax(gameId, playerName);
+    }
+
+    @Override
+    public void assignPawn(String gameId, String playerName, String pawn) {
+        delegate.assignPawn(gameId, playerName, pawn);
     }
 }

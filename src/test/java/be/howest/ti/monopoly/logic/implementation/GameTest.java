@@ -21,7 +21,7 @@ class GameTest {
     @BeforeEach
     void init() {
         service = new MonopolyService();
-        game = service.createGame(2, "group17");
+        game = service.createGame(2, "group17", "gameName");
     }
 
     @Test
@@ -208,7 +208,7 @@ class GameTest {
 
     @Test
     void declareBankruptcy(){
-        Game game = service.createGame(3, "group17");
+        Game game = service.createGame(3, "group17", "gameName");
 
         game.joinGame("Bob");
         game.joinGame("Jan");

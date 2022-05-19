@@ -81,7 +81,7 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
     void createGameWithEmptyBody(final VertxTestContext testContext) {
         service.setDelegate(new ServiceAdapter() {
             @Override
-            public Game createGame(int numberOfPlayers, String prefix) {
+            public Game createGame(int numberOfPlayers, String prefix, String gameName) {
                 return null;
             }
         });
@@ -98,7 +98,7 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
     void createGame(final VertxTestContext testContext) {
         service.setDelegate(new ServiceAdapter() {
             @Override
-            public Game createGame(int numberOfPlayers, String prefix) {
+            public Game createGame(int numberOfPlayers, String prefix, String gameName) {
                 return null;
             }
         });
@@ -197,6 +197,25 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
                 null,
                 new JsonObject()
                         .put("playerName", "Alice"),
+                response -> assertOkResponse(response)
+        );
+    }
+
+    @Test
+    void assignPawn(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public void assignPawn(String gameId, String playerName, String pawn) {
+
+            }
+        });
+        post(
+                testContext,
+                "/games/000/players",
+                "000-Alice",
+                new JsonObject()
+                        .put("playerName", "Alice")
+                        .put("pawn", "Mario"),
                 response -> assertOkResponse(response)
         );
     }

@@ -30,6 +30,7 @@ public class Player {
 
     private Taxsystem taxSystem;
 
+    private String pawn;
     private Tile currentTile;
     private Player creditor;
     private final Map<Property, PropertyView> properties;
@@ -44,6 +45,7 @@ public class Player {
 
         this.taxSystem = Taxsystem.ESTIMATE;
 
+        this.pawn = null;
         this.name = name;
         this.currentTile = startingTile;
         this.creditor = null;
@@ -74,6 +76,10 @@ public class Player {
 
     public int getGetOutOfJailCards() {
         return getOutOfJailCards;
+    }
+
+    public String getPawn() {
+        return pawn;
     }
 
     public Taxsystem getTaxSystem() {
@@ -118,6 +124,10 @@ public class Player {
 
     public void receiveGetOutOfJailCard() {
         getOutOfJailCards++;
+    }
+
+    public void setPawn(String pawn) {
+        this.pawn = pawn;
     }
 
     public void buyProperty(Property property) {

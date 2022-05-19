@@ -21,7 +21,7 @@ class UtilityTest {
     @BeforeEach
     void init() {
         service = new MonopolyService();
-        game = service.createGame(2, "group17");
+        game = service.createGame(2, "group17", "gameName");
         player = new Player("Bob", null);
         utility1 = (Utility) service.getTile(12);
         utility2 = (Utility) service.getTile(28);
