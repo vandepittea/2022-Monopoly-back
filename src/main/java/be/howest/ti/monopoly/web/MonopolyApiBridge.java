@@ -187,7 +187,7 @@ public class MonopolyApiBridge {
         String gameId = request.getGameId();
 
         try {
-            if (pawn != null) {
+            if (pawn == null) {
                 service.joinGame(gameId, playerName);
                 String playerToken = tokenManager.createToken(new MonopolyUser(gameId, playerName));
                 Response.sendJsonResponse(ctx, 200, new JsonObject().put("playerToken", playerToken));

@@ -202,6 +202,25 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
     }
 
     @Test
+    void assignPawn(final VertxTestContext testContext) {
+        service.setDelegate(new ServiceAdapter() {
+            @Override
+            public void assignPawn(String gameId, String playerName, String pawn) {
+
+            }
+        });
+        post(
+                testContext,
+                "/games/000/players",
+                "000-Alice",
+                new JsonObject()
+                        .put("playerName", "Alice")
+                        .put("pawn", "Mario"),
+                response -> assertOkResponse(response)
+        );
+    }
+
+    @Test
     void joinGamePlayerNameTooLong(final VertxTestContext testContext) {
         post(
                 testContext,

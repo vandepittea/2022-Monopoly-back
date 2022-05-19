@@ -415,4 +415,10 @@ class PlayerTest {
         player2.payTaxes();
         assertEquals(money - ((money + 60 + 60 + 50) / 10), player2.getMoney());
     }
+
+    @Test
+    void assignPawn() {
+        player1.setPawn("Mario");
+        assertEquals("Mario", player1.getPawn());
+    }
 }
