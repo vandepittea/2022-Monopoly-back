@@ -93,8 +93,8 @@ class PlayerTest {
 
         Turn turn = new Turn(player2);
         Turn turn2 = new Turn(player1);
-        turn2.addMove("Electric Company", "can buy this property in direct sale");
-        turn.addMove(sherbetLand.getName(), "should pay rent");
+        turn2.addMove(service.getTile(0), "can buy this property in direct sale");
+        turn.addMove(sherbetLand, "should pay rent");
         game.getTurns().add(turn);
         game.getTurns().add(turn2);
 
@@ -110,7 +110,7 @@ class PlayerTest {
 
         Turn turn = new Turn(player2);
         player2.moveTo(street4);
-        turn.addMove(street4.getName(), "should pay rent");
+        turn.addMove(street4, "should pay rent");
         game.getTurns().add(turn);
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> player1.collectDebt(street4, player2, game));
@@ -125,7 +125,7 @@ class PlayerTest {
 
         Turn turn = new Turn(player2);
         player2.moveTo(sherbetLand);
-        turn.addMove(sherbetLand.getName(), "should pay rent");
+        turn.addMove(sherbetLand, "should pay rent");
         game.getTurns().add(turn);
 
         player1.collectDebt(sherbetLand, player2, game);

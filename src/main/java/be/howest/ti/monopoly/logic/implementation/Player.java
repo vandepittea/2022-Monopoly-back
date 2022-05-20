@@ -241,10 +241,10 @@ public class Player {
     private boolean hasPlayerAlreadyRolled(Game game, Property property){
         Move move = game.getTurns().get(game.getTurns().size() - 1).getMoves().get(0);
         String descriptionLastRoll = move.getDescription();
-        String propertyTitle = move.getTitle();
+        Tile propertyTitle = move.getTile();
 
         boolean checkDescription = !descriptionLastRoll.equals("should pay rent");
-        boolean checkTitle = !propertyTitle.equals(property.getName());
+        boolean checkTitle = !propertyTitle.equals(property);
 
         return checkDescription && checkTitle;
     }

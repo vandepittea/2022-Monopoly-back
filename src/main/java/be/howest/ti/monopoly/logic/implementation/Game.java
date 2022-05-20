@@ -224,7 +224,7 @@ public class Game {
                 movePlayer(turn, lastDiceRoll);
                 changeCurrentPlayer(true);
             } else {
-                turn.addMove("Jail", "");
+                turn.addMove(service.getTile("Jail"), "");
                 turn.setType(TurnType.JAIL_STAY);
                 changeCurrentPlayer(true);
             }
@@ -326,12 +326,12 @@ public class Game {
                 break;
             case TAX_INCOME:
             case LUXURY_TAX:
-                turn.addMove(newTile.getName(), "Pay taxes");
+                turn.addMove(newTile, "Pay taxes");
                 currentPlayer.payTaxes();
                 changeCurrentPlayer(false);
                 break;
             default:
-                turn.addMove(newTile.getName(), "");
+                turn.addMove(newTile, "");
                 changeCurrentPlayer(false);
                 break;
         }
@@ -341,8 +341,8 @@ public class Game {
         Tile jail = service.getTile("Jail");
 
         currentPlayer.goToJail(jail);
-        turn.addMove(newTile.getName(), "");
-        turn.addMove("Jail", "");
+        turn.addMove(newTile, "");
+        turn.addMove(service.getTile("Jail"), "");
 
         changeCurrentPlayer(true);
     }
@@ -351,11 +351,11 @@ public class Game {
         if (!propertyOwnedByOtherPlayer(newTile)) {
             directSale = newTile.getName();
             canRoll = false;
-            turn.addMove(newTile.getName(), "Can buy this property in a direct sale");
+            turn.addMove(newTile, "Can buy this property in a direct sale");
             return;
         }
 
-        turn.addMove(newTile.getName(), "Can be asked to pay rent if the property isn't mortgaged");
+        turn.addMove(newTile, "Can't buy this property");
         changeCurrentPlayer(true);
     }
 
