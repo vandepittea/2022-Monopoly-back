@@ -356,7 +356,7 @@ public class Game {
     }
 
     private void executeStreetFunctionality(Tile newTile, Turn turn) {
-        if (!propertyOwnedByOtherPlayer(newTile)) {
+        if (!propertyOwnedByAPlayer(newTile)) {
             directSale = newTile.getName();
             canRoll = false;
             turn.addMove(newTile, currentPlayer.getName() + " can buy this property in a direct sale");
@@ -367,13 +367,11 @@ public class Game {
         changeCurrentPlayer(true);
     }
 
-    private boolean propertyOwnedByOtherPlayer(Tile newTile) {
+    private boolean propertyOwnedByAPlayer(Tile newTile) {
         for (Player player : players) {
-            if (!player.getName().equals(currentPlayer.getName())) {
-                for (OwnedProperty property : player.getProperties()) {
-                    if (property.getProperty().getName().equals(newTile.getName())) {
-                        return true;
-                    }
+            for (OwnedProperty property : player.getProperties()) {
+                if (property.getProperty().getName().equals(newTile.getName())) {
+                    return true;
                 }
             }
         }

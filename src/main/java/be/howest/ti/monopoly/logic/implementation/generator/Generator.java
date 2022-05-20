@@ -15,10 +15,10 @@ public class Generator {
         List<Tile> tiles = new ArrayList<>();
 
         tiles.add(new SimpleTile(0, "Peach Castle", TileType.GO));
-        tiles.add(new Street(1, "Peach's Garden", 60, 30, 2, StreetColor.PURPLE, new Integer[]{10, 30, 90, 160, 250}, 50, 2));
+        tiles.add(new Street(1, "Peachs Garden", 60, 30, 2, StreetColor.PURPLE, new Integer[]{10, 30, 90, 160, 250}, 50, 2));
         tiles.add(new CardExecutingTile(2, "Community Chest I", TileType.COMMUNITY_CHEST));
         tiles.add(new Street(3, "Yoshi Valley", 60, 30, 2, StreetColor.PURPLE, new Integer[]{20, 60, 180, 320, 450}, 50, 4));
-        tiles.add(new CardExecutingTile(4, "Bowser Jr.", TileType.TAX_INCOME));
+        tiles.add(new CardExecutingTile(4, "Bowser Jr", TileType.TAX_INCOME));
         tiles.add(new Railroad(5, "Fire Flower", 200, 100, 4, StreetColor.BLACK, 25));
         tiles.add(new Street(6, "Pokey Pyramid", 100, 50, 3, StreetColor.LIGHTBLUE, new Integer[]{30, 90, 270, 400, 550}, 50, 6));
         tiles.add(new CardExecutingTile(7, "Chance I", TileType.CHANCE));
@@ -29,7 +29,7 @@ public class Generator {
         tiles.add(new Utility(12, "Electric Koopa Farm", 150, 75, 2, StreetColor.WHITE, "4 or 10 times the dice roll"));
         tiles.add(new Street(13, "Delfino Plaza", 140, 70, 3, StreetColor.VIOLET, new Integer[]{50, 150, 450, 625, 750}, 100, 10));
         tiles.add(new Street(14, "MT Corona", 160, 80, 3, StreetColor.VIOLET, new Integer[]{60, 180, 500, 700, 900}, 100, 12));
-        tiles.add(new Railroad(15, "F.L.U.D.D.", 200, 100, 4, StreetColor.BLACK, 25));
+        tiles.add(new Railroad(15, "FLUDD", 200, 100, 4, StreetColor.BLACK, 25));
         tiles.add(new Street(16, "Sirena Beach", 180, 90, 3, StreetColor.ORANGE, new Integer[]{70, 200, 550, 750, 950}, 100, 14));
         tiles.add(new CardExecutingTile(17, "Community Chest II", TileType.COMMUNITY_CHEST));
         tiles.add(new Street(18, "Pinna Park", 180, 90, 3, StreetColor.ORANGE, new Integer[]{70, 200, 550, 750, 950}, 100, 14));
@@ -41,7 +41,7 @@ public class Generator {
         tiles.add(new Street(24, "Sherbet Land", 240, 120, 3, StreetColor.RED, new Integer[]{100, 300, 750, 925, 1100}, 150, 20));
         tiles.add(new Railroad(25, "Mario Cart", 200, 100, 4, StreetColor.BLACK, 25));
         tiles.add(new Street(26, "DK Mountain", 260, 130, 3, StreetColor.YELLOW, new Integer[]{110, 330, 800, 975, 1150}, 150, 22));
-        tiles.add(new Street(27, "Wario's Goldmine", 260, 130, 3, StreetColor.YELLOW, new Integer[]{110, 330, 800, 975, 1150,}, 150, 22));
+        tiles.add(new Street(27, "Warios Goldmine", 260, 130, 3, StreetColor.YELLOW, new Integer[]{110, 330, 800, 975, 1150,}, 150, 22));
         tiles.add(new Utility(28, "Gas Pump", 150, 75, 2, StreetColor.WHITE, "4 or 10 times the dice roll"));
         tiles.add(new Street(29, "Grumble Volcano", 280, 140, 3, StreetColor.YELLOW, new Integer[]{120, 360, 850, 1025, 1200}, 150, 24));
         tiles.add(new SimpleTile(30, "Go to Jail", TileType.GO_TO_JAIL));
