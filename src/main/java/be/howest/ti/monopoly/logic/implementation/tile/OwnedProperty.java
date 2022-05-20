@@ -1,18 +1,17 @@
-package be.howest.ti.monopoly.web.views;
+package be.howest.ti.monopoly.logic.implementation.tile;
 
-import be.howest.ti.monopoly.logic.implementation.tile.Property;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 import java.util.Objects;
 
-public class PropertyView {
+public class OwnedProperty {
     private final boolean mortgage;
     private final Property property;
 
     private int houseCount;
     private int hotelCount;
 
-    public PropertyView(Property property) {
+    public OwnedProperty(Property property) {
         this.mortgage = false;
 
         this.houseCount = 0;
@@ -60,7 +59,7 @@ public class PropertyView {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PropertyView that = (PropertyView) o;
+        OwnedProperty that = (OwnedProperty) o;
         return property.equals(that.property);
     }
 

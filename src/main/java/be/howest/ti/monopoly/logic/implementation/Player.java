@@ -5,7 +5,7 @@ import be.howest.ti.monopoly.logic.implementation.enums.Taxsystem;
 import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Move;
-import be.howest.ti.monopoly.web.views.PropertyView;
+import be.howest.ti.monopoly.logic.implementation.tile.OwnedProperty;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,14 +26,14 @@ public class Player {
     private boolean bankrupt;
     private int debt;
     private int money;
-    private int getOutOfJailCards;
+    private int getOutOfJailFreeCards;
 
     private Taxsystem taxSystem;
 
     private String pawn;
     private Tile currentTile;
     private Player creditor;
-    private final Map<Property, PropertyView> properties;
+    private final Map<Property, OwnedProperty> properties;
 
     public Player(String name, Tile startingTile) {
         this.jailed = false;
@@ -41,7 +41,7 @@ public class Player {
 
         this.debt = 0;
         this.money = 1500;
-        this.getOutOfJailCards = 0;
+        this.getOutOfJailFreeCards = 0;
 
         this.taxSystem = Taxsystem.ESTIMATE;
 
@@ -74,8 +74,8 @@ public class Player {
         return bankrupt;
     }
 
-    public int getGetOutOfJailCards() {
-        return getOutOfJailCards;
+    public int getGetOutOfJailFreeCards() {
+        return getOutOfJailFreeCards;
     }
 
     public String getPawn() {
@@ -86,11 +86,11 @@ public class Player {
         return taxSystem;
     }
 
-    public Set<PropertyView> getProperties() {
+    public Set<OwnedProperty> getProperties() {
         return new HashSet<>(properties.values());
     }
 
-    public PropertyView getPropertyView(Property property) {
+    public OwnedProperty getPropertyView(Property property) {
         return properties.get(property);
     }
 
@@ -122,8 +122,8 @@ public class Player {
         this.jailed = false;
     }
 
-    public void receiveGetOutOfJailCard() {
-        getOutOfJailCards++;
+    public void receiveGetOutOfJailFreeCard() {
+        getOutOfJailFreeCards++;
     }
 
     public void setPawn(String pawn) {
@@ -134,14 +134,14 @@ public class Player {
         boolean successfulPayment = payMoney(property.getCost());
 
         if (!successfulPayment) {
-            throw new IllegalMonopolyActionException("You don't have enough money to buy this property");
+            throw new IllegalMonopolyActionException(name + " doesn't have enough money to buy this property");
         }
 
         addProperty(property);
     }
 
     private void addProperty(Property property) {
-        properties.put(property, new PropertyView(property));
+        properties.put(property, new OwnedProperty(property));
     }
 
     private boolean payMoney(int amount) {
@@ -158,8 +158,8 @@ public class Player {
         if (!successfulPayment) {
             debt += amount;
             creditor = debtor;
-            throw new IllegalMonopolyActionException("You do not have enough money. You will have to sell properties " +
-                    "so that you can pay off your debt. You have time until it is your turn again.");
+            throw new IllegalMonopolyActionException("You don't have enough money, earn money before your next turn" +
+                    "or be bankrupt");
         }
 
         if (debtor != null) {
@@ -191,9 +191,9 @@ public class Player {
     private int calculateAssetWorth() {
         int assetWorth = money;
 
-        for (Map.Entry<Property, PropertyView> propertyPair : properties.entrySet()) {
+        for (Map.Entry<Property, OwnedProperty> propertyPair : properties.entrySet()) {
             Property property = propertyPair.getKey();
-            PropertyView view = propertyPair.getValue();
+            OwnedProperty view = propertyPair.getValue();
 
             assetWorth += property.getCost();
 
@@ -231,13 +231,13 @@ public class Player {
 
     public void collectDebt(Property property, Player player, Game game) {
         if (!checkForOwnership(property)) {
-            throw new IllegalMonopolyActionException("This property is not owned by you.");
+            throw new IllegalMonopolyActionException(property.getName() + " is not owned by you.");
         }
         if (!checkIfDebtorIsOnYourProperty(property, player)) {
-            throw new IllegalMonopolyActionException("The specified player is not on this property.");
+            throw new IllegalMonopolyActionException(player.getName() + " is not on this property.");
         }
         if (hasPlayerAlreadyRolled(game, property)) {
-            throw new IllegalMonopolyActionException("You're too late. The next dice roll is already over.");
+            throw new IllegalMonopolyActionException("You're too late. The next dice roll is already happened.");
         }
 
         int rent = property.calculateRent(this, game);
@@ -255,10 +255,10 @@ public class Player {
     private boolean hasPlayerAlreadyRolled(Game game, Property property){
         Move move = game.getTurns().get(game.getTurns().size() - 1).getMoves().get(0);
         String descriptionLastRoll = move.getDescription();
-        String propertyTitle = move.getTitle();
+        Tile propertyTitle = move.getTile();
 
         boolean checkDescription = !descriptionLastRoll.equals("should pay rent");
-        boolean checkTitle = !propertyTitle.equals(property.getName());
+        boolean checkTitle = !propertyTitle.equals(property);
 
         return checkDescription && checkTitle;
     }
@@ -268,8 +268,7 @@ public class Player {
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
         if (!street.checkStreetHouseDifference(service, this, true)) {
-            throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
-                    "not be higher than one.");
+            throw new IllegalMonopolyActionException("You have to build equally among streets of the same color");
         }
 
         if (properties.get(street).getHouseCount() < MAX_HOUSE_COUNT) {
@@ -281,8 +280,7 @@ public class Player {
 
     public int sellHouseOrHotel(MonopolyService service, Game game, Street street) {
         if (!street.checkStreetHouseDifference(service, this, false)) {
-            throw new IllegalMonopolyActionException("The difference between the houses in a street should " +
-                    "not be higher than one.");
+            throw new IllegalMonopolyActionException("You have to sell equally among streets of the same color");
         }
 
         if (properties.get(street).getHotelCount() != MAX_HOTEL_COUNT) {
@@ -294,8 +292,7 @@ public class Player {
 
     private int buyHouse(Game game, Street street) {
         if (game.getAvailableHouses() < 1) {
-            throw new IllegalMonopolyActionException("The limit for the maximum number of houses has been reached. " +
-                    "No more houses can be built.");
+            throw new IllegalMonopolyActionException("There are no more available houses, wait until some are free");
         }
         if (properties.get(street).getHotelCount() == MAX_HOTEL_COUNT) {
             throw new IllegalMonopolyActionException("You can only have 1 hotel on a street!");
@@ -326,8 +323,7 @@ public class Player {
 
     private int buyHotel(Game game, Street street) {
         if (game.getAvailableHotels() < 1) {
-            throw new IllegalMonopolyActionException("The limit for the maximum number of hotels has been reached. " +
-                    "No more hotels can be built.");
+            throw new IllegalMonopolyActionException("There are no more available hotels, wait until there are more.");
         }
 
         boolean successfulPayment = payMoney(street.getHousePrice());
@@ -369,14 +365,14 @@ public class Player {
     }
 
     public void getOutOfJailFree() {
-        if(getOutOfJailCards < 1){
+        if(getOutOfJailFreeCards < 1){
             throw  new IllegalMonopolyActionException("You don't have get out of jail cards. You're still in jail.");
         }
         if(!jailed){
             throw new IllegalMonopolyActionException("You're not in jail. You can't use this endpoint.");
         }
 
-        getOutOfJailCards--;
+        getOutOfJailFreeCards--;
         jailed = false;
     }
 

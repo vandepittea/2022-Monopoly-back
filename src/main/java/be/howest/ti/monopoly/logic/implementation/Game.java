@@ -6,10 +6,12 @@ import be.howest.ti.monopoly.logic.implementation.tile.*;
 import be.howest.ti.monopoly.logic.implementation.turn.DiceRoll;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.logic.implementation.enums.TurnType;
-import be.howest.ti.monopoly.web.views.PropertyView;
+import be.howest.ti.monopoly.logic.implementation.tile.OwnedProperty;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game {
     private static final Map<String, Integer> idCounter = new HashMap<>();
@@ -150,10 +152,11 @@ public class Game {
     }
 
     public void joinGame(String playerName) {
-        if (isExistingUser(playerName) || this.started) {
-            throw new IllegalMonopolyActionException("You tried to do something which is against the " +
-                    "rules of Monopoly. In this case, it is most likely that you tried to join a game which has " +
-                    "already started, or you used a name that is already taken in this game.");
+        if (isExistingUser(playerName)) {
+            throw new IllegalMonopolyActionException(playerName + " already exists in this game");
+        }
+        if (started) {
+            throw new IllegalMonopolyActionException("This game is already started");
         }
 
         Player player = new Player(playerName, startingTile);
@@ -188,8 +191,7 @@ public class Game {
             }
         }
 
-        throw new MonopolyResourceNotFoundException("The player you are looking for do not exist. " +
-                "Double check the name.");
+        throw new MonopolyResourceNotFoundException(playerName + " does not exist in this game");
     }
 
     public void handlePropertySale() {
@@ -206,7 +208,7 @@ public class Game {
 
         if (currentPlayer.isJailed()) {
             checkRollInJail(turn);
-        } else if (doesCurrentPlayerGetJailed()) {
+        } else if (checkLastTwoPlayerTurns(turns, true)) {
             jailCurrentPlayer(turn);
         } else {
             movePlayer(turn, lastDiceRoll);
@@ -218,12 +220,28 @@ public class Game {
     private void checkRollInJail(Turn turn) {
         if (lastDiceRoll.isDoubleRoll()) {
             currentPlayer.getOutOfJail();
+            turn.setType(TurnType.GET_OUT_OF_JAIL);
             movePlayer(turn, lastDiceRoll);
         } else {
-            turn.addMove("Jail", "");
-            turn.setType(TurnType.JAIL_STAY);
-            changeCurrentPlayer(true);
+            List<Turn> currentPlayerTurns = getCurrentPlayerTurns();
+
+            if (checkLastTwoPlayerTurns(currentPlayerTurns, false)) {
+                currentPlayer.getOutOfJailFine();
+                turn.setType(TurnType.GET_OUT_OF_JAIL);
+                movePlayer(turn, lastDiceRoll);
+                changeCurrentPlayer(true);
+            } else {
+                turn.addMove(service.getTile("Jail"), currentPlayer.getName() + " is still in jail");
+                turn.setType(TurnType.JAIL_STAY);
+                changeCurrentPlayer(true);
+            }
         }
+    }
+
+    @JsonIgnore
+    private List<Turn> getCurrentPlayerTurns() {
+        return turns.stream().filter(turn ->
+                turn.getPlayer().equals(currentPlayer.getName())).collect(Collectors.toList());
     }
 
     private void checkIllegalRollDiceActions(String playerName) {
@@ -237,23 +255,26 @@ public class Game {
             throw new IllegalMonopolyActionException("It is not your turn.");
         }
         if (currentPlayer.getDebt() > 0) {
-            throw new IllegalMonopolyActionException("The player is in debt. Earn money or declare bankruptcy");
+            throw new IllegalMonopolyActionException("You are in debt. Earn money or declare bankruptcy");
         }
         if (directSale != null) {
-            throw new IllegalMonopolyActionException("The current player has to decide on a property.");
+            throw new IllegalMonopolyActionException("You have to decide on a property.");
         }
         if (currentPlayer.isBankrupt()) {
             throw new IllegalMonopolyActionException("You are bankrupt. Rolling the dice isn't allowed.");
         }
     }
 
-    private boolean doesCurrentPlayerGetJailed() {
-        if (turns.size() >= 2) {
-            Turn previousTurn = turns.get(turns.size() - 1);
-            Turn beforePreviousTurn = turns.get(turns.size() - 2);
+    private boolean checkLastTwoPlayerTurns(List<Turn> playerTurns, boolean checkForDoubleRoll) {
+        if (playerTurns.size() >= 2) {
+            Turn previousTurn = playerTurns.get(playerTurns.size() - 1);
+            Turn beforePreviousTurn = playerTurns.get(playerTurns.size() - 2);
 
             if ((currentPlayer.getName().equals(previousTurn.getPlayer())) &&
                     (currentPlayer.getName().equals(beforePreviousTurn.getPlayer()))) {
+                if (!checkForDoubleRoll){
+                    return true;
+                }
                 return lastDiceRoll.isDoubleRoll();
             }
         }
@@ -261,7 +282,7 @@ public class Game {
         return false;
     }
 
-    private void jailCurrentPlayer(Turn turn) {
+    public void jailCurrentPlayer(Turn turn) {
         Tile jail = service.getTile("Jail");
         currentPlayer.goToJail(jail);
         turn.setType(TurnType.GO_TO_JAIL);
@@ -313,11 +334,12 @@ public class Game {
                 break;
             case TAX_INCOME:
             case LUXURY_TAX:
-                turn.addMove(newTile.getName(), "Pay taxes");
+                turn.addMove(newTile, currentPlayer.getName() + " has to pay taxes");
                 currentPlayer.payTaxes();
+                changeCurrentPlayer(false);
                 break;
             default:
-                turn.addMove(newTile.getName(), "");
+                turn.addMove(newTile, "");
                 changeCurrentPlayer(false);
                 break;
         }
@@ -327,8 +349,8 @@ public class Game {
         Tile jail = service.getTile("Jail");
 
         currentPlayer.goToJail(jail);
-        turn.addMove(newTile.getName(), "");
-        turn.addMove("Jail", "");
+        turn.addMove(newTile, currentPlayer.getName() + " has to go to jail");
+        turn.addMove(service.getTile("Jail"), currentPlayer.getName() + " is in jail.");
 
         changeCurrentPlayer(true);
     }
@@ -337,18 +359,18 @@ public class Game {
         if (!propertyOwnedByOtherPlayer(newTile)) {
             directSale = newTile.getName();
             canRoll = false;
-            turn.addMove(newTile.getName(), "Can buy this property in a direct sale");
+            turn.addMove(newTile, currentPlayer.getName() + " can buy this property in a direct sale");
             return;
         }
 
-        turn.addMove(newTile.getName(), "Can be asked to pay rent if the property isn't mortgaged");
+        turn.addMove(newTile,  currentPlayer.getName() + " can't buy this property");
         changeCurrentPlayer(true);
     }
 
     private boolean propertyOwnedByOtherPlayer(Tile newTile) {
         for (Player player : players) {
             if (!player.getName().equals(currentPlayer.getName())) {
-                for (PropertyView property : player.getProperties()) {
+                for (OwnedProperty property : player.getProperties()) {
                     if (property.getProperty().getName().equals(newTile.getName())) {
                         return true;
                     }

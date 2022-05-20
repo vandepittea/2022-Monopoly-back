@@ -1,16 +1,20 @@
 package be.howest.ti.monopoly.logic.implementation.turn;
 
+import be.howest.ti.monopoly.logic.implementation.tile.Tile;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+
 public class Move {
-    private final String title;
+    private final Tile tile;
     private final String description;
 
-    public Move(String title, String description) {
-        this.title = title;
+    public Move(Tile tile, String description) {
+        this.tile = tile;
         this.description = description;
     }
 
-    public String getTitle() {
-        return title;
+    @JsonIdentityReference(alwaysAsId = true)
+    public Tile getTile() {
+        return tile;
     }
 
     public String getDescription() {

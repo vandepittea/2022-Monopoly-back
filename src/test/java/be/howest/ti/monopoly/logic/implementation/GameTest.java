@@ -2,6 +2,7 @@ package be.howest.ti.monopoly.logic.implementation;
 
 import be.howest.ti.monopoly.logic.exceptions.IllegalMonopolyActionException;
 import be.howest.ti.monopoly.logic.exceptions.MonopolyResourceNotFoundException;
+import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import be.howest.ti.monopoly.logic.implementation.tile.Tile;
 import be.howest.ti.monopoly.logic.implementation.turn.DiceRoll;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
@@ -170,9 +171,51 @@ class GameTest {
             if (game.getDirectSale() != null) {
                 service.dontBuyProperty(game.getId(), game.getCurrentPlayer().getName(), Tile.decideNameAsPathParameter(game.getDirectSale()));
             }
-        } while (!lastTurn.getMoves().get(0).getTitle().equals("Go to Jail"));
+        } while (!lastTurn.getMoves().get(0).getTile().getName().equals("Go to Jail"));
 
         assertTrue(game.getPlayer(lastTurn.getPlayer()).isJailed());
+    }
+
+    @Test
+    void rollDiceThriceWhenInJail() {
+        boolean endedWithoutDoubleRoll = false;
+        while(!endedWithoutDoubleRoll) {
+            game = service.createGame(2, "group17", "jailGame");
+            game.joinGame("Jonas");
+            game.joinGame("Thomas");
+
+            Turn turn = new Turn(game.getPlayer("Jonas"));
+            game.jailCurrentPlayer(turn);
+            game.getTurns().add(turn);
+
+            for (int i = 0; i < 2; i++) {
+                turn = new Turn(game.getPlayer("Jonas"), 1, 2);
+                turn.setType(TurnType.JAIL_STAY);
+                turn.addMove(service.getTile("Jail"), "");
+                game.getTurns().add(turn);
+            }
+
+            game.rollDice("Jonas");
+            Turn lastTurn = game.getTurns().get(game.getTurns().size() - 1);
+
+            TileType type = lastTurn.getMoves().get(lastTurn.getMoves().size() - 1).getTile().getType();
+
+            if ((type == TileType.CHANCE) || (type == TileType.COMMUNITY_CHEST)) {
+                if (game.getPlayer("Jonas").getGetOutOfJailFreeCards() > 0) {
+                    assertEquals(1450, game.getPlayer("Jonas").getMoney());
+                } else {
+                    assertNotEquals(1450, game.getPlayer("Jonas").getMoney());
+                }
+            }
+            else {
+                if (lastTurn.getRoll().isDoubleRoll()){
+                    assertEquals(1500, game.getPlayer("Jonas").getMoney());
+                } else {
+                    assertEquals(1450, game.getPlayer("Jonas").getMoney());
+                    endedWithoutDoubleRoll = true;
+                }
+            }
+        }
     }
 
     @Test
@@ -182,7 +225,7 @@ class GameTest {
 
         game.getCurrentPlayer().moveTo(service.getTile(39));
         game.rollDice("Jonas");
-        assertTrue(1500 < game.getPlayer("Jonas").getMoney());
+        assertTrue(1500 <= game.getPlayer("Jonas").getMoney());
     }
 
     @Test
