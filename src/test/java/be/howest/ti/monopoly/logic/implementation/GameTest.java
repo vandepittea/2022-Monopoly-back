@@ -176,6 +176,44 @@ class GameTest {
     }
 
     @Test
+    void rollDiceThriceWhenInJail() {
+        boolean testCompleted = false;
+        Game newGame = null;
+
+        while (!testCompleted) {
+            newGame = service.createGame(2, "group17");
+            newGame.joinGame("Jonas");
+            newGame.joinGame("Thomas");
+
+            Turn turn = new Turn(newGame.getPlayer("Jonas"));
+            newGame.jailCurrentPlayer(turn);
+            newGame.setCurrentPlayer("Thomas");
+
+            for (int i = 0; i < 3; i++) {
+                while (newGame.getCurrentPlayer().getName().equals("Thomas")) {
+                    newGame.rollDice("Thomas");
+                    if (newGame.getDirectSale() != null) {
+                        service.dontBuyProperty(newGame.getId(), newGame.getCurrentPlayer().getName(), Tile.decideNameAsPathParameter(newGame.getDirectSale()));
+                    }
+                }
+
+                newGame.rollDice("Jonas");
+                Turn lastTurn = newGame.getTurns().get(newGame.getTurns().size() - 1);
+
+                if ((i == 2) && !lastTurn.getRoll().isDoubleRoll() && (lastTurn.getType() == TurnType.DEFAULT)){
+                    testCompleted = true;
+                    break;
+                }
+                if (lastTurn.getType() != TurnType.JAIL_STAY) {
+                    break;
+                }
+            }
+        }
+
+        assertEquals(1450, newGame.getPlayer("Jonas").getMoney());
+    }
+
+    @Test
     void rollDicePassGo() {
         game.joinGame("Jonas");
         game.joinGame("Thomas");

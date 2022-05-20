@@ -8,8 +8,10 @@ import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.logic.implementation.enums.TurnType;
 import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game {
     private static final Map<String, Integer> idCounter = new HashMap<>();
@@ -199,7 +201,7 @@ public class Game {
 
         if (currentPlayer.isJailed()) {
             checkRollInJail(turn);
-        } else if (doesCurrentPlayerGetJailed()) {
+        } else if (checkLastTwoPlayerTurns(turns, true)) {
             jailCurrentPlayer(turn);
         } else {
             movePlayer(turn, lastDiceRoll);
@@ -211,12 +213,27 @@ public class Game {
     private void checkRollInJail(Turn turn) {
         if (lastDiceRoll.isDoubleRoll()) {
             currentPlayer.getOutOfJail();
+            turn.setType(TurnType.GET_OUT_OF_JAIL);
             movePlayer(turn, lastDiceRoll);
         } else {
-            turn.addMove("Jail", "");
-            turn.setType(TurnType.JAIL_STAY);
-            changeCurrentPlayer(true);
+            List<Turn> currentPlayerTurns = getCurrentPlayerTurns();
+
+            if (checkLastTwoPlayerTurns(currentPlayerTurns, false)) {
+                currentPlayer.getOutOfJailFine();
+                turn.setType(TurnType.GET_OUT_OF_JAIL);
+                movePlayer(turn, lastDiceRoll);
+                changeCurrentPlayer(true);
+            } else {
+                turn.addMove("Jail", "");
+                turn.setType(TurnType.JAIL_STAY);
+                changeCurrentPlayer(true);
+            }
         }
+    }
+
+    @JsonIgnore
+    private List<Turn> getCurrentPlayerTurns() {
+        return turns.stream().filter(turn -> turn.getPlayer().equals(currentPlayer.getName())).collect(Collectors.toList());
     }
 
     private void checkIllegalRollDiceActions(String playerName) {
@@ -240,13 +257,16 @@ public class Game {
         }
     }
 
-    private boolean doesCurrentPlayerGetJailed() {
-        if (turns.size() >= 2) {
-            Turn previousTurn = turns.get(turns.size() - 1);
-            Turn beforePreviousTurn = turns.get(turns.size() - 2);
+    private boolean checkLastTwoPlayerTurns(List<Turn> playerTurns, boolean checkForDoubleRoll) {
+        if (playerTurns.size() >= 2) {
+            Turn previousTurn = playerTurns.get(playerTurns.size() - 1);
+            Turn beforePreviousTurn = playerTurns.get(playerTurns.size() - 2);
 
             if ((currentPlayer.getName().equals(previousTurn.getPlayer())) &&
                     (currentPlayer.getName().equals(beforePreviousTurn.getPlayer()))) {
+                if (!checkForDoubleRoll){
+                    return true;
+                }
                 return lastDiceRoll.isDoubleRoll();
             }
         }
@@ -254,7 +274,7 @@ public class Game {
         return false;
     }
 
-    private void jailCurrentPlayer(Turn turn) {
+    public void jailCurrentPlayer(Turn turn) {
         Tile jail = service.getTile("Jail");
         currentPlayer.goToJail(jail);
         turn.setType(TurnType.GO_TO_JAIL);
@@ -308,6 +328,7 @@ public class Game {
             case LUXURY_TAX:
                 turn.addMove(newTile.getName(), "Pay taxes");
                 currentPlayer.payTaxes();
+                changeCurrentPlayer(false);
                 break;
             default:
                 turn.addMove(newTile.getName(), "");
