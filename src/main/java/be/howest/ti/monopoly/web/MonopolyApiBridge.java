@@ -173,8 +173,8 @@ public class MonopolyApiBridge {
         String prefix = request.getPrefixOfQuery();
 
         Boolean isStarted = null;
-        if (request.hasPathStartedParameter()) {
-            isStarted = request.getGameStartedPathParameter();
+        if (request.hasQueryStartedParameter()) {
+            isStarted = request.getGameStartedFromQuery();
         }
 
         Response.sendJsonResponse(ctx, 200, service.getGames(isStarted, numberOfPlayers, prefix));

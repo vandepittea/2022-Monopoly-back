@@ -122,13 +122,13 @@ public class Request {
         return getIdFromPath("gameId").getString();
     }
 
-    public boolean hasPathStartedParameter() {
-        RequestParameter parameter = getIdFromPath("started");
+    public boolean hasQueryStartedParameter() {
+        RequestParameter parameter = getIdFromQuery("started");
         return parameter != null;
     }
 
-    public Boolean getGameStartedPathParameter() {
-        RequestParameter parameter = getIdFromPath("started");
+    public Boolean getGameStartedFromQuery() {
+        RequestParameter parameter = getIdFromQuery("started");
         return parameter.getBoolean();
     }
 
