@@ -4,7 +4,6 @@ import be.howest.ti.monopoly.logic.implementation.*;
 import be.howest.ti.monopoly.logic.implementation.enums.*;
 import be.howest.ti.monopoly.logic.implementation.generator.Generator;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
-import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.security.SecureRandom;
@@ -128,7 +127,7 @@ public class CardExecutingTile extends Tile {
     private void executeRandomCommunityChest(MonopolyService service, Game game, Turn turn) {
         int randomCommunityChest = random.nextInt(communityChests.size());
         CommunityChest type = CommunityChest.values()[randomCommunityChest];
-        turn.addMove(this, game.getCurrentPlayer().getName() + ": " + communityChests.get(type));
+        turn.addMove(this, communityChests.get(type));
 
         switch (type) {
             case ADV_GO:
@@ -242,8 +241,8 @@ public class CardExecutingTile extends Tile {
     private void payRepairs(Game game, int houseRepairCost, int hotelRepairCost) {
         int cost = 0;
 
-        Set<PropertyView> properties = game.getCurrentPlayer().getProperties();
-        for (PropertyView propertyView : properties) {
+        Set<OwnedProperty> properties = game.getCurrentPlayer().getProperties();
+        for (OwnedProperty propertyView : properties) {
             if (propertyView.getProperty().type == TileType.STREET){
                 cost += propertyView.getHouseCount() * houseRepairCost;
                 cost += propertyView.getHotelCount() * hotelRepairCost;

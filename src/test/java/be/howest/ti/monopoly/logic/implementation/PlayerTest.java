@@ -5,7 +5,7 @@ import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
 import be.howest.ti.monopoly.logic.implementation.tile.Railroad;
 import be.howest.ti.monopoly.logic.implementation.tile.Street;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
-import be.howest.ti.monopoly.web.views.PropertyView;
+import be.howest.ti.monopoly.logic.implementation.tile.OwnedProperty;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ class PlayerTest {
         player1.buyProperty(railroad);
 
         assertEquals(1500 - 5, player1.getMoney());
-        assertTrue(player1.getProperties().contains(new PropertyView(railroad)));
+        assertTrue(player1.getProperties().contains(new OwnedProperty(railroad)));
     }
 
     @Test
@@ -68,9 +68,9 @@ class PlayerTest {
         assertEquals(0, player2.getMoney());
         assertTrue(player2.getProperties().isEmpty());
         assertEquals(1500 - 280 + (1500 - 240 - 260), player1.getMoney());
-        assertTrue(player1.getProperties().contains(new PropertyView(sherbetLand)));
-        assertTrue(player1.getProperties().contains(new PropertyView(warioGoldmine)));
-        assertTrue(player1.getProperties().contains(new PropertyView(grumbleVolcano)));
+        assertTrue(player1.getProperties().contains(new OwnedProperty(sherbetLand)));
+        assertTrue(player1.getProperties().contains(new OwnedProperty(warioGoldmine)));
+        assertTrue(player1.getProperties().contains(new OwnedProperty(grumbleVolcano)));
     }
 
     @Test
@@ -82,14 +82,14 @@ class PlayerTest {
 
     @Test
     void collectDebtDebtorNotOnProperty(){
-        player1.getProperties().add(new PropertyView(sherbetLand));
+        player1.getProperties().add(new OwnedProperty(sherbetLand));
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> player1.collectDebt(sherbetLand, player2, game));
     }
 
     @Test
     void collectDebtTooLateDiceRolledAlready(){
-        player1.getProperties().add(new PropertyView(sherbetLand));
+        player1.getProperties().add(new OwnedProperty(sherbetLand));
 
         Turn turn = new Turn(player2);
         Turn turn2 = new Turn(player1);

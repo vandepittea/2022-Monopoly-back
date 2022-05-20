@@ -6,7 +6,7 @@ import be.howest.ti.monopoly.logic.implementation.tile.*;
 import be.howest.ti.monopoly.logic.implementation.turn.DiceRoll;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
 import be.howest.ti.monopoly.logic.implementation.enums.TurnType;
-import be.howest.ti.monopoly.web.views.PropertyView;
+import be.howest.ti.monopoly.logic.implementation.tile.OwnedProperty;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -363,7 +363,7 @@ public class Game {
     private boolean propertyOwnedByOtherPlayer(Tile newTile) {
         for (Player player : players) {
             if (!player.getName().equals(currentPlayer.getName())) {
-                for (PropertyView property : player.getProperties()) {
+                for (OwnedProperty property : player.getProperties()) {
                     if (property.getProperty().getName().equals(newTile.getName())) {
                         return true;
                     }

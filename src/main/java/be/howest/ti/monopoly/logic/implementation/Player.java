@@ -5,7 +5,7 @@ import be.howest.ti.monopoly.logic.implementation.enums.Taxsystem;
 import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 import be.howest.ti.monopoly.logic.implementation.turn.Move;
-import be.howest.ti.monopoly.web.views.PropertyView;
+import be.howest.ti.monopoly.logic.implementation.tile.OwnedProperty;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,7 +32,7 @@ public class Player {
 
     private Tile currentTile;
     private Player creditor;
-    private final Map<Property, PropertyView> properties;
+    private final Map<Property, OwnedProperty> properties;
 
     public Player(String name, Tile startingTile) {
         this.jailed = false;
@@ -80,11 +80,11 @@ public class Player {
         return taxSystem;
     }
 
-    public Set<PropertyView> getProperties() {
+    public Set<OwnedProperty> getProperties() {
         return new HashSet<>(properties.values());
     }
 
-    public PropertyView getPropertyView(Property property) {
+    public OwnedProperty getPropertyView(Property property) {
         return properties.get(property);
     }
 
@@ -131,7 +131,7 @@ public class Player {
     }
 
     private void addProperty(Property property) {
-        properties.put(property, new PropertyView(property));
+        properties.put(property, new OwnedProperty(property));
     }
 
     private boolean payMoney(int amount) {
@@ -177,9 +177,9 @@ public class Player {
     private int calculateAssetWorth() {
         int assetWorth = money;
 
-        for (Map.Entry<Property, PropertyView> propertyPair : properties.entrySet()) {
+        for (Map.Entry<Property, OwnedProperty> propertyPair : properties.entrySet()) {
             Property property = propertyPair.getKey();
-            PropertyView view = propertyPair.getValue();
+            OwnedProperty view = propertyPair.getValue();
 
             assetWorth += property.getCost();
 

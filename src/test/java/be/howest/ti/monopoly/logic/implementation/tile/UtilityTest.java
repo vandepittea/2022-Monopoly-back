@@ -3,9 +3,7 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 import be.howest.ti.monopoly.logic.implementation.Game;
 import be.howest.ti.monopoly.logic.implementation.MonopolyService;
 import be.howest.ti.monopoly.logic.implementation.Player;
-import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
 import be.howest.ti.monopoly.logic.implementation.turn.DiceRoll;
-import be.howest.ti.monopoly.web.views.PropertyView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +29,7 @@ class UtilityTest {
     void calculateRentOneUtility(){
         game.joinGame("Bob");
         game.joinGame("Jan");
-        player.getProperties().add(new PropertyView(utility1));
+        player.getProperties().add(new OwnedProperty(utility1));
         game.rollDice("Bob");
 
         DiceRoll roll = game.getLastDiceRoll();
