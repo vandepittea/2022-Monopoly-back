@@ -169,6 +169,10 @@ public class Player {
 
     public void receiveMoney(int amount) {
         money += amount;
+        if ((debt > 0) && (money > debt)) {
+            money -= debt;
+            debt = 0;
+        }
     }
 
     public void moveTo(Tile newTile) {

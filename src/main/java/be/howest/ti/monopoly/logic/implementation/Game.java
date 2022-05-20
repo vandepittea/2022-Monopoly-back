@@ -236,7 +236,7 @@ public class Game {
             throw new IllegalMonopolyActionException("It is not your turn.");
         }
         if (currentPlayer.getDebt() > 0) {
-            throw new IllegalMonopolyActionException("The player is in debt.");
+            throw new IllegalMonopolyActionException("The player is in debt. Earn money or declare bankruptcy");
         }
         if (directSale != null) {
             throw new IllegalMonopolyActionException("The current player has to decide on a property.");
