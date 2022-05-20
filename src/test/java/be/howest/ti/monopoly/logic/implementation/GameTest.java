@@ -178,35 +178,43 @@ class GameTest {
 
     @Test
     void rollDiceThriceWhenInJail() {
-        game = service.createGame(2, "group17", "jailGame");
-        game.joinGame("Jonas");
-        game.joinGame("Thomas");
+        boolean endedWithoutDoubleRoll = false;
+        while(!endedWithoutDoubleRoll) {
+            game = service.createGame(2, "group17", "jailGame");
+            game.joinGame("Jonas");
+            game.joinGame("Thomas");
 
-        Turn turn = new Turn(game.getPlayer("Jonas"));
-        game.jailCurrentPlayer(turn);
-        game.getTurns().add(turn);
-
-        for (int i = 0; i < 2; i++) {
-            turn = new Turn(game.getPlayer("Jonas"), 1, 2);
-            turn.setType(TurnType.JAIL_STAY);
-            turn.addMove(service.getTile("Jail"), "");
+            Turn turn = new Turn(game.getPlayer("Jonas"));
+            game.jailCurrentPlayer(turn);
             game.getTurns().add(turn);
-        }
 
-        game.rollDice("Jonas");
-        Turn lastTurn = game.getTurns().get(game.getTurns().size() - 1);
-
-        TileType type = lastTurn.getMoves().get(lastTurn.getMoves().size() - 1).getTile().getType();
-
-        if ((type == TileType.CHANCE) || (type == TileType.COMMUNITY_CHEST)) {
-            if (game.getPlayer("Jonas").getGetOutOfJailFreeCards() > 0) {
-                assertEquals(1450, game.getPlayer("Jonas").getMoney());
-            } else {
-                assertNotEquals(1450, game.getPlayer("Jonas").getMoney());
+            for (int i = 0; i < 2; i++) {
+                turn = new Turn(game.getPlayer("Jonas"), 1, 2);
+                turn.setType(TurnType.JAIL_STAY);
+                turn.addMove(service.getTile("Jail"), "");
+                game.getTurns().add(turn);
             }
-        }
-        else {
-            assertEquals(1450, game.getPlayer("Jonas").getMoney());
+
+            game.rollDice("Jonas");
+            Turn lastTurn = game.getTurns().get(game.getTurns().size() - 1);
+
+            TileType type = lastTurn.getMoves().get(lastTurn.getMoves().size() - 1).getTile().getType();
+
+            if ((type == TileType.CHANCE) || (type == TileType.COMMUNITY_CHEST)) {
+                if (game.getPlayer("Jonas").getGetOutOfJailFreeCards() > 0) {
+                    assertEquals(1450, game.getPlayer("Jonas").getMoney());
+                } else {
+                    assertNotEquals(1450, game.getPlayer("Jonas").getMoney());
+                }
+            }
+            else {
+                if (lastTurn.getRoll().isDoubleRoll()){
+                    assertEquals(1500, game.getPlayer("Jonas").getMoney());
+                } else {
+                    assertEquals(1450, game.getPlayer("Jonas").getMoney());
+                    endedWithoutDoubleRoll = true;
+                }
+            }
         }
     }
 
