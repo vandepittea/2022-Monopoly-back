@@ -178,7 +178,7 @@ class GameTest {
 
     @Test
     void rollDiceThriceWhenInJail() {
-        game = service.createGame(2, "group17");
+        game = service.createGame(2, "group17", "jailGame");
         game.joinGame("Jonas");
         game.joinGame("Thomas");
 

@@ -36,7 +36,8 @@ class CardExecutingTileTest {
             chanceTile.execute(service, game, turn);
 
             Player currentplayerObject = game.getCurrentPlayer();
-            ChanceCard type = CardExecutingTile.getChanceType(turn.getMoves().get(0).getDescription());
+            String description = turn.getMoves().get(0).getDescription().split(": ")[1];
+            ChanceCard type = CardExecutingTile.getChanceType(description);
             gottenChanceCards.add(type);
             switch (type) {
                 case ADV_BOWSER_CASTLE:
@@ -129,7 +130,8 @@ class CardExecutingTileTest {
             communityTile.execute(service, game, turn);
 
             Player currentplayerObject = game.getCurrentPlayer();
-            CommunityChest type = CardExecutingTile.getCommunityType(turn.getMoves().get(0).getDescription());
+            String description = turn.getMoves().get(0).getDescription().split(": ")[1];
+            CommunityChest type = CardExecutingTile.getCommunityType(description);
             gottenCommmunityChests.add(type);
             switch (type) {
                 case ADV_GO:

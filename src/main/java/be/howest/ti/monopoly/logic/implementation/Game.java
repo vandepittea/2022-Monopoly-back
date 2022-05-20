@@ -349,7 +349,7 @@ public class Game {
 
         currentPlayer.goToJail(jail);
         turn.addMove(newTile, currentPlayer.getName() + " has to go to jail");
-        turn.addMove(service.getTile("Jail"), "");
+        turn.addMove(service.getTile("Jail"), currentPlayer.getName() + " is in jail.");
 
         changeCurrentPlayer(true);
     }

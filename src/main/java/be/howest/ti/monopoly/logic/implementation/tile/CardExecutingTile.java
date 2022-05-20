@@ -67,7 +67,7 @@ public class CardExecutingTile extends Tile {
     private void executeRandomChance(MonopolyService service, Game game, Turn turn) {
         int randomChance = random.nextInt(chances.size());
         ChanceCard type = ChanceCard.values()[randomChance];
-        turn.addMove(this, chances.get(type));
+        turn.addMove(this, game.getCurrentPlayer().getName() + ": " + chances.get(type));
 
         switch (type) {
             case ADV_BOWSER_CASTLE:
@@ -127,7 +127,7 @@ public class CardExecutingTile extends Tile {
     private void executeRandomCommunityChest(MonopolyService service, Game game, Turn turn) {
         int randomCommunityChest = random.nextInt(communityChests.size());
         CommunityChest type = CommunityChest.values()[randomCommunityChest];
-        turn.addMove(this, communityChests.get(type));
+        turn.addMove(this, game.getCurrentPlayer().getName() + ": " + communityChests.get(type));
 
         switch (type) {
             case ADV_GO:
