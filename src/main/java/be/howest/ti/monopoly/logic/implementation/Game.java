@@ -18,6 +18,7 @@ public class Game {
 
     private final int numberOfPlayers;
     private final String id;
+    private final String gameName;
     private final Tile startingTile;
     private final MonopolyService service;
     private final List<Turn> turns;
@@ -33,7 +34,7 @@ public class Game {
     private Player currentPlayer;
     private Player winner;
 
-    public Game(MonopolyService service, int numberOfPlayers, String prefix, Tile startingTile) {
+    public Game(MonopolyService service, int numberOfPlayers, String prefix, Tile startingTile, String gameName) {
         this.started = false;
         this.canRoll = true;
         this.ended = false;
@@ -52,6 +53,7 @@ public class Game {
         this.turns = new ArrayList<>();
         this.players = new ArrayList<>();
 
+        this.gameName = gameName;
         this.id = generateId(prefix);
     }
 
@@ -75,6 +77,10 @@ public class Game {
 
     public String getId() {
         return this.id;
+    }
+
+    public String getGameName() {
+        return gameName;
     }
 
     public boolean isStarted() {
@@ -248,10 +254,10 @@ public class Game {
             throw new IllegalMonopolyActionException("It is not your turn.");
         }
         if (currentPlayer.getDebt() > 0) {
-            throw new IllegalMonopolyActionException("You are in debt.");
+            throw new IllegalMonopolyActionException("You are in debt. Earn money or declare bankruptcy");
         }
         if (directSale != null) {
-            throw new IllegalMonopolyActionException("The current player has to decide on a property.");
+            throw new IllegalMonopolyActionException("You have to decide on a property.");
         }
         if (currentPlayer.isBankrupt()) {
             throw new IllegalMonopolyActionException("You are bankrupt. Rolling the dice isn't allowed.");

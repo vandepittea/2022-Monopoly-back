@@ -30,7 +30,7 @@ class PlayerTest {
     @BeforeEach
     void init() {
         service = new MonopolyService();
-        game = service.createGame(2, "group17");
+        game = service.createGame(2, "group17", "gameName");
 
         player1 = new Player("Bob", null);
         player2 = new Player("Jan", null);
@@ -414,5 +414,11 @@ class PlayerTest {
         assertEquals(money, player2.getMoney());
         player2.payTaxes();
         assertEquals(money - ((money + 60 + 60 + 50) / 10), player2.getMoney());
+    }
+
+    @Test
+    void assignPawn() {
+        player1.setPawn("Mario");
+        assertEquals("Mario", player1.getPawn());
     }
 }

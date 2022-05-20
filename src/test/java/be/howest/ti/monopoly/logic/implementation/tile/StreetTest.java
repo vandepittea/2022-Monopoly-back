@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StreetTest {
     MonopolyService service = new MonopolyService();
-    Game game = service.createGame(2, "group17");
+    Game game = service.createGame(2, "group17", "gameName");
     Player player = new Player("Thomas", null);
 
     Street street1 = (Street) service.getTile(1);

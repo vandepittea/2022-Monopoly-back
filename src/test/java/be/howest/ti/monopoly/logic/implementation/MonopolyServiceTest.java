@@ -18,7 +18,7 @@ class MonopolyServiceTest {
     @BeforeEach
     void init() {
         service = new MonopolyService();
-        game = service.createGame(2, "group17");
+        game = service.createGame(2, "group17", "gameName");
         street = new Street(1, "Peach's Garden", 60, 30, 2, StreetColor.PURPLE,
                 new Integer[]{10, 30, 90, 160, 250}, 50, 2);
     }
@@ -46,7 +46,7 @@ class MonopolyServiceTest {
     @Test
     void testGetGames() {
         assertEquals(0, service.getGames(false, 2, "test").size());
-        service.createGame(2, "test");
+        service.createGame(2, "test", "GameName");
         assertEquals(1, service.getGames(false, 2, "test").size());
         assertEquals(0, service.getGames(true, 2, "test").size());
         assertEquals(0, service.getGames(false, 3, "test").size());

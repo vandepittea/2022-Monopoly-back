@@ -18,7 +18,7 @@ class CardExecutingTileTest {
 
         while (gottenChanceCards.size() != ChanceCard.values().length) {
             MonopolyService service = new MonopolyService();
-            Game game = service.createGame(2, "group17");
+            Game game = service.createGame(2, "group17", "gameName");
             game.joinGame("Jonas");
             game.joinGame("Thomas");
 
@@ -111,7 +111,7 @@ class CardExecutingTileTest {
 
         while (gottenCommmunityChests.size() != CommunityChest.values().length) {
             MonopolyService service = new MonopolyService();
-            Game game = service.createGame(2, "group17");
+            Game game = service.createGame(2, "group17", "gameName");
             game.joinGame("Jonas");
             game.joinGame("Thomas");
 

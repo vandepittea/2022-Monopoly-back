@@ -162,8 +162,9 @@ public class MonopolyApiBridge {
 
         int numberOfPlayers = request.getNumberOfPlayersOfBody();
         String prefix = request.getPrefixOfBody();
+        String gameName = request.getGameNameOfBody();
 
-        Response.sendJsonResponse(ctx, 200, service.createGame(numberOfPlayers, prefix));
+        Response.sendJsonResponse(ctx, 200, service.createGame(numberOfPlayers, prefix, gameName));
     }
 
     private void getGames(RoutingContext ctx) {
@@ -183,12 +184,19 @@ public class MonopolyApiBridge {
         Request request = Request.from(ctx);
 
         String playerName = request.getPlayerNameOfBody();
+        String pawn = request.getPawnOfBody();
         String gameId = request.getGameId();
 
         try {
-            service.joinGame(gameId, playerName);
-            String playerToken = tokenManager.createToken(new MonopolyUser(gameId, playerName));
-            Response.sendJsonResponse(ctx, 200, new JsonObject().put("playerToken", playerToken));
+            if (pawn == null) {
+                service.joinGame(gameId, playerName);
+                String playerToken = tokenManager.createToken(new MonopolyUser(gameId, playerName));
+                Response.sendJsonResponse(ctx, 200, new JsonObject().put("playerToken", playerToken));
+            } else {
+                service.assignPawn(gameId, playerName, pawn);
+                Response.sendOkResponse(ctx);
+            }
+
         } catch (IllegalMonopolyActionException exception) {
             Response.sendFailure(ctx, 409, exception.getMessage());
         } catch (MonopolyResourceNotFoundException exception) {

@@ -29,7 +29,7 @@ public class ServiceAdapter implements IService {
     }
 
     @Override
-    public Game createGame(int numberOfPlayers, String prefix) {
+    public Game createGame(int numberOfPlayers, String prefix, String gameName) {
         throw new UnsupportedOperationException();
     }
 
@@ -110,6 +110,11 @@ public class ServiceAdapter implements IService {
 
     @Override
     public void useEstimateTax(String gameId, String playerName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void assignPawn(String gameId, String playerName, String pawn) {
         throw new UnsupportedOperationException();
     }
 

@@ -78,8 +78,8 @@ public class MonopolyService extends ServiceAdapter {
     }
 
     @Override
-    public Game createGame(int numberOfPlayers, String prefix) {
-        Game newGame = new Game(this, numberOfPlayers, prefix, tiles.get(0));
+    public Game createGame(int numberOfPlayers, String prefix, String gameName) {
+        Game newGame = new Game(this, numberOfPlayers, prefix, tiles.get(0), gameName);
         games.add(newGame);
         return newGame;
     }
@@ -213,5 +213,12 @@ public class MonopolyService extends ServiceAdapter {
         Game game = getGame(gameId);
         Player player = game.getPlayer(playerName);
         player.useEstimateTax();
+    }
+
+    @Override
+    public void assignPawn(String gameId, String playerName, String pawn) {
+        Game game = getGame(gameId);
+        Player player = game.getPlayer(playerName);
+        player.setPawn(pawn);
     }
 }
