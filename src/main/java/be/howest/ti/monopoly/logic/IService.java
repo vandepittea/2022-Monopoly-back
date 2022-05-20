@@ -29,8 +29,6 @@ public interface IService {
     void getOutOfJailFree(String gameId, String playerName);
     void getOutOfJailFine(String gameId, String playerName);
     void useComputeTax(String gameId, String playerName);
-
     void useEstimateTax(String gameId, String playerName);
-
     void assignPawn(String gameId, String playerName, String pawn);
 }
