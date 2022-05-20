@@ -128,7 +128,7 @@ public class CardExecutingTile extends Tile {
     private void executeRandomCommunityChest(MonopolyService service, Game game, Turn turn) {
         int randomCommunityChest = random.nextInt(communityChests.size());
         CommunityChest type = CommunityChest.values()[randomCommunityChest];
-        turn.addMove(this, communityChests.get(type));
+        turn.addMove(this, game.getCurrentPlayer().getName() + ": " + communityChests.get(type));
 
         switch (type) {
             case ADV_GO:

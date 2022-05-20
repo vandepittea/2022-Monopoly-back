@@ -95,13 +95,13 @@ public class MonopolyService extends ServiceAdapter {
     public String buyProperty(String gameId, String playerName, String propertyName) {
         Game game = getGame(gameId);
         Player player = game.getPlayer(playerName);
-        Tile tile = getTile(propertyName);
-        Property property = (Property) tile;
+        Property property = (Property) getTile(propertyName);
 
-        if (!player.equals(game.getCurrentPlayer()) || !tile.getName().equals(game.getDirectSale())) {
-            throw new IllegalMonopolyActionException("You tried to do something which is against the rules of " +
-                    "Monopoly. In this case, it is most likely not your place to buy this property and/or you are " +
-                    "trying to buy the wrong property.");
+        if (!player.equals(game.getCurrentPlayer())) {
+            throw new IllegalMonopolyActionException("Only the current player can buy property");
+        }
+        if (!property.getName().equals(game.getDirectSale())) {
+            throw new IllegalMonopolyActionException(property.getName() + " is currently not on sale");
         }
 
         player.buyProperty(property);
@@ -116,10 +116,10 @@ public class MonopolyService extends ServiceAdapter {
         Property property = (Property) getTile(propertyName);
 
         if (!player.equals(game.getCurrentPlayer())) {
-            throw new IllegalMonopolyActionException("Only the current player can choose not to buy a property");
+            throw new IllegalMonopolyActionException("Only the current player can choose not to buy property");
         }
         if (!property.getName().equals(game.getDirectSale())) {
-            throw new IllegalMonopolyActionException("You can only choose not to buy the property you're standing on");
+            throw new IllegalMonopolyActionException(property.getName() + " is currently not on sale");
         }
 
         game.handlePropertySale();
