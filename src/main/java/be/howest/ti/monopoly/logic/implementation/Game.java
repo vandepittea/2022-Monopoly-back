@@ -131,8 +131,9 @@ public class Game {
         return currentPlayer;
     }
 
-    public String getWinner() {
-        return winner.getName();
+    @JsonIdentityReference(alwaysAsId = true)
+    public Player getWinner() {
+        return winner;
     }
 
     public void setDirectSale(String directSale) {
