@@ -41,7 +41,10 @@ class GameTest {
         Player p2 = new Player("Jan", null);
 
         game.joinGame("Bob");
+        service.assignPawn("group17_0", "Bob", "BobPawn");
         game.joinGame("Jan");
+        service.assignPawn("group17_0", "Jan", "JanPawn");
+
 
         assertTrue(game.getPlayers().contains(p));
         assertTrue(game.getPlayers().contains(p2));
