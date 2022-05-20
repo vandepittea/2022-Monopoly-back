@@ -169,8 +169,8 @@ public class MonopolyApiBridge {
 
     private void getGames(RoutingContext ctx) {
         Request request = Request.from(ctx);
-        Integer numberOfPlayers = request.getNumberOfPlayersOfPath();
-        String prefix = request.getPrefixOfPath();
+        Integer numberOfPlayers = request.getNumberOfPlayersOfQuery();
+        String prefix = request.getPrefixOfQuery();
 
         Boolean isStarted = null;
         if (request.hasPathStartedParameter()) {
@@ -191,7 +191,7 @@ public class MonopolyApiBridge {
             if (pawn == null) {
                 service.joinGame(gameId, playerName);
                 String playerToken = tokenManager.createToken(new MonopolyUser(gameId, playerName));
-                Response.sendJsonResponse(ctx, 200, new JsonObject().put("playerToken", playerToken));
+                Response.sendJsonResponse(ctx, 200, new JsonObject().put("token", playerToken));
             } else {
                 service.assignPawn(gameId, playerName, pawn);
                 Response.sendOkResponse(ctx);

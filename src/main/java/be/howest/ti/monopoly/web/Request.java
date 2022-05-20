@@ -81,8 +81,8 @@ public class Request {
         return params.body().getJsonObject().getInteger("numberOfPlayers");
     }
 
-    public Integer getNumberOfPlayersOfPath(){
-        RequestParameter parameter = getIdFromPath("numberOfPlayers");
+    public Integer getNumberOfPlayersOfQuery(){
+        RequestParameter parameter = getIdFromQuery("numberOfPlayers");
         if (parameter == null) {
             return null;
         }
@@ -93,8 +93,8 @@ public class Request {
         return params.body().getJsonObject().getString("prefix");
     }
 
-    public String getPrefixOfPath(){
-        RequestParameter parameter = getIdFromPath("prefix");
+    public String getPrefixOfQuery(){
+        RequestParameter parameter = getIdFromQuery("prefix");
         if (parameter == null) {
             return null;
         }
@@ -142,5 +142,9 @@ public class Request {
 
     private RequestParameter getIdFromPath(String id) {
         return params.pathParameter(id);
+    }
+
+    private RequestParameter getIdFromQuery(String id) {
+        return params.queryParameter(id);
     }
 }
