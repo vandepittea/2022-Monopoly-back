@@ -2,10 +2,8 @@ package be.howest.ti.monopoly.logic.implementation.tile;
 
 import be.howest.ti.monopoly.logic.implementation.*;
 import be.howest.ti.monopoly.logic.implementation.enums.*;
-import be.howest.ti.monopoly.logic.implementation.enums.Utility;
 import be.howest.ti.monopoly.logic.implementation.generator.Generator;
 import be.howest.ti.monopoly.logic.implementation.turn.Turn;
-import be.howest.ti.monopoly.web.views.PropertyView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.security.SecureRandom;
@@ -16,7 +14,7 @@ public class CardExecutingTile extends Tile {
     private static final Map<ChanceCard, String> chances = Generator.generateChances();
     private static final Map<CommunityChest, String> communityChests = Generator.generateCommunityChests();
     private static final Map<PowerUp, Integer> powerUpLocations = Generator.generatePowerUpLocations();
-    private static final Map<Utility, Integer> utilityLocations = Generator.generateUtilityLocations();
+    private static final Map<UtilityEnum, Integer> utilityLocations = Generator.generateUtilityLocations();
     private static final Map<TilesToAdvance, Integer> tilesToAdvance = Generator.generateTilesToAdvance();
 
     public CardExecutingTile(int position, String name, TileType type) {
@@ -69,7 +67,7 @@ public class CardExecutingTile extends Tile {
     private void executeRandomChance(MonopolyService service, Game game, Turn turn) {
         int randomChance = random.nextInt(chances.size());
         ChanceCard type = ChanceCard.values()[randomChance];
-        turn.addMove(getName(), chances.get(type));
+        turn.addMove(this, game.getCurrentPlayer().getName() + ": " + chances.get(type));
 
         switch (type) {
             case ADV_BOWSER_CASTLE:
@@ -95,7 +93,7 @@ public class CardExecutingTile extends Tile {
                 game.changeCurrentPlayer(false);
                 break;
             case GET_JAIL_CARD:
-                game.getCurrentPlayer().receiveGetOutOfJailCard();
+                game.getCurrentPlayer().receiveGetOutOfJailFreeCard();
                 game.changeCurrentPlayer(false);
                 break;
             case RETURN_3:
@@ -129,7 +127,7 @@ public class CardExecutingTile extends Tile {
     private void executeRandomCommunityChest(MonopolyService service, Game game, Turn turn) {
         int randomCommunityChest = random.nextInt(communityChests.size());
         CommunityChest type = CommunityChest.values()[randomCommunityChest];
-        turn.addMove(getName(), communityChests.get(type));
+        turn.addMove(this, game.getCurrentPlayer().getName() + ": " + communityChests.get(type));
 
         switch (type) {
             case ADV_GO:
@@ -149,7 +147,7 @@ public class CardExecutingTile extends Tile {
                 game.changeCurrentPlayer(false);
                 break;
             case GET_JAIL_CARD:
-                game.getCurrentPlayer().receiveGetOutOfJailCard();
+                game.getCurrentPlayer().receiveGetOutOfJailFreeCard();
                 game.changeCurrentPlayer(false);
                 break;
             case GO_JAIL:
@@ -214,7 +212,7 @@ public class CardExecutingTile extends Tile {
             }
         }
 
-        goToTile(service, utilityLocations.get(Utility.ELECTRIC_KOOPA_FARM), turn, game, false);
+        goToTile(service, utilityLocations.get(UtilityEnum.ELECTRIC_KOOPA_FARM), turn, game, false);
     }
 
     private void advanceToNextPowerUp(MonopolyService service, Game game, Turn turn) {
@@ -243,8 +241,8 @@ public class CardExecutingTile extends Tile {
     private void payRepairs(Game game, int houseRepairCost, int hotelRepairCost) {
         int cost = 0;
 
-        Set<PropertyView> properties = game.getCurrentPlayer().getProperties();
-        for (PropertyView propertyView : properties) {
+        Set<OwnedProperty> properties = game.getCurrentPlayer().getProperties();
+        for (OwnedProperty propertyView : properties) {
             if (propertyView.getProperty().type == TileType.STREET){
                 cost += propertyView.getHouseCount() * houseRepairCost;
                 cost += propertyView.getHotelCount() * hotelRepairCost;

@@ -5,7 +5,6 @@ import be.howest.ti.monopoly.logic.implementation.Player;
 import be.howest.ti.monopoly.logic.implementation.enums.StreetColor;
 import be.howest.ti.monopoly.logic.implementation.enums.TileType;
 import be.howest.ti.monopoly.logic.implementation.turn.DiceRoll;
-import be.howest.ti.monopoly.web.views.PropertyView;
 
 import java.util.Objects;
 
@@ -44,7 +43,7 @@ public class Utility extends Property {
     private int amountOfUtilitiesInOwnership(Player player){
         int amountOfUtilities = 0;
 
-        for(PropertyView propertyView: player.getProperties()){
+        for(OwnedProperty propertyView: player.getProperties()){
             if(propertyView.getProperty().getType().equals(TileType.UTILITY)){
                 amountOfUtilities++;
             }

@@ -1,7 +1,6 @@
 package be.howest.ti.monopoly.logic.implementation.generator;
 
 import be.howest.ti.monopoly.logic.implementation.enums.*;
-import be.howest.ti.monopoly.logic.implementation.enums.Utility;
 import be.howest.ti.monopoly.logic.implementation.tile.*;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class Generator {
         tiles.add(new Street(9, "Cheep-Cheep Oasis", 120, 60, 3, StreetColor.LIGHTBLUE, new Integer[]{40, 100, 300, 450, 600}, 50, 8));
         tiles.add(new SimpleTile(10, "Jail", TileType.JAIL));
         tiles.add(new Street(11, "Delfino Airship", 140, 70, 3, StreetColor.VIOLET, new Integer[]{50, 150, 450, 625, 750}, 100, 10));
-        tiles.add(new be.howest.ti.monopoly.logic.implementation.tile.Utility(12, "Electric Koopa Farm", 150, 75, 2, StreetColor.WHITE, "4 or 10 times the dice roll"));
+        tiles.add(new Utility(12, "Electric Koopa Farm", 150, 75, 2, StreetColor.WHITE, "4 or 10 times the dice roll"));
         tiles.add(new Street(13, "Delfino Plaza", 140, 70, 3, StreetColor.VIOLET, new Integer[]{50, 150, 450, 625, 750}, 100, 10));
         tiles.add(new Street(14, "MT Corona", 160, 80, 3, StreetColor.VIOLET, new Integer[]{60, 180, 500, 700, 900}, 100, 12));
         tiles.add(new Railroad(15, "F.L.U.D.D.", 200, 100, 4, StreetColor.BLACK, 25));
@@ -43,7 +42,7 @@ public class Generator {
         tiles.add(new Railroad(25, "Mario Cart", 200, 100, 4, StreetColor.BLACK, 25));
         tiles.add(new Street(26, "DK Mountain", 260, 130, 3, StreetColor.YELLOW, new Integer[]{110, 330, 800, 975, 1150}, 150, 22));
         tiles.add(new Street(27, "Wario's Goldmine", 260, 130, 3, StreetColor.YELLOW, new Integer[]{110, 330, 800, 975, 1150,}, 150, 22));
-        tiles.add(new be.howest.ti.monopoly.logic.implementation.tile.Utility(28, "Gas Pump", 150, 75, 2, StreetColor.WHITE, "4 or 10 times the dice roll"));
+        tiles.add(new Utility(28, "Gas Pump", 150, 75, 2, StreetColor.WHITE, "4 or 10 times the dice roll"));
         tiles.add(new Street(29, "Grumble Volcano", 280, 140, 3, StreetColor.YELLOW, new Integer[]{120, 360, 850, 1025, 1200}, 150, 24));
         tiles.add(new SimpleTile(30, "Go to Jail", TileType.GO_TO_JAIL));
         tiles.add(new Street(31, "Steam Gardens", 300, 150, 3, StreetColor.DARKGREEN, new Integer[]{130, 390, 900, 1100, 1275}, 200, 26));
@@ -104,11 +103,11 @@ public class Generator {
         return communityChests;
     }
 
-    public static Map<Utility, Integer> generateUtilityLocations() {
-        Map<Utility, Integer> utilityLocations = new EnumMap<>(Utility.class);
+    public static Map<UtilityEnum, Integer> generateUtilityLocations() {
+        Map<UtilityEnum, Integer> utilityLocations = new EnumMap<>(UtilityEnum.class);
 
-        utilityLocations.put(Utility.ELECTRIC_KOOPA_FARM, 12);
-        utilityLocations.put(Utility.GAS_PUMP, 28);
+        utilityLocations.put(UtilityEnum.ELECTRIC_KOOPA_FARM, 12);
+        utilityLocations.put(UtilityEnum.GAS_PUMP, 28);
 
         return utilityLocations;
     }
