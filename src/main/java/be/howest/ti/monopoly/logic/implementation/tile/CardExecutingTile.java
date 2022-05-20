@@ -94,7 +94,7 @@ public class CardExecutingTile extends Tile {
                 game.changeCurrentPlayer(false);
                 break;
             case GET_JAIL_CARD:
-                game.getCurrentPlayer().receiveGetOutOfJailCard();
+                game.getCurrentPlayer().receiveGetOutOfJailFreeCard();
                 game.changeCurrentPlayer(false);
                 break;
             case RETURN_3:
@@ -148,7 +148,7 @@ public class CardExecutingTile extends Tile {
                 game.changeCurrentPlayer(false);
                 break;
             case GET_JAIL_CARD:
-                game.getCurrentPlayer().receiveGetOutOfJailCard();
+                game.getCurrentPlayer().receiveGetOutOfJailFreeCard();
                 game.changeCurrentPlayer(false);
                 break;
             case GO_JAIL:

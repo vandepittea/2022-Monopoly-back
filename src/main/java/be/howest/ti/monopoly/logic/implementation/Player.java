@@ -26,7 +26,7 @@ public class Player {
     private boolean bankrupt;
     private int debt;
     private int money;
-    private int getOutOfJailCards;
+    private int getOutOfJailFreeCards;
 
     private Taxsystem taxSystem;
 
@@ -40,7 +40,7 @@ public class Player {
 
         this.debt = 0;
         this.money = 1500;
-        this.getOutOfJailCards = 0;
+        this.getOutOfJailFreeCards = 0;
 
         this.taxSystem = Taxsystem.ESTIMATE;
 
@@ -72,8 +72,8 @@ public class Player {
         return bankrupt;
     }
 
-    public int getGetOutOfJailCards() {
-        return getOutOfJailCards;
+    public int getGetOutOfJailFreeCards() {
+        return getOutOfJailFreeCards;
     }
 
     public Taxsystem getTaxSystem() {
@@ -116,8 +116,8 @@ public class Player {
         this.jailed = false;
     }
 
-    public void receiveGetOutOfJailCard() {
-        getOutOfJailCards++;
+    public void receiveGetOutOfJailFreeCard() {
+        getOutOfJailFreeCards++;
     }
 
     public void buyProperty(Property property) {
@@ -355,14 +355,14 @@ public class Player {
     }
 
     public void getOutOfJailFree() {
-        if(getOutOfJailCards < 1){
+        if(getOutOfJailFreeCards < 1){
             throw  new IllegalMonopolyActionException("You don't have get out of jail cards. You're still in jail.");
         }
         if(!jailed){
             throw new IllegalMonopolyActionException("You're not in jail. You can't use this endpoint.");
         }
 
-        getOutOfJailCards--;
+        getOutOfJailFreeCards--;
         jailed = false;
     }
 

@@ -69,7 +69,7 @@ class CardExecutingTileTest {
                     break;
                 case GET_JAIL_CARD:
                     assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
-                    assertEquals(1, currentplayerObject.getGetOutOfJailCards());
+                    assertEquals(1, currentplayerObject.getGetOutOfJailFreeCards());
                     break;
                 case RETURN_3:
                     Tile returnedTile = service.getTile(4);
@@ -151,7 +151,7 @@ class CardExecutingTileTest {
                     break;
                 case GET_JAIL_CARD:
                     assertEquals(newTile.getName(), currentplayerObject.getCurrentTile().getName());
-                    assertEquals(1, currentplayerObject.getGetOutOfJailCards());
+                    assertEquals(1, currentplayerObject.getGetOutOfJailFreeCards());
                     break;
                 case GO_JAIL:
                     assertEquals("Jail", currentplayerObject.getCurrentTile().getName());

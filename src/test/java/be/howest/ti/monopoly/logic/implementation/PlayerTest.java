@@ -353,7 +353,7 @@ class PlayerTest {
 
     @Test
     void getOutOfJailFreeNotJailed(){
-        player1.receiveGetOutOfJailCard();
+        player1.receiveGetOutOfJailFreeCard();
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> player1.getOutOfJailFree());
     }
@@ -361,15 +361,15 @@ class PlayerTest {
     @Test
     void getOutOfJailFreeSuccessful(){
         player1.goToJail(null);
-        player1.receiveGetOutOfJailCard();
+        player1.receiveGetOutOfJailFreeCard();
 
         assertTrue(player1.isJailed());
-        assertEquals(1, player1.getGetOutOfJailCards());
+        assertEquals(1, player1.getGetOutOfJailFreeCards());
 
         player1.getOutOfJailFree();
 
         assertFalse(player1.isJailed());
-        assertEquals(0, player1.getGetOutOfJailCards());
+        assertEquals(0, player1.getGetOutOfJailFreeCards());
     }
 
     @Test
