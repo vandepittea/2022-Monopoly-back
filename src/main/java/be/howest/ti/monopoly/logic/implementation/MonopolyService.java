@@ -220,5 +220,6 @@ public class MonopolyService extends ServiceAdapter {
         Game game = getGame(gameId);
         Player player = game.getPlayer(playerName);
         player.setPawn(pawn);
+        game.changeStartedIfNeeded();
     }
 }

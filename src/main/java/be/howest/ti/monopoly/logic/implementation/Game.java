@@ -161,10 +161,9 @@ public class Game {
 
         Player player = new Player(playerName, startingTile);
         players.add(player);
-        changeStartedIfNeeded();
     }
 
-    private void changeStartedIfNeeded() {
+    public void changeStartedIfNeeded() {
         if (checkForReachingOfMaximumPlayers()) {
             started = true;
             currentPlayer = players.get(0);
