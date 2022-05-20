@@ -337,6 +337,12 @@ public class Game {
                 currentPlayer.payTaxes();
                 changeCurrentPlayer(false);
                 break;
+            case FREE_PARKING:
+                turn.addMove(newTile, currentPlayer.getName() + " passed this tile.");
+                break;
+            case JAIL:
+                turn.addMove(newTile, currentPlayer.getName() + " is visiting the jail.");
+                break;
             default:
                 turn.addMove(newTile, "");
                 changeCurrentPlayer(false);
