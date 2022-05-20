@@ -28,7 +28,9 @@ class UtilityTest {
     @Test
     void calculateRentOneUtility(){
         game.joinGame("Bob");
+        service.assignPawn(game.getId(), "Bob", "");
         game.joinGame("Jan");
+        service.assignPawn(game.getId(), "Jan", "");
         player.getProperties().add(new OwnedProperty(utility1));
         game.rollDice("Bob");
 
@@ -41,7 +43,9 @@ class UtilityTest {
     @Test
     void calculateRentTwoUtilities(){
         game.joinGame("Bob");
+        service.assignPawn(game.getId(), "Bob", "");
         game.joinGame("Jan");
+        service.assignPawn(game.getId(), "Jan", "");
         player.buyProperty(utility1);
         player.buyProperty(utility2);
         game.rollDice("Bob");

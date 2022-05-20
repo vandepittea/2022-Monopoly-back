@@ -20,7 +20,9 @@ class CardExecutingTileTest {
             MonopolyService service = new MonopolyService();
             Game game = service.createGame(2, "group17", "gameName");
             game.joinGame("Jonas");
+            service.assignPawn(game.getId(), "Jonas", "");
             game.joinGame("Thomas");
+            service.assignPawn(game.getId(), "Thomas", "");
 
             Player player = game.getPlayer("Jonas");
             Street street = (Street) service.getTile(1);
@@ -57,7 +59,7 @@ class CardExecutingTileTest {
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case ADV_POWERUP:
-                    assertEquals("F.L.U.D.D.", currentplayerObject.getCurrentTile().getName());
+                    assertEquals("FLUDD", currentplayerObject.getCurrentTile().getName());
                     assertEquals(1330, currentplayerObject.getMoney());
                     break;
                 case ADV_UT:
@@ -114,7 +116,9 @@ class CardExecutingTileTest {
             MonopolyService service = new MonopolyService();
             Game game = service.createGame(2, "group17", "gameName");
             game.joinGame("Jonas");
+            service.assignPawn(game.getId(), "Jonas", "");
             game.joinGame("Thomas");
+            service.assignPawn(game.getId(), "Thomas", "");
 
             Player player = game.getPlayer("Jonas");
             Street street = (Street) service.getTile(1);
