@@ -126,10 +126,6 @@ public class Player {
         getOutOfJailFreeCards++;
     }
 
-    public void setPawn(String pawn) {
-        this.pawn = pawn;
-    }
-
     public void buyProperty(Property property) {
         boolean successfulPayment = payMoney(property.getCost());
 
@@ -395,6 +391,20 @@ public class Player {
 
     public void useEstimateTax() {
         taxSystem = Taxsystem.ESTIMATE;
+    }
+
+    public void assignPawn(Game game, String pawn){
+        checkIfPawnIsStillAvailable(game, pawn);
+        this.pawn = pawn;
+        game.changeStartedIfNeeded();
+    }
+
+    private void checkIfPawnIsStillAvailable(Game game, String pawn){
+        for(Player player: game.getPlayers()){
+            if(player.getPawn().equals(pawn)){
+                throw new IllegalMonopolyActionException("This pawn is already in use.");
+            }
+        }
     }
 
     @Override

@@ -219,7 +219,6 @@ public class MonopolyService extends ServiceAdapter {
     public void assignPawn(String gameId, String playerName, String pawn) {
         Game game = getGame(gameId);
         Player player = game.getPlayer(playerName);
-        player.setPawn(pawn);
-        game.changeStartedIfNeeded();
+        player.assignPawn(game, pawn);
     }
 }
