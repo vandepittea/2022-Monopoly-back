@@ -401,7 +401,7 @@ public class Player {
 
     private void checkIfPawnIsStillAvailable(Game game, String pawn){
         for(Player player: game.getPlayers()){
-            if(player.getPawn().equals(pawn)){
+            if(player.getPawn() != null && player.getPawn().equals(pawn)) {
                 throw new IllegalMonopolyActionException("This pawn is already in use.");
             }
         }

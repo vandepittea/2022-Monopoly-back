@@ -27,10 +27,13 @@ class UtilityTest {
 
     @Test
     void calculateRentOneUtility(){
+        Player player1 = new Player("Bob", null);
+        Player player2 = new Player("Jan", null);
+
         game.joinGame("Bob");
-        service.assignPawn(game.getId(), "Bob", "");
+        player1.assignPawn(game, "pawnBob");
         game.joinGame("Jan");
-        service.assignPawn(game.getId(), "Jan", "");
+        player2.assignPawn(game, "pawnJan");
         player.getProperties().add(new OwnedProperty(utility1));
         game.rollDice("Bob");
 
@@ -42,10 +45,13 @@ class UtilityTest {
 
     @Test
     void calculateRentTwoUtilities(){
+        Player player1 = new Player("Bob", null);
+        Player player2 = new Player("Jan", null);
+
         game.joinGame("Bob");
-        service.assignPawn(game.getId(), "Bob", "");
+        player1.assignPawn(game, "pawnBob");
         game.joinGame("Jan");
-        service.assignPawn(game.getId(), "Jan", "");
+        player2.assignPawn(game, "pawnJan");
         player.buyProperty(utility1);
         player.buyProperty(utility2);
         game.rollDice("Bob");

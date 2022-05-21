@@ -20,9 +20,9 @@ class CardExecutingTileTest {
             MonopolyService service = new MonopolyService();
             Game game = service.createGame(2, "group17", "gameName");
             game.joinGame("Jonas");
-            service.assignPawn(game.getId(), "Jonas", "");
+            service.assignPawn(game.getId(), "Jonas", "pawnJonas");
             game.joinGame("Thomas");
-            service.assignPawn(game.getId(), "Thomas", "");
+            service.assignPawn(game.getId(), "Thomas", "pawnThomas");
 
             Player player = game.getPlayer("Jonas");
             Street street = (Street) service.getTile(1);
@@ -116,9 +116,9 @@ class CardExecutingTileTest {
             MonopolyService service = new MonopolyService();
             Game game = service.createGame(2, "group17", "gameName");
             game.joinGame("Jonas");
-            service.assignPawn(game.getId(), "Jonas", "");
+            service.assignPawn(game.getId(), "Jonas", "pawnJonas");
             game.joinGame("Thomas");
-            service.assignPawn(game.getId(), "Thomas", "");
+            service.assignPawn(game.getId(), "Thomas", "pawnThomas");
 
             Player player = game.getPlayer("Jonas");
             Street street = (Street) service.getTile(1);

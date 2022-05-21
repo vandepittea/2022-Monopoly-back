@@ -418,7 +418,7 @@ class PlayerTest {
 
     @Test
     void assignPawn() {
-        player1.setPawn("Mario");
+        player1.assignPawn(game, "Mario");
         assertEquals("Mario", player1.getPawn());
     }
 }
