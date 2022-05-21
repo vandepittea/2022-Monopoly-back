@@ -417,8 +417,22 @@ class PlayerTest {
     }
 
     @Test
-    void assignPawn() {
-        player1.assignPawn(game, "Mario");
-        assertEquals("Mario", player1.getPawn());
+    void assignPawnSuccessful() {
+        game.joinGame("Bob");
+        game.joinGame("Jan");
+        game.getPlayers().get(0).assignPawn(game, "Mario");
+        game.getPlayers().get(1).assignPawn(game, "Donkey_Kong");
+
+        assertEquals("Mario", game.getPlayers().get(0).getPawn());
+        assertEquals("Donkey_Kong", game.getPlayers().get(1).getPawn());
+    }
+
+    @Test
+    void assignPawnAlreadyChosenPawn() {
+        game.joinGame("Bob");
+        game.joinGame("Jan");
+        game.getPlayers().get(0).assignPawn(game, "Mario");
+
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.getPlayers().get(1).assignPawn(game, "Mario"));
     }
 }
