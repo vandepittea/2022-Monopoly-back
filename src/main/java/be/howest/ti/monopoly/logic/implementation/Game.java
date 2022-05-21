@@ -133,8 +133,9 @@ public class Game {
         return currentPlayer;
     }
 
-    public String getWinner() {
-        return winner.getName();
+    @JsonIdentityReference(alwaysAsId = true)
+    public Player getWinner() {
+        return winner;
     }
 
     public void setDirectSale(String directSale) {
@@ -160,10 +161,9 @@ public class Game {
 
         Player player = new Player(playerName, startingTile);
         players.add(player);
-        changeStartedIfNeeded();
     }
 
-    private void changeStartedIfNeeded() {
+    public void changeStartedIfNeeded() {
         if (checkForReachingOfMaximumPlayers()) {
             started = true;
             currentPlayer = players.get(0);
@@ -337,6 +337,12 @@ public class Game {
                 currentPlayer.payTaxes();
                 changeCurrentPlayer(false);
                 break;
+            case FREE_PARKING:
+                turn.addMove(newTile, currentPlayer.getName() + " passed this tile.");
+                break;
+            case JAIL:
+                turn.addMove(newTile, currentPlayer.getName() + " is visiting the jail.");
+                break;
             default:
                 turn.addMove(newTile, "");
                 changeCurrentPlayer(false);
@@ -355,7 +361,7 @@ public class Game {
     }
 
     private void executeStreetFunctionality(Tile newTile, Turn turn) {
-        if (!propertyOwnedByOtherPlayer(newTile)) {
+        if (!propertyOwnedByAPlayer(newTile)) {
             directSale = newTile.getName();
             canRoll = false;
             turn.addMove(newTile, currentPlayer.getName() + " can buy this property in a direct sale");
@@ -366,13 +372,11 @@ public class Game {
         changeCurrentPlayer(true);
     }
 
-    private boolean propertyOwnedByOtherPlayer(Tile newTile) {
+    private boolean propertyOwnedByAPlayer(Tile newTile) {
         for (Player player : players) {
-            if (!player.getName().equals(currentPlayer.getName())) {
-                for (OwnedProperty property : player.getProperties()) {
-                    if (property.getProperty().getName().equals(newTile.getName())) {
-                        return true;
-                    }
+            for (OwnedProperty property : player.getProperties()) {
+                if (property.getProperty().getName().equals(newTile.getName())) {
+                    return true;
                 }
             }
         }

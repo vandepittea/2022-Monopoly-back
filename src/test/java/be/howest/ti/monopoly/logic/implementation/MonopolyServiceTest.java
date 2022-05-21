@@ -19,7 +19,7 @@ class MonopolyServiceTest {
     void init() {
         service = new MonopolyService();
         game = service.createGame(2, "group17", "gameName");
-        street = new Street(1, "Peach's Garden", 60, 30, 2, StreetColor.PURPLE,
+        street = new Street(1, "Peachs Garden", 60, 30, 2, StreetColor.PURPLE,
                 new Integer[]{10, 30, 90, 160, 250}, 50, 2);
     }
 
@@ -35,7 +35,7 @@ class MonopolyServiceTest {
 
     @Test
     void getTileOnNameSuccesful(){
-        assertEquals(street, service.getTile("Peach's_Garden"));
+        assertEquals(street, service.getTile("Peachs_Garden"));
     }
 
     @Test

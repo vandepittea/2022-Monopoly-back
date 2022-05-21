@@ -20,6 +20,8 @@ import io.vertx.ext.web.handler.BearerAuthHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.openapi.RouterBuilder;
 
+import javax.xml.bind.ValidationException;
+import javax.xml.validation.ValidatorHandler;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -164,17 +166,24 @@ public class MonopolyApiBridge {
         String prefix = request.getPrefixOfBody();
         String gameName = request.getGameNameOfBody();
 
+        if(gameName.length() > 15){
+            Response.sendFailure(ctx, 400, "Provided string should have size <= 15");
+        }
+        else if(gameName.length() <= 0){
+            Response.sendFailure(ctx, 400, "Provided string should have size >= 0");
+        }
+
         Response.sendJsonResponse(ctx, 200, service.createGame(numberOfPlayers, prefix, gameName));
     }
 
     private void getGames(RoutingContext ctx) {
         Request request = Request.from(ctx);
-        Integer numberOfPlayers = request.getNumberOfPlayersOfPath();
-        String prefix = request.getPrefixOfPath();
+        Integer numberOfPlayers = request.getNumberOfPlayersOfQuery();
+        String prefix = request.getPrefixOfQuery();
 
         Boolean isStarted = null;
-        if (request.hasPathStartedParameter()) {
-            isStarted = request.getGameStartedPathParameter();
+        if (request.hasQueryStartedParameter()) {
+            isStarted = request.getGameStartedFromQuery();
         }
 
         Response.sendJsonResponse(ctx, 200, service.getGames(isStarted, numberOfPlayers, prefix));
@@ -191,7 +200,7 @@ public class MonopolyApiBridge {
             if (pawn == null) {
                 service.joinGame(gameId, playerName);
                 String playerToken = tokenManager.createToken(new MonopolyUser(gameId, playerName));
-                Response.sendJsonResponse(ctx, 200, new JsonObject().put("playerToken", playerToken));
+                Response.sendJsonResponse(ctx, 200, new JsonObject().put("token", playerToken));
             } else {
                 service.assignPawn(gameId, playerName, pawn);
                 Response.sendOkResponse(ctx);

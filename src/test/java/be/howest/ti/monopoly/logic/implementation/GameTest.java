@@ -41,7 +41,10 @@ class GameTest {
         Player p2 = new Player("Jan", null);
 
         game.joinGame("Bob");
+        p.assignPawn(game, "pawnBob");
         game.joinGame("Jan");
+        p.assignPawn(game, "pawnJan");
+
 
         assertTrue(game.getPlayers().contains(p));
         assertTrue(game.getPlayers().contains(p2));
@@ -57,8 +60,13 @@ class GameTest {
 
     @Test
     void joinAlreadyStartedGame() {
+        Player player1 = new Player("Bob", null);
+        Player player2 = new Player("Jan", null);
+
         game.joinGame("Bob");
+        player1.assignPawn(game, "pawnBob");
         game.joinGame("Jan");
+        player2.assignPawn(game, "pawnJan");
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.joinGame( "Jonas"));
     }
@@ -83,8 +91,13 @@ class GameTest {
 
     @Test
     void rollDiceGameEnded() {
-        game.joinGame("Thomas");
+        Player player1 = new Player("Jonas", null);
+        Player player2 = new Player("Thomas", null);
+
         game.joinGame("Jonas");
+        player1.assignPawn(game, "pawnJonas");
+        game.joinGame("Thomas");
+        player2.assignPawn(game, "pawnThomas");
 
         game.declareBankruptcy("Jonas");
 
@@ -93,15 +106,17 @@ class GameTest {
 
     @Test
     void rollDiceInDebt() {
-        game.joinGame("Thomas");
+        Player player1 = new Player("Jonas", null);
+        Player player2 = new Player("Thomas", null);
+
         game.joinGame("Jonas");
+        player1.assignPawn(game, "pawnJonas");
+        game.joinGame("Thomas");
+        player2.assignPawn(game, "pawnThomas");
 
-        Player thomas = game.getPlayer("Thomas");
-        Player jonas = game.getPlayer("Jonas");
-
-        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> jonas.payDebt(1550, thomas));
-        game.rollDice("Thomas");
-
+        game.setCurrentPlayer("Jonas");
+        Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.getCurrentPlayer().payDebt(5000, player2));
+        assertEquals(5000, game.getCurrentPlayer().getDebt());
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.rollDice("Jonas"));
     }
 
@@ -114,8 +129,14 @@ class GameTest {
 
     @Test
     void rollDiceWhenDirectSale() {
+        Player player1 = new Player("Jonas", null);
+        Player player2 = new Player("Thomas", null);
+
         game.joinGame("Jonas");
+        player1.assignPawn(game, "pawnJonas");
         game.joinGame("Thomas");
+        player2.assignPawn(game, "pawnThomas");
+
         while (game.getDirectSale() == null) {
             assertEquals(game, service.rollDice(game.getId(), game.getCurrentPlayer().getName()));
         }
@@ -125,8 +146,13 @@ class GameTest {
 
     @Test
     void rollDiceToJail() {
+        Player player1 = new Player("Jonas", null);
+        Player player2 = new Player("Thomas", null);
+
         game.joinGame("Jonas");
+        player1.assignPawn(game, "pawnJonas");
         game.joinGame("Thomas");
+        player2.assignPawn(game, "pawnThomas");
 
         Turn lastTurn;
         do {
@@ -160,8 +186,13 @@ class GameTest {
 
     @Test
     void rollDiceGoToJailTile() {
+        Player player1 = new Player("Jonas", null);
+        Player player2 = new Player("Thomas", null);
+
         game.joinGame("Jonas");
+        player1.assignPawn(game, "pawnJonas");
         game.joinGame("Thomas");
+        player2.assignPawn(game, "pawnThomas");
 
         Turn lastTurn;
         do {
@@ -181,8 +212,13 @@ class GameTest {
         boolean endedWithoutDoubleRoll = false;
         while(!endedWithoutDoubleRoll) {
             game = service.createGame(2, "group17", "jailGame");
+            Player player1 = new Player("Jonas", null);
+            Player player2 = new Player("Thomas", null);
+
             game.joinGame("Jonas");
+            player1.assignPawn(game, "pawnJonas");
             game.joinGame("Thomas");
+            player2.assignPawn(game, "pawnThomas");
 
             Turn turn = new Turn(game.getPlayer("Jonas"));
             game.jailCurrentPlayer(turn);
@@ -220,8 +256,13 @@ class GameTest {
 
     @Test
     void rollDicePassGo() {
+        Player player1 = new Player("Jonas", null);
+        Player player2 = new Player("Thomas", null);
+
         game.joinGame("Jonas");
+        player1.assignPawn(game, "pawnJonas");
         game.joinGame("Thomas");
+        player2.assignPawn(game, "pawnThomas");
 
         game.getCurrentPlayer().moveTo(service.getTile(39));
         game.rollDice("Jonas");
@@ -230,9 +271,15 @@ class GameTest {
 
     @Test
     void rollDice() {
-        game.joinGame("Jonas");
-        game.joinGame("Thomas");
+        Player player1 = new Player("Jonas", null);
+        Player player2 = new Player("Thomas", null);
 
+        game.joinGame("Jonas");
+        player1.assignPawn(game, "pawnJonas");
+        game.joinGame("Thomas");
+        player2.assignPawn(game, "pawnThomas");
+
+        game.setCurrentPlayer("Jonas");
         assertEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile().getName());
         assertEquals(game, service.rollDice(game.getId(), "Jonas"));
         assertNotEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile().getName());
@@ -252,13 +299,19 @@ class GameTest {
     @Test
     void declareBankruptcy(){
         Game game = service.createGame(3, "group17", "gameName");
+        Player player1 = new Player("Bob", null);
+        Player player2 = new Player("Jan", null);
+        Player player3 = new Player("Tim", null);
 
         game.joinGame("Bob");
+        player1.assignPawn(game, "pawnBob");
         game.joinGame("Jan");
+        player2.assignPawn(game, "pawnJan");
         game.joinGame("Tim");
+        player3.assignPawn(game, "pawnTim");
         game.declareBankruptcy("Bob");
 
-        assertNotEquals("Bob", this.game.getCurrentPlayer());
+        assertNotEquals(player1, game.getCurrentPlayer());
         assertTrue(game.getPlayers().get(0).isBankrupt());
         assertTrue(game.getPlayers().get(0).getProperties().isEmpty());
         assertEquals(0, game.getPlayers().get(0).getMoney());
