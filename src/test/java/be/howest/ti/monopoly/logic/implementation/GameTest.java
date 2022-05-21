@@ -41,7 +41,10 @@ class GameTest {
         Player p2 = new Player("Jan", null);
 
         game.joinGame("Bob");
+        service.assignPawn(game.getId(), "Bob", "BobPawn");
         game.joinGame("Jan");
+        service.assignPawn(game.getId(), "Jan", "JanPawn");
+
 
         assertTrue(game.getPlayers().contains(p));
         assertTrue(game.getPlayers().contains(p2));
@@ -58,7 +61,9 @@ class GameTest {
     @Test
     void joinAlreadyStartedGame() {
         game.joinGame("Bob");
+        service.assignPawn(game.getId(), "Bob", "");
         game.joinGame("Jan");
+        service.assignPawn(game.getId(), "Jan", "");
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.joinGame( "Jonas"));
     }
@@ -83,8 +88,10 @@ class GameTest {
 
     @Test
     void rollDiceGameEnded() {
-        game.joinGame("Thomas");
         game.joinGame("Jonas");
+        service.assignPawn(game.getId(), "Jonas", "");
+        game.joinGame("Thomas");
+        service.assignPawn(game.getId(), "Thomas", "");
 
         game.declareBankruptcy("Jonas");
 
@@ -94,7 +101,9 @@ class GameTest {
     @Test
     void rollDiceInDebt() {
         game.joinGame("Thomas");
+        service.assignPawn(game.getId(), "Thomas", "");
         game.joinGame("Jonas");
+        service.assignPawn(game.getId(), "Jonas", "");
 
         Player thomas = game.getPlayer("Thomas");
         Player jonas = game.getPlayer("Jonas");
@@ -115,7 +124,9 @@ class GameTest {
     @Test
     void rollDiceWhenDirectSale() {
         game.joinGame("Jonas");
+        service.assignPawn(game.getId(), "Jonas", "");
         game.joinGame("Thomas");
+        service.assignPawn(game.getId(), "Thomas", "");
         while (game.getDirectSale() == null) {
             assertEquals(game, service.rollDice(game.getId(), game.getCurrentPlayer().getName()));
         }
@@ -126,7 +137,9 @@ class GameTest {
     @Test
     void rollDiceToJail() {
         game.joinGame("Jonas");
+        service.assignPawn(game.getId(), "Jonas", "");
         game.joinGame("Thomas");
+        service.assignPawn(game.getId(), "Thomas", "");
 
         Turn lastTurn;
         do {
@@ -161,7 +174,9 @@ class GameTest {
     @Test
     void rollDiceGoToJailTile() {
         game.joinGame("Jonas");
+        service.assignPawn(game.getId(), "Jonas", "");
         game.joinGame("Thomas");
+        service.assignPawn(game.getId(), "Thomas", "");
 
         Turn lastTurn;
         do {
@@ -182,7 +197,9 @@ class GameTest {
         while(!endedWithoutDoubleRoll) {
             game = service.createGame(2, "group17", "jailGame");
             game.joinGame("Jonas");
+            service.assignPawn(game.getId(), "Jonas", "");
             game.joinGame("Thomas");
+            service.assignPawn(game.getId(), "Thomas", "");
 
             Turn turn = new Turn(game.getPlayer("Jonas"));
             game.jailCurrentPlayer(turn);
@@ -221,7 +238,9 @@ class GameTest {
     @Test
     void rollDicePassGo() {
         game.joinGame("Jonas");
+        service.assignPawn(game.getId(), "Jonas", "");
         game.joinGame("Thomas");
+        service.assignPawn(game.getId(), "Thomas", "");
 
         game.getCurrentPlayer().moveTo(service.getTile(39));
         game.rollDice("Jonas");
@@ -231,7 +250,9 @@ class GameTest {
     @Test
     void rollDice() {
         game.joinGame("Jonas");
+        service.assignPawn(game.getId(), "Jonas", "");
         game.joinGame("Thomas");
+        service.assignPawn(game.getId(), "Thomas", "");
 
         assertEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile().getName());
         assertEquals(game, service.rollDice(game.getId(), "Jonas"));
@@ -254,8 +275,11 @@ class GameTest {
         Game game = service.createGame(3, "group17", "gameName");
 
         game.joinGame("Bob");
+        service.assignPawn(game.getId(), "Bob", "");
         game.joinGame("Jan");
+        service.assignPawn(game.getId(), "Jan", "");
         game.joinGame("Tim");
+        service.assignPawn(game.getId(), "Tim", "");
         game.declareBankruptcy("Bob");
 
         assertNotEquals("Bob", this.game.getCurrentPlayer());
