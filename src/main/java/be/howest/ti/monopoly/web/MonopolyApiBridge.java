@@ -164,6 +164,13 @@ public class MonopolyApiBridge {
         String prefix = request.getPrefixOfBody();
         String gameName = request.getGameNameOfBody();
 
+        if(gameName.length() > 15){
+            Response.sendFailure(ctx, 409, "Provided string should have size <= 15");
+        }
+        else if(gameName.length() <= 0){
+            Response.sendFailure(ctx, 409, "Provided string should have size >= 0");
+        }
+
         Response.sendJsonResponse(ctx, 200, service.createGame(numberOfPlayers, prefix, gameName));
     }
 
