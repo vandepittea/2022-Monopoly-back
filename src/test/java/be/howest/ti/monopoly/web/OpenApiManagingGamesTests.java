@@ -108,7 +108,8 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
                 null,
                 new JsonObject()
                         .put("prefix", "Prefix123")
-                        .put("numberOfPlayers", 10),
+                        .put("numberOfPlayers", 10)
+                        .put("gameName", "gameName"),
                 response -> assertOkResponse(response)
         );
     }
