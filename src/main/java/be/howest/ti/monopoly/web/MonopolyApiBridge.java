@@ -20,6 +20,8 @@ import io.vertx.ext.web.handler.BearerAuthHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.openapi.RouterBuilder;
 
+import javax.xml.bind.ValidationException;
+import javax.xml.validation.ValidatorHandler;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -165,10 +167,10 @@ public class MonopolyApiBridge {
         String gameName = request.getGameNameOfBody();
 
         if(gameName.length() > 15){
-            Response.sendFailure(ctx, 409, "Provided string should have size <= 15");
+            Response.sendFailure(ctx, 400, "Provided string should have size <= 15");
         }
         else if(gameName.length() <= 0){
-            Response.sendFailure(ctx, 409, "Provided string should have size >= 0");
+            Response.sendFailure(ctx, 400, "Provided string should have size >= 0");
         }
 
         Response.sendJsonResponse(ctx, 200, service.createGame(numberOfPlayers, prefix, gameName));
