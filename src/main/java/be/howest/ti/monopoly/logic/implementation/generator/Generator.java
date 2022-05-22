@@ -61,21 +61,21 @@ public class Generator {
     public static Map<ChanceCard, String> generateChances() {
         Map<ChanceCard, String> chances = new EnumMap<>(ChanceCard.class);
 
-        chances.put(ChanceCard.ADV_BOWSER_CASTLE, "You got launched by a cannon right to Bowsers Castle");
-        chances.put(ChanceCard.ADV_GO, "Head to Peach's Castle (Collect 200 coins)");
-        chances.put(ChanceCard.ADV_SHERBET, "You are sent to Sherbet Land. If you pass Peach's Castle, collect 200 coins");
-        chances.put(ChanceCard.ADV_DELFINO, "Take a plane to Delfino Airstrip. If you pass Peach's Castle, collect 200 coins");
-        chances.put(ChanceCard.ADV_POWERUP, "Advance to the nearest Powerup. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled");
+        chances.put(ChanceCard.ADV_BOWSER_CASTLE, "You got launched by a cannon right to Bowsers Castle.");
+        chances.put(ChanceCard.ADV_GO, "Head to Peach's Castle (Collect 200 coins).");
+        chances.put(ChanceCard.ADV_SHERBET, "You are sent to Sherbet Land. If you pass Peach's Castle, collect 200 coins.");
+        chances.put(ChanceCard.ADV_DELFINO, "Take a plane to Delfino Airstrip. If you pass Peach's Castle, collect 200 coins.");
+        chances.put(ChanceCard.ADV_POWERUP, "Advance to the nearest Powerup. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental to which they are otherwise entitled.");
         chances.put(ChanceCard.ADV_UT, "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown.");
-        chances.put(ChanceCard.REC_BANK_50, "The Toad Bank pays you dividend of 50 coins");
-        chances.put(ChanceCard.GET_JAIL_CARD, "Get Out of Jail Free");
-        chances.put(ChanceCard.RETURN_3, "Go Back 3 Spaces");
-        chances.put(ChanceCard.GO_JAIL, "Go to Jail. Go directly to Jail, do not pass Go, do not collect 200 coins");
-        chances.put(ChanceCard.PAY_REPAIRS, "Make general repairs on all your property. For each house pay 25 coins. For each castle pay 100 coins");
-        chances.put(ChanceCard.PAY_15, "Speeding fine 15 coins");
-        chances.put(ChanceCard.GO_FLOWER, "Take a trip to the FireFlower. If you pass Peach's Castle, collect 200 coins");
-        chances.put(ChanceCard.PAY_PLAYERS_50, "You lost a bet that you would defeat Bowser. Pay each player 50 coins");
-        chances.put(ChanceCard.REC_150, "You won an important race! Collect 150 coins");
+        chances.put(ChanceCard.REC_BANK_50, "The Toad Bank pays you dividend of 50 coins.");
+        chances.put(ChanceCard.GET_JAIL_CARD, "Get Out of Jail Free.");
+        chances.put(ChanceCard.RETURN_3, "Go Back 3 Spaces.");
+        chances.put(ChanceCard.GO_JAIL, "Go to Jail. Go directly to Jail, do not pass Go, do not collect 200 coins.");
+        chances.put(ChanceCard.PAY_REPAIRS, "Make general repairs on all your property. For each house pay 25 coins. For each castle pay 100 coins.");
+        chances.put(ChanceCard.PAY_15, "Speeding fine 15 coins.");
+        chances.put(ChanceCard.GO_FLOWER, "Take a trip to the FireFlower. If you pass Peach's Castle, collect 200 coins.");
+        chances.put(ChanceCard.PAY_PLAYERS_50, "You lost a bet that you would defeat Bowser. Pay each player 50 coins.");
+        chances.put(ChanceCard.REC_150, "You won an important race! Collect 150 coins.");
 
         return chances;
     }
@@ -83,22 +83,22 @@ public class Generator {
     public static Map<CommunityChest, String> generateCommunityChests() {
         Map<CommunityChest, String> communityChests = new EnumMap<>(CommunityChest.class);
 
-        communityChests.put(CommunityChest.ADV_GO, "Head to Peach's Castle (Collect 200 coins)");
-        communityChests.put(CommunityChest.REC_BANK_ERR, "The Toad Bank made an error in your favor. Collect 200 coins");
-        communityChests.put(CommunityChest.PAY_DOCTOR_FEE, "You are sick and go to Doctor Mario. Pay 50 coins");
-        communityChests.put(CommunityChest.REC_SOLD_STOCK, "You found a hidden chest with coins. You get 50 coins");
-        communityChests.put(CommunityChest.GET_JAIL_CARD, "Get Out of Jail Free");
-        communityChests.put(CommunityChest.GO_JAIL, "Go to Jail. Go directly to jail, do not pass Peach's Castle, do not collect $200)");
-        communityChests.put(CommunityChest.REC_DELFINO, "You guide tourists around Delfino Island. Receive 100 coins");
-        communityChests.put(CommunityChest.REC_BANK_OWES, "The toad Bank owes you some coins. Collect 20 coins");
-        communityChests.put(CommunityChest.REC_BIRTHDAY, "It is your birthday. Collect 10 coins from every player");
-        communityChests.put(CommunityChest.REC_KOOPALING, "You defeated a Koopaling. Collect 100 coins as a reward");
-        communityChests.put(CommunityChest.PAY_BOO, "A Boo scares you and steals some coins, you lose 100 coins");
-        communityChests.put(CommunityChest.PAY_STAR, "You lose a star and need to buy a new one for 50 coins");
-        communityChests.put(CommunityChest.REC_FRUIT, "Receive 25 coins from selling fruit");
-        communityChests.put(CommunityChest.PAY_REPAIRS, "You are assessed for street repair. $40 per house. $115 per castle");
-        communityChests.put(CommunityChest.REC_PRIZE, "You have won second prize in a run contest against some Coopas. Collect 10 coins");
-        communityChests.put(CommunityChest.REC_ROSALINA, "Rosalina sends you a gift from space. Receive 100 coins ");
+        communityChests.put(CommunityChest.ADV_GO, "Head to Peach's Castle (Collect 200 coins).");
+        communityChests.put(CommunityChest.REC_BANK_ERR, "The Toad Bank made an error in your favor. Collect 200 coins.");
+        communityChests.put(CommunityChest.PAY_DOCTOR_FEE, "You are sick and go to Doctor Mario. Pay 50 coins.");
+        communityChests.put(CommunityChest.REC_SOLD_STOCK, "You found a hidden chest with coins. You get 50 coins.");
+        communityChests.put(CommunityChest.GET_JAIL_CARD, "Get Out of Jail Free.");
+        communityChests.put(CommunityChest.GO_JAIL, "Go to Jail. Go directly to jail, do not pass Peach's Castle, do not collect $200).");
+        communityChests.put(CommunityChest.REC_DELFINO, "You guide tourists around Delfino Island. Receive 100 coins.");
+        communityChests.put(CommunityChest.REC_BANK_OWES, "The toad Bank owes you some coins. Collect 20 coins.");
+        communityChests.put(CommunityChest.REC_BIRTHDAY, "It is your birthday. Collect 10 coins from every player.");
+        communityChests.put(CommunityChest.REC_KOOPALING, "You defeated a Koopaling. Collect 100 coins as a reward.");
+        communityChests.put(CommunityChest.PAY_BOO, "A Boo scares you and steals some coins, you lose 100 coins.");
+        communityChests.put(CommunityChest.PAY_STAR, "You lose a star and need to buy a new one for 50 coins.");
+        communityChests.put(CommunityChest.REC_FRUIT, "Receive 25 coins from selling fruit.");
+        communityChests.put(CommunityChest.PAY_REPAIRS, "You are assessed for street repair. $40 per house. $115 per castle.");
+        communityChests.put(CommunityChest.REC_PRIZE, "You have won second prize in a run contest against some Coopas. Collect 10 coins.");
+        communityChests.put(CommunityChest.REC_ROSALINA, "Rosalina sends you a gift from space. Receive 100 coins.");
 
         return communityChests;
     }
