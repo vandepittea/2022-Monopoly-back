@@ -214,8 +214,6 @@ public class Player {
     }
 
     public void turnOverAssetsToBank() {
-        //TODO: start auction
-
         clearAssets();
     }
 
