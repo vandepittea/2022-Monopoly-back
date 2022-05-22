@@ -98,10 +98,10 @@ public class MonopolyService extends ServiceAdapter {
         Property property = (Property) getTile(propertyName);
 
         if (!player.equals(game.getCurrentPlayer())) {
-            throw new IllegalMonopolyActionException("Only the current player can buy property");
+            throw new IllegalMonopolyActionException("Only the current player can buy property.");
         }
         if (!property.getName().equals(game.getDirectSale())) {
-            throw new IllegalMonopolyActionException(property.getName() + " is currently not on sale");
+            throw new IllegalMonopolyActionException(property.getName() + " is currently not on sale.");
         }
 
         player.buyProperty(property);
@@ -116,10 +116,10 @@ public class MonopolyService extends ServiceAdapter {
         Property property = (Property) getTile(propertyName);
 
         if (!player.equals(game.getCurrentPlayer())) {
-            throw new IllegalMonopolyActionException("Only the current player can choose not to buy property");
+            throw new IllegalMonopolyActionException("Only the current player can choose not to buy property.");
         }
         if (!property.getName().equals(game.getDirectSale())) {
-            throw new IllegalMonopolyActionException(property.getName() + " is currently not on sale");
+            throw new IllegalMonopolyActionException(property.getName() + " is currently not on sale.");
         }
 
         game.handlePropertySale();

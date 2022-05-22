@@ -153,10 +153,10 @@ public class Game {
 
     public void joinGame(String playerName) {
         if (isExistingUser(playerName)) {
-            throw new IllegalMonopolyActionException(playerName + " already exists in this game");
+            throw new IllegalMonopolyActionException(playerName + " already exists in this game.");
         }
         if (started) {
-            throw new IllegalMonopolyActionException("This game is already started");
+            throw new IllegalMonopolyActionException("This game is already started.");
         }
 
         Player player = new Player(playerName, startingTile);
@@ -199,7 +199,7 @@ public class Game {
             }
         }
 
-        throw new MonopolyResourceNotFoundException(playerName + " does not exist in this game");
+        throw new MonopolyResourceNotFoundException(playerName + " does not exist in this game.");
     }
 
     public void handlePropertySale() {
@@ -239,7 +239,7 @@ public class Game {
                 movePlayer(turn, lastDiceRoll);
                 changeCurrentPlayer(true);
             } else {
-                turn.addMove(service.getTile("Jail"), currentPlayer.getName() + " is still in jail");
+                turn.addMove(service.getTile("Jail"), currentPlayer.getName() + " is still in jail.");
                 turn.setType(TurnType.JAIL_STAY);
                 changeCurrentPlayer(true);
             }
@@ -346,7 +346,7 @@ public class Game {
                 break;
             case TAX_INCOME:
             case LUXURY_TAX:
-                turn.addMove(newTile, currentPlayer.getName() + " has to pay taxes");
+                turn.addMove(newTile, currentPlayer.getName() + " has to pay taxes.");
                 currentPlayer.payTaxes();
                 changeCurrentPlayer(false);
                 break;
@@ -367,7 +367,7 @@ public class Game {
         Tile jail = service.getTile("Jail");
 
         currentPlayer.goToJail(jail);
-        turn.addMove(newTile, currentPlayer.getName() + " has to go to jail");
+        turn.addMove(newTile, currentPlayer.getName() + " has to go to jail.");
         turn.addMove(service.getTile("Jail"), currentPlayer.getName() + " is in jail.");
 
         changeCurrentPlayer(true);
@@ -377,11 +377,11 @@ public class Game {
         if (!propertyOwnedByAPlayer(newTile)) {
             directSale = newTile.getName();
             canRoll = false;
-            turn.addMove(newTile, currentPlayer.getName() + " can buy this property in a direct sale");
+            turn.addMove(newTile, currentPlayer.getName() + " can buy this property in a direct sale.");
             return;
         }
 
-        turn.addMove(newTile,  currentPlayer.getName() + " can't buy this property");
+        turn.addMove(newTile,  currentPlayer.getName() + " can't buy this property.");
         changeCurrentPlayer(true);
     }
 

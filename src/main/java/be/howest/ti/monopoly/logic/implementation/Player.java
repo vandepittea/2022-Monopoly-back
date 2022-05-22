@@ -130,7 +130,7 @@ public class Player {
         boolean successfulPayment = payMoney(property.getCost());
 
         if (!successfulPayment) {
-            throw new IllegalMonopolyActionException(name + " doesn't have enough money to buy this property");
+            throw new IllegalMonopolyActionException(name + " doesn't have enough money to buy this property.");
         }
 
         addProperty(property);
@@ -154,7 +154,7 @@ public class Player {
         if (!successfulPayment) {
             debt += amount;
             creditor = debtor;
-            throw new IllegalMonopolyActionException("You don't have enough money, earn money before your next turn" +
+            throw new IllegalMonopolyActionException("You don't have enough money, earn money before your next turn." +
                     "or be bankrupt");
         }
 
@@ -264,7 +264,7 @@ public class Player {
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
         if (!street.checkStreetHouseDifference(service, this, true)) {
-            throw new IllegalMonopolyActionException("You have to build equally among streets of the same color");
+            throw new IllegalMonopolyActionException("You have to build equally among streets of the same color.");
         }
 
         if (properties.get(street).getHouseCount() < MAX_HOUSE_COUNT) {
@@ -276,7 +276,7 @@ public class Player {
 
     public int sellHouseOrHotel(MonopolyService service, Game game, Street street) {
         if (!street.checkStreetHouseDifference(service, this, false)) {
-            throw new IllegalMonopolyActionException("You have to sell equally among streets of the same color");
+            throw new IllegalMonopolyActionException("You have to sell equally among streets of the same color.");
         }
 
         if (properties.get(street).getHotelCount() != MAX_HOTEL_COUNT) {
@@ -288,7 +288,7 @@ public class Player {
 
     private int buyHouse(Game game, Street street) {
         if (game.getAvailableHouses() < 1) {
-            throw new IllegalMonopolyActionException("There are no more available houses, wait until some are free");
+            throw new IllegalMonopolyActionException("There are no more available houses, wait until some are free.");
         }
         if (properties.get(street).getHotelCount() == MAX_HOTEL_COUNT) {
             throw new IllegalMonopolyActionException("You can only have 1 hotel on a street!");
