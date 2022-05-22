@@ -261,7 +261,7 @@ public class Player {
 
     public int buyHouseOrHotel(MonopolyService service, Game game, Street street) {
         if (!properties.containsKey(street)) {
-            throw new IllegalMonopolyActionException("You can't buy houses on a property you don't own'");
+            throw new IllegalMonopolyActionException("You can't buy houses on a property you don't own.");
         }
 
         if (!checkOwnershipWholeStreet(street, service)) {
@@ -280,7 +280,7 @@ public class Player {
 
     public int sellHouseOrHotel(MonopolyService service, Game game, Street street) {
         if (!properties.containsKey(street)) {
-            throw new IllegalMonopolyActionException("You can't sell houses on a property you don't own'");
+            throw new IllegalMonopolyActionException("You can't sell houses on a property you don't own.");
         }
 
         if (!street.checkStreetHouseDifference(service, this, false)) {
