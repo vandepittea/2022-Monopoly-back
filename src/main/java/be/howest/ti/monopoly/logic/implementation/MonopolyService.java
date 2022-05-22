@@ -65,7 +65,7 @@ public class MonopolyService extends ServiceAdapter {
         List<Game> gamesList = new ArrayList<>();
 
         games.forEach(game -> {
-            if (((started == null) || (started == game.isStarted())) &&
+            if ((started == null) || (game.getNumberOfPlayers() != game.getPlayers().size()) &&
                     ((numberOfPlayers == null) || (numberOfPlayers == game.getNumberOfPlayers()))) {
                 String gamePrefix = game.getId().split("_")[0];
                 if (gamePrefix.equals(prefix)) {
