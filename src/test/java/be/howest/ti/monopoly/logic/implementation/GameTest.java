@@ -41,9 +41,9 @@ class GameTest {
         Player p2 = new Player("Jan", null);
 
         game.joinGame("Bob");
-        p.assignPawn(game, "pawnBob");
+        game.getPlayer("Bob").assignPawn(game, "pawnBob");
         game.joinGame("Jan");
-        p.assignPawn(game, "pawnJan");
+        game.getPlayer("Jan").assignPawn(game, "pawnJan");
 
 
         assertTrue(game.getPlayers().contains(p));
@@ -64,9 +64,9 @@ class GameTest {
         Player player2 = new Player("Jan", null);
 
         game.joinGame("Bob");
-        player1.assignPawn(game, "pawnBob");
+        game.getPlayer("Bob").assignPawn(game, "pawnBob");
         game.joinGame("Jan");
-        player2.assignPawn(game, "pawnJan");
+        game.getPlayer("Jan").assignPawn(game, "pawnJan");
 
         Assertions.assertThrows(IllegalMonopolyActionException.class, () -> game.joinGame( "Jonas"));
     }
@@ -95,9 +95,9 @@ class GameTest {
         Player player2 = new Player("Thomas", null);
 
         game.joinGame("Jonas");
-        player1.assignPawn(game, "pawnJonas");
+        game.getPlayer("Jonas").assignPawn(game, "pawnJonas");
         game.joinGame("Thomas");
-        player2.assignPawn(game, "pawnThomas");
+        game.getPlayer("Thomas").assignPawn(game, "pawnThomas");
 
         game.declareBankruptcy("Jonas");
 
@@ -133,9 +133,9 @@ class GameTest {
         Player player2 = new Player("Thomas", null);
 
         game.joinGame("Jonas");
-        player1.assignPawn(game, "pawnJonas");
+        game.getPlayer("Jonas").assignPawn(game, "pawnJonas");
         game.joinGame("Thomas");
-        player2.assignPawn(game, "pawnThomas");
+        game.getPlayer("Thomas").assignPawn(game, "pawnThomas");
 
         while (game.getDirectSale() == null) {
             assertEquals(game, service.rollDice(game.getId(), game.getCurrentPlayer().getName()));
@@ -150,9 +150,9 @@ class GameTest {
         Player player2 = new Player("Thomas", null);
 
         game.joinGame("Jonas");
-        player1.assignPawn(game, "pawnJonas");
+        game.getPlayer("Jonas").assignPawn(game, "pawnJonas");
         game.joinGame("Thomas");
-        player2.assignPawn(game, "pawnThomas");
+        game.getPlayer("Thomas").assignPawn(game, "pawnThomas");
 
         Turn lastTurn;
         do {
@@ -190,9 +190,9 @@ class GameTest {
         Player player2 = new Player("Thomas", null);
 
         game.joinGame("Jonas");
-        player1.assignPawn(game, "pawnJonas");
+        game.getPlayer("Jonas").assignPawn(game, "pawnJonas");
         game.joinGame("Thomas");
-        player2.assignPawn(game, "pawnThomas");
+        game.getPlayer("Thomas").assignPawn(game, "pawnThomas");
 
         Turn lastTurn;
         do {
@@ -216,9 +216,9 @@ class GameTest {
             Player player2 = new Player("Thomas", null);
 
             game.joinGame("Jonas");
-            player1.assignPawn(game, "pawnJonas");
+            game.getPlayer("Jonas").assignPawn(game, "pawnJonas");
             game.joinGame("Thomas");
-            player2.assignPawn(game, "pawnThomas");
+            game.getPlayer("Thomas").assignPawn(game, "pawnThomas");
 
             Turn turn = new Turn(game.getPlayer("Jonas"));
             game.jailCurrentPlayer(turn);
@@ -242,8 +242,9 @@ class GameTest {
                 } else {
                     assertNotEquals(1450, game.getPlayer("Jonas").getMoney());
                 }
-            }
-            else {
+            } else if (type == TileType.GO) {
+                assertEquals(1700, game.getPlayer("Jonas").getMoney());
+            } else {
                 if (lastTurn.getRoll().isDoubleRoll()){
                     assertEquals(1500, game.getPlayer("Jonas").getMoney());
                 } else {
@@ -260,9 +261,9 @@ class GameTest {
         Player player2 = new Player("Thomas", null);
 
         game.joinGame("Jonas");
-        player1.assignPawn(game, "pawnJonas");
+        game.getPlayer("Jonas").assignPawn(game, "pawnJonas");
         game.joinGame("Thomas");
-        player2.assignPawn(game, "pawnThomas");
+        game.getPlayer("Thomas").assignPawn(game, "pawnThomas");
 
         game.getCurrentPlayer().moveTo(service.getTile(39));
         game.rollDice("Jonas");
@@ -275,9 +276,9 @@ class GameTest {
         Player player2 = new Player("Thomas", null);
 
         game.joinGame("Jonas");
-        player1.assignPawn(game, "pawnJonas");
+        game.getPlayer("Jonas").assignPawn(game, "pawnJonas");
         game.joinGame("Thomas");
-        player2.assignPawn(game, "pawnThomas");
+        game.getPlayer("Thomas").assignPawn(game, "pawnThomas");
 
         game.setCurrentPlayer("Jonas");
         assertEquals("Peach Castle", game.getPlayer("Jonas").getCurrentTile().getName());
@@ -304,11 +305,11 @@ class GameTest {
         Player player3 = new Player("Tim", null);
 
         game.joinGame("Bob");
-        player1.assignPawn(game, "pawnBob");
+        game.getPlayer("Bob").assignPawn(game, "pawnBob");
         game.joinGame("Jan");
-        player2.assignPawn(game, "pawnJan");
+        game.getPlayer("Jan").assignPawn(game, "pawnJan");
         game.joinGame("Tim");
-        player3.assignPawn(game, "pawnTim");
+        game.getPlayer("Tim").assignPawn(game, "pawnTim");
         game.declareBankruptcy("Bob");
 
         assertNotEquals(player1, game.getCurrentPlayer());

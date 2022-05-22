@@ -31,9 +31,9 @@ class UtilityTest {
         Player player2 = new Player("Jan", null);
 
         game.joinGame("Bob");
-        player1.assignPawn(game, "pawnBob");
+        game.getPlayer("Bob").assignPawn(game, "pawnBob");
         game.joinGame("Jan");
-        player2.assignPawn(game, "pawnJan");
+        game.getPlayer("Jan").assignPawn(game, "pawnJan");
         player.getProperties().add(new OwnedProperty(utility1));
         game.rollDice("Bob");
 
@@ -49,9 +49,9 @@ class UtilityTest {
         Player player2 = new Player("Jan", null);
 
         game.joinGame("Bob");
-        player1.assignPawn(game, "pawnBob");
+        game.getPlayer("Bob").assignPawn(game, "pawnBob");
         game.joinGame("Jan");
-        player2.assignPawn(game, "pawnJan");
+        game.getPlayer("Jan").assignPawn(game, "pawnJan");
         player.buyProperty(utility1);
         player.buyProperty(utility2);
         game.rollDice("Bob");

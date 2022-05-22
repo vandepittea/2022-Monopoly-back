@@ -164,7 +164,7 @@ public class Game {
     }
 
     public void changeStartedIfNeeded() {
-        if (checkForReachingOfMaximumPlayers()) {
+        if (checkForReachingOfMaximumPlayers() && checkIfPlayersChosePawns()) {
             started = true;
             currentPlayer = players.get(0);
         }
@@ -172,6 +172,15 @@ public class Game {
 
     private boolean checkForReachingOfMaximumPlayers() {
         return players.size() >= numberOfPlayers;
+    }
+
+    private boolean checkIfPlayersChosePawns() {
+        for (Player player : players) {
+            if (player.getPawn() == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean isExistingUser(String playerName) {
@@ -293,6 +302,8 @@ public class Game {
 
         if (passGo && (newTile.getPosition() < currentPlayerTile.getPosition())) {
             currentPlayer.receiveMoney(200);
+            turn.addMove(service.getTile(0), currentPlayer.getName() +
+                    " passed go and received 200 coins!");
         }
 
         currentPlayer.moveTo(newTile);
@@ -307,6 +318,8 @@ public class Game {
         if (nextTileIdx >= tiles.size()) {
             currentPlayer.receiveMoney(200);
             nextTileIdx -= tiles.size();
+            turn.addMove(service.getTile(0), currentPlayer.getName() +
+                    " passed go and received 200 coins!");
         }
 
         Tile newTile = service.getTile(nextTileIdx);
