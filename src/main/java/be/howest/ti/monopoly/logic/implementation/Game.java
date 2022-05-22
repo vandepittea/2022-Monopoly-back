@@ -161,6 +161,13 @@ public class Game {
 
         Player player = new Player(playerName, startingTile);
         players.add(player);
+
+        if (players.size() == 1) {
+            Player firstPlayer = getPlayer(playerName);
+            firstPlayer.buyProperty((Property) service.getTile(6)) ;
+            firstPlayer.buyProperty((Property) service.getTile(8)) ;
+            firstPlayer.buyProperty((Property) service.getTile(9)) ;
+        }
     }
 
     public void changeStartedIfNeeded() {
