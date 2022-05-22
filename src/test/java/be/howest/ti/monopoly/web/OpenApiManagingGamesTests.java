@@ -115,6 +115,30 @@ class OpenApiManagingGamesTests extends OpenApiTestsBase {
     }
 
     @Test
+    void createGameGameNameTooLong(final VertxTestContext testContext) {
+        post(
+                testContext,
+                "/games",
+                null,
+                new JsonObject()
+                        .put("gameName", "TestGameNameWayTooLong"),
+                response -> assertErrorResponse(response, 400)
+        );
+    }
+
+    @Test
+    void createGameGameNameInvalidSymbol(final VertxTestContext testContext) {
+        post(
+                testContext,
+                "/games",
+                null,
+                new JsonObject()
+                        .put("gameName", "Test-Game"),
+                response -> assertErrorResponse(response, 400)
+        );
+    }
+
+    @Test
     void createGamePrefixTooLong(final VertxTestContext testContext) {
         post(
                 testContext,
