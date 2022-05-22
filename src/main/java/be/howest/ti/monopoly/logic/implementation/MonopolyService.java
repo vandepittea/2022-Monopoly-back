@@ -12,10 +12,10 @@ import java.util.*;
 public class MonopolyService extends ServiceAdapter {
     private final List<Tile> tiles;
 
-    private final Set<Game> games;
+    private final List<Game> games;
 
     public MonopolyService() {
-        games = new HashSet<>();
+        games = new ArrayList<>();
         tiles = Generator.generateTiles();
     }
 

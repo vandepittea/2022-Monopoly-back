@@ -260,6 +260,10 @@ public class Player {
     }
 
     public int buyHouseOrHotel(MonopolyService service, Game game, Street street) {
+        if (!properties.containsKey(street)) {
+            throw new IllegalMonopolyActionException("You can't buy houses on a property you don't own.");
+        }
+
         if (!checkOwnershipWholeStreet(street, service)) {
             throw new IllegalMonopolyActionException("You can only build on a property when you own the whole group.");
         }
@@ -275,6 +279,10 @@ public class Player {
     }
 
     public int sellHouseOrHotel(MonopolyService service, Game game, Street street) {
+        if (!properties.containsKey(street)) {
+            throw new IllegalMonopolyActionException("You can't sell houses on a property you don't own.");
+        }
+
         if (!street.checkStreetHouseDifference(service, this, false)) {
             throw new IllegalMonopolyActionException("You have to sell equally among streets of the same color.");
         }
@@ -291,7 +299,7 @@ public class Player {
             throw new IllegalMonopolyActionException("There are no more available houses, wait until some are free.");
         }
         if (properties.get(street).getHotelCount() == MAX_HOTEL_COUNT) {
-            throw new IllegalMonopolyActionException("You can only have 1 hotel on a street!");
+            throw new IllegalMonopolyActionException("You can't build more than one hotel on a property.");
         }
 
         boolean successfulPayment = payMoney(street.getHousePrice());
