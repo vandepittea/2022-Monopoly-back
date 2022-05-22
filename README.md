@@ -1,12 +1,9 @@
 # Monopoly
 
-In the files ``gradle.properties`` (twice) and
-`src/main/resources/vertx-default-jul-logging.properties` (once)
-you see the number ``99``.
+## Token Scheme
+Not implemented
 
-One group member should replace these ``99``'s by the groups-number as a two-digit
-number.
-
-`monopoly-03.log` and `2022.project-i:monopoly-server-03` for instance.
-
-If done, remove this text and replace it with relevant information.
+## Bug list
+| Bug behaviour  | How to reproduce  | Why it hasn't been fixed    |
+|---|---|---|
+|A game is too long in the list of joinable games|Make a game for 2 players, join with both but don't choose pawns yet for 1 or both of them|We fixed it by checking if the amount of players already joined matched the numberOfPlayers of the game, but this created a bug because we stopped checking the started value. In the end we didn't have time left to fix this|
